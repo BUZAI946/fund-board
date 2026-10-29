@@ -1,0 +1,15 @@
+# 抓取缓存（不要提交，Actions 每次重新抓）
+tools/raw/
+tools/all_funds.js
+tools/market_raw.json
+
+# 中间产物
+tools/data.js
+tools/data.json
+
+# 系统文件
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+*.bak

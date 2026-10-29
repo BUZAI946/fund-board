@@ -1,0 +1,121 @@
+name: 每日更新基金数据
+
+# 每天北京时间 20:17 跑一次（UTC 12:17）
+# 为什么是 17 分而不是整点：GitHub 官方文档说明「整点前后是高负载时段，
+# schedule 事件会延迟，极端情况下排队任务会被丢弃」，所以避开整点。
+on:
+  schedule:
+    - cron: '17 12 * * *'
+  workflow_dispatch:        # 也可以手动触发（在 Actions 页面点 Run workflow）
+
+# 需要写权限才能把新数据提交回仓库
+permissions:
+  contents: write
+
+# 同一个 workflow 不并发跑，避免两次更新打架
+concurrency:
+  group: update-fund-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest        # 公开仓库上 Linux runner 完全免费
+    timeout-minutes: 15
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      # ---------- 抓数据 ----------
+      - name: 1/4 抓取 42 只基金净值
+        working-directory: tools
+        run: python fetch.py
+
+      - name: 2/4 抓取行情 + F10 官方净值校验
+        working-directory: tools
+        run: python fetch_extra.py
+
+      # ---------- 算指标 ----------
+      - name: 3/4 计算全指标
+        working-directory: tools
+        run: python build.py
+
+      - name: 4/4 生成看板数据
+        working-directory: tools
+        run: python build_site_data.py
+
+      # ---------- 数据体检（失败不阻断，只告警）----------
+      - name: 数据体检
+        id: health
+        working-directory: tools
+        continue-on-error: true
+        run: |
+          python - <<'PY'
+          import io, json, os, statistics as st, sys
+          raw = io.open('data.js', encoding='utf-8').read()
+          D = json.loads(raw[raw.index('=')+1:].strip().rstrip(';'))
+          F = list(D['funds'].values())
+
+          # 1) 数据新鲜度：最新净值日不能超过 7 天
+          from datetime import datetime, timedelta
+          dates = sorted([f.get('last_date') or '' for f in F if f.get('last_date')])
+          newest = dates[-1] if dates else ''
+          age = (datetime.now() - datetime.strptime(newest, '%Y-%m-%d')).days if newest else 999
+
+          # 2) 单日异常波动：任何一只近250日收益一天内变化超过 15pp 视为可疑
+          bad = [f['code'] for f in F if f.get('ret_250d') is not None and abs(f['ret_250d']) > 400]
+
+          print(f'最新净值日: {newest}（距今 {age} 天）')
+          print(f'基金数: {len(F)}')
+          print(f'异常值: {bad if bad else "无"}')
+
+          if age > 7:
+              print('::warning::数据可能已过期，最新净值日是 %s' % newest)
+          if bad:
+              print('::warning::发现可疑收益值: %s' % bad)
+          PY
+
+      # ---------- 提交 ----------
+      - name: 提交更新
+        run: |
+          git config user.name  "fund-board-bot"
+          git config user.email "bot@users.noreply.github.com"
+
+          # 只提交数据文件，不动代码
+          git add _assets/data.js
+
+          if git diff --staged --quiet; then
+            echo "数据没有变化，跳过提交"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            STAMP=$(date -u -d '+8 hours' '+%Y-%m-%d')
+            git commit -m "data: 更新基金数据 ${STAMP}" \
+              -m "自动抓取 42 只基金净值 + 16 项行情，重算全部指标。来源：天天基金公开接口。"
+            git push
+            echo "已提交 ${STAMP} 的数据"
+          fi
+        id: commit
+
+      # ---------- 汇总 ----------
+      - name: 结果汇总
+        if: always()
+        run: |
+          echo "## 更新结果" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ 数据更新成功" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ 更新失败，请查看上方日志" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "旧的 _assets/data.js 保持不变（失败时不会破坏站点）" >> $GITHUB_STEP_SUMMARY

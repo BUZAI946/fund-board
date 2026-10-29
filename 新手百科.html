@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>新手百科与购买建议 — 基金股票</title>
+<meta name="description" content="5个必懂术语、3个收益错觉、三档仓位换算、完整配置方案、别碰清单、数据说明书（11个已修的坑）。">
+<link rel="stylesheet" href="_assets/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <a class="logo" href="总览.html">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 17l5-5 4 3 7-8"/><path d="M15 7h5v5"/>
+        </svg>
+      </span>
+      基金股票
+    </a>
+    <nav class="nav">
+      <a href="总览.html">首页</a>
+      <a href="债券基金.html" title="债券基金：钱借给国家或企业，收利息">债券</a>
+      <a href="股票基金.html" title="股票基金：钱买一篮子股票，不是买个股">股票</a>
+      <a href="商品基金.html" title="商品基金：钱买黄金、白银、原油、有色">商品</a>
+      <a href="新手百科.html">购买建议</a>
+    </nav>
+      <button class="search-trigger" type="button" aria-label="搜索">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="st-txt">搜索</span><kbd>Ctrl K</kbd>
+      </button>
+  </div>
+</div>
+
+<div class="ticker"><div class="ticker-track"></div></div>
+
+<div class="data-banner" id="dataBanner"></div>
+
+
+<main>
+<div class="wrap">
+  <div class="crumb"><a href="总览.html">首页</a> <span>/</span> <span style="color:#96a8c2">新手百科 · 购买建议 · 数据说明书</span></div>
+</div>
+
+<header class="hero" style="padding:36px 0 32px">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:0">
+      <div class="kicker" style="color:#f5b942">Guide · 从零开始</div>
+      <h1 style="font-size:clamp(26px,3.8vw,42px)">看不懂术语，就不该下单<br>
+        <span style="font-size:.52em;color:#96a8c2;font-weight:600">这一页把该说的都说了</span>
+      </h1>
+      <p style="margin-top:14px">
+        5 个必懂的词 → 3 个会让你亏钱的错觉 → 具体买什么、买多少 → 哪些别碰 →
+        以及<b style="color:#e8eef8">这份看板每一个数字是怎么算的、哪里可能错</b>。
+      </p>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 5 个词 ============ -->
+<section class="block" style="border-top:none;padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">01 · Vocabulary</div>
+      <h2>先搞懂 5 个词</h2>
+      <p>这 5 个词看懂了，你自己就能判断一只基金适不适合你，不用再问别人。</p>
+    </div>
+    <div class="grid g3" id="termRow"></div>
+
+    <div class="note danger reveal">
+      <b>新手最常犯的一个错：只看"近一年最大回撤"，不看"全历史最大回撤"。</b><br>
+      这 40 只基金，近一年<b>平均</b>最深跌 <b class="n">24.74%</b>，全历史<b>平均</b>最深跌 <b class="n">42.27%</b>
+      —— 按平均值算，深了 <b class="n">1.71 倍</b>。<br>
+      但更贴近你实际感受的算法是逐个比：<b class="hl-up">每只基金"全历史回撤 ÷ 近一年回撤"，
+      中位数是 2.14 倍</b>。<br>
+      连最安全的短债基金 001512，这个比值高达 <b class="n">20.7 倍</b>（近一年只跌 0.20%，历史上跌过 4.14%）。
+      <b>没有任何品种能逃过这条规律。</b>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 个错觉 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">02 · Illusions</div>
+      <h2>3 个会让你亏钱的错觉</h2>
+      <p>每一个都有真实数据撑着，不是"感觉"。</p>
+    </div>
+
+    <!-- 错觉1 -->
+    <h3 style="font-size:17px;margin:8px 0 14px;display:flex;align-items:center;gap:9px" class="reveal">
+      <span class="tag danger">错觉一</span> 同一只基金，能同时告诉你"赚 9.28%"和"亏 0.79%"
+    </h3>
+    <div class="tbl-wrap reveal">
+      <table id="gapTable"></table>
+    </div>
+    <div class="note reveal">
+      <b>这不是有人在骗你。</b>是"收益率"这四个字背后有好几种算法：算不算分红、
+      用 250 个交易日还是 1 个日历年、用单位净值还是累计净值。<br>
+      <b style="color:#f5b942">你以为你在比较两只基金，其实你在比较两个算法。</b>
+      所以本看板<b>全站统一</b>用"近250交易日 · 累计净值 · 分红再投"这一个口径。
+    </div>
+
+    <!-- 错觉2 -->
+    <h3 style="font-size:17px;margin:30px 0 14px;display:flex;align-items:center;gap:9px" class="reveal">
+      <span class="tag danger">错觉二</span> 分红那天你的钱"少"了——其实一分没少
+    </h3>
+    <div class="grid g2">
+      <div class="card card-pad reveal">
+        <div style="font-size:14px;color:#f5b942;font-weight:700;margin-bottom:10px">头号案例：161725 招商白酒A</div>
+        <div style="display:flex;gap:20px;margin:14px 0">
+          <div>
+            <div style="font-size:11.5px;color:#7b8fb0">单位净值口径（App常见）</div>
+            <div class="big-num down" style="font-size:28px">-31.54%</div>
+          </div>
+          <div>
+            <div style="font-size:11.5px;color:#7b8fb0">复权口径（真实到手）</div>
+            <div class="big-num up" style="font-size:28px">-9.94%</div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#96a8c2;line-height:1.85">
+          两者相差 <b class="hl-up">21.60 个百分点</b>，是全市场差距最大的一只。<br>
+          <b style="color:#e8eef8">App 告诉你亏了三分之一，其实只亏了一成。</b>
+        </div>
+        <div class="note warn" style="margin-bottom:0">
+          <b>这是双向的坑：</b>反过来看，你觉得"跌了 31%，够便宜了"想去抄底——
+          <b>它根本没跌那么多，便宜程度被夸大了 3 倍。</b>
+        </div>
+      </div>
+
+      <div class="card card-pad reveal d1">
+        <div style="font-size:14px;color:#f5b942;font-weight:700;margin-bottom:10px">更微妙的：007466 红利低波</div>
+        <div style="display:flex;gap:20px;margin:14px 0">
+          <div>
+            <div style="font-size:11.5px;color:#7b8fb0">单位净值口径</div>
+            <div class="big-num down" style="font-size:28px">-0.76%</div>
+          </div>
+          <div>
+            <div style="font-size:11.5px;color:#7b8fb0">复权口径</div>
+            <div class="big-num up" style="font-size:28px">+2.67%</div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;color:#96a8c2;line-height:1.85">
+          <b class="hl-up">正负号直接反转。</b>为什么？因为"分红再投资"<b>不是默认选项</b>——
+          国内基金默认通常是现金分红，钱打到你账户，不会自动买成更多份额。
+        </div>
+        <div class="note danger" style="margin-bottom:0">
+          <b>所以 "+2.67%" 只在"你选了红利再投资"这个前提下成立。</b>
+          如果你选的是现金分红，你在持仓页看到的就是 <b class="n">-0.76%</b>，
+          你会在最低点把一个其实在赚钱的基金卖掉。
+        </div>
+      </div>
+    </div>
+
+    <!-- 错觉3 -->
+    <h3 style="font-size:17px;margin:30px 0 14px;display:flex;align-items:center;gap:9px" class="reveal">
+      <span class="tag danger">错觉三</span> 看到"胜率 99%"就以为稳了
+    </h3>
+    <div class="note danger reveal">
+      <b>同一只基金、同一个经理、同一个策略、同一篮子资产，胜率能差 40.9 个百分点。</b><br>
+      · <b>019005 白银C</b>：持有 250 天胜率 <b class="n hl">99.0%</b>，但样本 <b>n=98</b>，成立于 2023-10-11，
+        <b>全部 98 个窗口恰好落在白银上涨那两年</b>。<br>
+      · <b>161226 白银A</b>：同经理赵建、同白银期货策略，样本 <b>n=496</b>，胜率 <b class="n hl">58.1%</b>。<br><br>
+      <b style="color:#f5b942">看到"胜率 99%""上涨概率 81%"，先问三句话：样本有多少（n）？覆盖几年？跨越几个牛熊？</b>
+    </div>
+    <div class="note warn reveal">
+      <b>同类陷阱还有两例：</b><br>
+      ① 某黄金基金"未来20日上涨概率 81.0%"（n=52），而同样超卖处境用 n=449 的大样本只有 <b class="n">51.8%</b>——差 29.2 个百分点。<br>
+      ② 流传很广的"黄金 65.8% 上涨概率"，是把两组<b>筛选条件完全不同</b>的数字硬平均出来的，
+        <b class="hl-up">不对应任何真实历史情景</b>。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 购买建议 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">03 · The Plan</div>
+      <h2>购买建议</h2>
+      <p>
+        这是<b style="color:#e8eef8">基于历史数据给出的配置框架，不是预测涨跌</b>。
+        我的立场不是"会涨"也不是"会跌"，而是：
+        <b style="color:#f5b942">现在这个位置，你以为的收益比你以为的少，你承担的风险比你以为的多。</b>
+      </p>
+    </div>
+
+    <div class="note reveal">
+      <b>第一步：先决定拿多少钱出来。</b>这件事比"买哪只"重要十倍。
+      <b style="color:#e8eef8">拿出来的钱，必须是三年内用不到的。</b>
+      如果这笔钱明年要交学费、后年要付首付，那它就不该进这里——不管收益多好看。
+    </div>
+
+    <h3 style="font-size:16px;margin:24px 0 14px" class="reveal">第二步：三档仓位，选一个你能睡着的</h3>
+    <div class="grid g3" id="levelRow"></div>
+
+    <h3 style="font-size:16px;margin:30px 0 14px" class="reveal">第三步：具体怎么分（以 10 万元可投资金为例）</h3>
+    <div class="tbl-wrap reveal">
+      <table id="allocTable"></table>
+    </div>
+
+    <div class="note good reveal">
+      <b>为什么债券占大头？</b>不是因为它涨得多，而是因为它的<b>波动只有 0.35%~1.24%</b>、
+      <b>近一年最深只跌 0.20%~0.67%</b>——<b>这是新手唯一一个"跌了你也不会慌"的位置</b>。
+    </div>
+
+    <div class="note danger reveal">
+      <b>但必须说清两件风险：</b><br>
+      ① <b>债券今年赚的是"涨价"，不是利息。</b>涨价的原因是利率跌到 <b class="n up">1.6412%</b> 的历史低位。
+        <b>利率已低到不能再低，这块涨幅不可重复。</b><br>
+      ② <b>反过来，利率只要往回走一点，7-10 年长债跌得最快</b>。
+        003376 历史上最惨亏过 <b class="n up">8.27%</b>——这就是为什么本看板只给它 <b class="n">15%</b>，
+        而把更多权重给了久期更短的中短债（001512 全历史只亏 4.14%）。
+    </div>
+
+    <div class="note danger reveal">
+      <b>⚠️ 一个必须诚实告诉你的对照：过去这一年，"不分散"全面更划算。</b><br>
+      把钱<b>全部</b>买那只长债基金 003376：收益 <b class="n hl">+4.92%</b>、波动 <b class="n hl">1.23%</b>、
+      回撤 <b class="n hl">-0.65%</b>、夏普 <b class="n hl">2.37</b>。<br>
+      而本看板建议的分散组合：<b class="n">+3.87%</b> / <b class="n">2.48%</b> / <b class="n">-1.53%</b> / <b class="n">0.76</b>。<br>
+      <b style="color:#ff4d5e">单买在收益、波动、回撤、夏普 —— 四项全赢，没有一项输。</b><br><br>
+      <b>为什么？</b>两个原因，都不是"分散没用"：<br>
+      ① <b>这一年债券单边上涨</b>，而 003376 是久期最长的一只，涨得最多（+5.05%，四只债基里第一）。<br>
+      ② 建议组合里有 <b>20% 现金</b>，现金只赚 0.902%。<b>这 20% 现金单独就拖累了约 0.7 个百分点</b>
+      （0.20 × (5.05% − 0.90%)）。<br><br>
+      <b style="color:#f5b942">那为什么还是不建议你全押 003376？</b>三个理由，跟收益无关：<br>
+      · 它是 7-10 年长债，<b>全历史最深亏过 8.27%</b>，是 001512（-4.14%）的两倍。全押就是 100% 押在"利率不反弹"这一件事上。<br>
+      · <b>机构持有比例四期从 22.07% 撤到 9.32%</b>（撤了 58%）——专业资金正在离开它。<br>
+      · 中国 10 年期国债收益率已到 <b class="n">1.6412%</b> 的历史低位。<b>利率已经低到不能再低，靠"涨价"赚钱的空间很小了。</b><br><br>
+      <b>说白了：这不是"哪个收益高"的问题，是"你愿意把全部身家押在一个方向上，还是留点余地"的问题。</b>
+      如果你能接受全押一只长债、并且扛得住它历史最惨的 -8.27%，那单买确实更划算——
+      <b>但那已经不是"新手配置"，那是一个明确的方向性押注。</b>
+    </div>
+
+    <h3 style="font-size:16px;margin:34px 0 14px" class="reveal">第四步：这些别碰</h3>
+    <div class="tbl-wrap reveal">
+      <table id="avoidTable"></table>
+    </div>
+    <div class="note warn reveal">
+      <b>"别碰"不等于"这只基金垃圾"。</b>它们是有价值的工具，但<b>工具要匹配使用者</b>。
+      这些品种的共同问题是：<b style="color:#e8eef8">新手在它们身上犯错的代价，远大于做对的收益。</b>
+    </div>
+
+    <h3 style="font-size:16px;margin:34px 0 14px" class="reveal">第五步：等这两个有日期的事过去</h3>
+    <div class="grid g2">
+      <div class="card card-pad reveal">
+        <div style="color:#f5b942;font-weight:700;margin-bottom:10px">📅 北京时间 10/30 凌晨 — FOMC 决议</div>
+        <ul class="plain">
+          <li>现任美联储主席是 <b>凯文·沃什</b>（不是鲍威尔），而且他<b>已取消前瞻指引</b>——
+              不会提前告诉你他要干什么。</li>
+          <li>12 月加息概率目前被定价在 <b class="hl-up">75%~80%</b>
+              （CME FedWatch + 纽约联储威廉姆斯本人 + 德银等多方）。</li>
+          <li>你要看的是<b>措辞偏向</b>，不是明确指引——因为他不给了。</li>
+          <li>注意时差：<b>10/29 白天国内看到的是二十届五中全会公报，不是 FOMC 结果。</b></li>
+        </ul>
+      </div>
+      <div class="card card-pad reveal d1">
+        <div style="color:#f5b942;font-weight:700;margin-bottom:10px">📅 11 月 3 日 — 美国中期选举</div>
+        <ul class="plain">
+          <li>油价<b>双向最大变量</b>。</li>
+          <li>10/28 已经预演过一次：伊朗方面一句表态，布伦特当天跌 1%、WTI 跌破百元。</li>
+          <li>这也是为什么<b>现在追原油特别危险</b>——5 只原油基金的 52 周位置都在 98.3%~100%。</li>
+        </ul>
+        <div class="note good" style="margin-bottom:0">
+          <b>大白话：等一个有日期的东西，比等一个感觉靠谱得多。</b>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px;margin:34px 0 14px" class="reveal">第六步：具体怎么下单（分批建仓 · 再平衡 · 卖出）</h3>
+
+    <div class="note reveal">
+      <b>先说一个反常识的事：基金没有"入场价"和"止损价"。</b><br>
+      你买股票可以挂"跌到 45 元就买"，基金不行——基金按<b>当天收盘净值</b>成交，
+      15:00 前提交算当天，15:00 后提交算下一个交易日。
+      <b>所以别人告诉你"基金止损位设在 XX"，那是外行话。</b><br>
+      基金能控制的只有三件事：<b>买多少、什么时候买、什么时候卖。</b>
+    </div>
+
+    <h4 style="font-size:14.5px;margin:22px 0 12px;color:#6aacff">① 建仓表：三批，但只有一批需要等</h4>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead><tr>
+          <th class="left">批次</th><th class="left">什么时候</th><th class="left">买什么</th>
+          <th>占计划资金</th><th>累计仓位</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="left"><b>第 0 批</b><br><span style="font-size:11px;color:#7286a8">当天做完</span></td>
+            <td class="left">下一个交易日 <b>15:00 前</b></td>
+            <td class="left">001512 <b class="n">25%</b> ＋ 000015 <b class="n">20%</b> ＋ 003376 <b class="n">15%</b>
+              ＋ 050025 <b class="n">6.67%</b><br>
+              <span style="font-size:11.5px;color:#7286a8">余下 33.33% 先放 000509 货币基金</span></td>
+            <td><b class="n hl">66.67%</b></td>
+            <td>66.67%</td>
+          </tr>
+          <tr>
+            <td class="left"><b>第 1 批</b></td>
+            <td class="left">11/04 ~ 11/06 之间任一天</td>
+            <td class="left">050025 <b class="n">6.67%</b></td>
+            <td>6.67%</td>
+            <td>73.33%</td>
+          </tr>
+          <tr>
+            <td class="left"><b>第 2 批</b></td>
+            <td class="left">12 月 FOMC 决议后 <b>3 个交易日内</b></td>
+            <td class="left">050025 <b class="n">6.66%</b></td>
+            <td>6.66%</td>
+            <td>80.00%</td>
+          </tr>
+          <tr style="background:#121c2f">
+            <td class="left"><b>永久现金</b></td>
+            <td class="left">一直留着</td>
+            <td class="left">000509 货币基金</td>
+            <td><b class="n">20%</b></td>
+            <td><b class="n">100%</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note danger reveal">
+      <b>⚠️ 这里有条最重要的反直觉结论：债券那 60% 不要分批，一次买完。</b><br>
+      因为债券的波动只有 0.35%~1.24%，分批对降低风险几乎没用，
+      却让你<b>多等了一个月少赚利息</b>。<br>
+      <b>需要分批的只有 050025（标普500）</b>——它波动 12.09%，
+      而且正好卡在 FOMC（10/30）和美国中期选举（11/3）这两个事件中间。
+      <b>把 20% 的仓位拆成三笔，就是为了让这两个事件期间你只有 6.67% 暴露在它上面。</b>
+    </div>
+
+    <h4 style="font-size:14.5px;margin:26px 0 12px;color:#6aacff">② 分批到底值不值？用真实的钱算</h4>
+    <div class="grid g2">
+      <div class="card reveal">
+        <div style="font-size:12px;color:#7286a8;margin-bottom:8px">过去一年同样的窗口，两种买法</div>
+        <table style="font-size:13px">
+          <thead><tr><th class="left">买法</th><th>收益</th><th>波动</th><th>回撤</th></tr></thead>
+          <tbody>
+            <tr><td class="left">一次性买满</td>
+              <td class="num-cell up">+3.87%</td><td>2.48%</td><td class="down">-1.53%</td></tr>
+            <tr><td class="left">分 3 批（第20/45日）</td>
+              <td class="num-cell up">+3.68%</td><td>2.33%</td><td class="down">-1.52%</td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:12.5px;color:#96a8c2;margin-top:12px;line-height:1.8">
+          分批的确定代价：<b class="hl-up">0.19 个百分点</b>（10 万块约 <b class="n up">190 元</b>）。<br>
+          换来的是：事件期间最大暴露从 20% 降到 <b class="n">6.67%</b>。
+        </div>
+      </div>
+      <div class="card reveal d1">
+        <div style="font-size:12px;color:#7286a8;margin-bottom:8px">三个数字，你要分清楚</div>
+        <div style="font-size:13px;line-height:2">
+          <div><b style="color:#6aacff">正常年份最深</b>　<b class="n hl">-1.53%</b>
+            <span style="color:#7286a8;font-size:12px">（10万浮亏 1,530 元）</span></div>
+          <div><b style="color:#e8a93c">警戒线</b>　　　　　<b class="n hl">-3.00%</b>
+            <span style="color:#7286a8;font-size:12px">（约两倍正常，击穿=逻辑变了）</span></div>
+          <div><b style="color:#ff8a5c">四腿同时最惨</b>　　<b class="n up">-9.20%</b>
+            <span style="color:#7286a8;font-size:12px">（10万变 90,804 元）</span></div>
+        </div>
+        <div style="font-size:12px;color:#96a8c2;margin-top:10px;line-height:1.75">
+          第三个是<b>真正的下限</b>：假设 001512、000015、003376、050025
+          同时打出各自全历史最深回撤。<br>
+          <b style="color:#ff8a5c">其中 050025 一只就贡献 -6.10pp，比三只债券合计（-3.09pp）还多一倍。</b>
+        </div>
+      </div>
+    </div>
+
+    <h4 style="font-size:14.5px;margin:26px 0 12px;color:#6aacff">③ 三档资金的换算（照着抄）</h4>
+    <div class="tbl-wrap reveal">
+      <table id="sizeTable"></table>
+    </div>
+
+    <div class="note reveal">
+      <b>费率这块能省不少：</b>这几只基金申购费原价 0.50%~1.20%，
+      但<b>天天基金/支付宝等平台常年 1 折</b>，折后 0.05%~0.12%。<br>
+      <b>10 万块一次买齐：原价 675 元 → 1 折 67.5 元，差 607.5 元。</b>
+      这 607 块相当于你多赚了 0.6 个百分点的收益——<b>比你在费率上省心更实际。</b>
+    </div>
+
+    <div class="note warn reveal">
+      <b>A 类还是 C 类？一个公式解决：</b><br>
+      C 类没有申购费，但每年多收 <b>销售服务费</b>（通常 0.2%~0.4%）。<br>
+      以 050025（A）对 006075（C）为例：C 类每年多付约 <b>0.28 个百分点</b>。<br>
+      · 申购费 <b>1 折</b>（0.12%）时：<b>持有超过约 5 个月，买 A 更划算</b><br>
+      · 申购费<b>原价</b>（1.20%）时：<b>持有超过约 4.3 年才轮到 A 更划算</b><br>
+      <b style="color:#f5b942">记住一句话：打算长期拿着就买 A，只想短炒就买 C。新手一律买 A。</b>
+    </div>
+
+    <h4 style="font-size:14.5px;margin:26px 0 12px;color:#6aacff">④ 什么情况暂停、什么情况加速</h4>
+    <div class="grid g2">
+      <div class="card card-pad reveal">
+        <div style="color:#ff8a5c;font-weight:700;margin-bottom:10px">⏸ 暂停建仓（触发任一条，不做下一批）</div>
+        <ul class="plain" style="margin-left:18px">
+          <li>10 年期国债收益率<b>单周上行超过 20 个基点</b>（债券在快速下跌）</li>
+          <li>050025 的净值<b>单日跌幅超过 3%</b>（美股出事了）</li>
+          <li>VIX 恐慌指数<b>突破 30</b></li>
+          <li>组合浮亏<b>超过 -3.00%</b>（击穿警戒线）</li>
+        </ul>
+        <div class="note danger" style="margin-bottom:0">
+          <b>注意：暂停 = 不买下一批，已经买了的不动。</b>
+          暂停不是卖出。
+        </div>
+      </div>
+      <div class="card card-pad reveal d1">
+        <div style="color:#6aacff;font-weight:700;margin-bottom:10px">⏩ 加速建仓（把"以后的钱"提前用）</div>
+        <ul class="plain" style="margin-left:18px">
+          <li>050025 从近期高点<b>回落超过 10%</b>（美股跌出机会）</li>
+          <li>10 年期国债收益率<b>回落到 1.8% 以下</b>（债券又有空间）</li>
+          <li>组合浮亏在 -1.53% ~ -3.00% 之间<b>横盘超过 2 周</b>（恐慌已过）</li>
+        </ul>
+        <div class="note good" style="margin-bottom:0">
+          <b>加速 ≠ 加仓。</b>只是把原计划后面几批的钱提前用掉，
+          <b>总仓位上限 80%（含 20% 永久现金）永远不变。</b>
+        </div>
+      </div>
+    </div>
+
+    <h4 style="font-size:14.5px;margin:26px 0 12px;color:#6aacff">⑤ 再平衡：半年看一次，别天天盯</h4>
+    <div class="note reveal">
+      <b>频率：每 6 个月一次，一年两次。</b>看太勤会让你忍不住乱动。<br>
+      <b>触发条件：只按"三条腿"看</b>——① 债券合计（应 60%）② 050025（应 20%）③ 现金（应 20%）。
+      <b>任一条偏离原定比例 5 个百分点以上才动。</b><br>
+      <b>怎么动：先用新钱补，再动老仓。</b>比如债券涨到 66% 了，
+      下次投钱就往股票和现金那边放，不要急着赎回债券（赎回有费用）。<br>
+      <b>同一类里的几只债券之间不要互相调</b>——001512 和 000015 差几个点无所谓，动了纯亏手续费。
+    </div>
+
+    <h4 style="font-size:14.5px;margin:26px 0 12px;color:#6aacff">⑥ 卖出规则：新手最缺的一节</h4>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead><tr>
+          <th class="left" style="width:50%">🔴 必须卖（S1~S5，无条件执行）</th>
+          <th class="left">🟢 绝对不卖（N1~N4，这四条更救命）</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="left wrap-cell">
+              <b>S1</b> 这笔钱<b>三年内要用了</b>（买房/学费/治病）<br>
+              <b>S2</b> 组合浮亏<b>击穿 -9.20%</b>（四腿同时打最深，说明判断已错）<br>
+              <b>S3</b> 10 年期国债收益率<b>升破 2.00%</b>（债券逻辑反转）<br>
+              <b>S4</b> 003376 机构持有比例<b>连续两期继续下降</b><br>
+              <b>S5</b> 你<b>睡不着觉</b>（这条是真的，不是玩笑）
+            </td>
+            <td class="left wrap-cell">
+              <b>N1</b> 只是<b>浮亏 -1.5%</b>（正常年份最大回撤，属于噪音）<br>
+              <b>N2</b> 别人说"要跌了"（<b>没有可量化触发条件就不动</b>）<br>
+              <b>N3</b> 某只基金<b>短期排名下滑</b>（排名是后视镜）<br>
+              <b>N4</b> <b>持有不满一年</b>——数据显示持有 20 天的胜率只有
+              <b>68.6%~78.8%</b>，持有 250 天是 <b>91.5%~94.6%</b>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn reveal">
+      <b>N4 这条值得单独说：为什么"第一年内不卖"是有数据支撑的？</b><br>
+      这四只基金的历史统计：<b>随便买、只拿 20 天，赚钱概率 68.6%~78.8%；
+      拿满 250 天，概率升到 91.5%~94.6%。</b><br>
+      <b style="color:#f5b942">换句话说：你拿得越短，越像在赌；拿满一年，才是在投资。</b>
+      而且赎回费通常按持有期递减（7 天内 1.5%、7 天~1 年 0.5%、1~2 年 0.25%），
+      <b>拿不满 7 天卖出，光赎回费就能吃掉你大半年的收益。</b>
+    </div>
+
+    <h4 style="font-size:14.5px;margin:26px 0 12px;color:#6aacff">⑦ 下单前检查清单（一条没打勾就别下单）</h4>
+    <div class="card card-pad reveal">
+      <div class="grid g2" style="gap:6px">
+        <div style="font-size:13px;line-height:2.1;color:#96a8c2">
+          ☐ 这笔钱<b>三年内用不到</b><br>
+          ☐ 我有<b>应急金</b>（3~6 个月生活费）在别处<br>
+          ☐ 我<b>没有任何高息负债</b>（信用卡/网贷）<br>
+          ☐ 我选好了<b>档位</b>（25% / 50% / 90%）<br>
+          ☐ 我确认了<b>申购费是 1 折</b><br>
+          ☐ 我选的是 <b>A 类</b>（不是 C 类）
+        </div>
+        <div style="font-size:13px;line-height:2.1;color:#96a8c2">
+          ☐ 我知道<b>基金没有止损价</b>，只能控制仓位<br>
+          ☐ 我知道<b>正常浮亏可能到 -1.53%</b>（10万亏 1,530 元）<br>
+          ☐ 我知道<b>极端情况可能到 -9.20%</b>（10万变 90,804 元）<br>
+          ☐ 我知道<b>第一年内不该卖</b><br>
+          ☐ 我设好了<b>半年后的再平衡提醒</b><br>
+          ☐ <b>我能扛住上面所有数字。</b>
+        </div>
+      </div>
+      <div class="note danger" style="margin-bottom:0">
+        <b>最后一条最重要。</b>如果看到 -9.20%（10 万变 9 万）你会慌到睡不着，
+        <b>那就把档位降到 25%，或者干脆先只买货币基金。</b>
+        没有"必须投资"这回事。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 压力测试 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Stress Test</div>
+      <h2>最坏情况，你的账户会变成多少</h2>
+      <p>
+        填一个金额，看它在各种情景下会变成多少。
+        <b style="color:#e8eef8">这不是预测，是"历史上真实发生过的跌幅"。</b>
+      </p>
+    </div>
+    <div class="card card-pad reveal" id="stressBox"></div>
+  </div>
+</section>
+
+<!-- ============ 常见问题 FAQ ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">FAQ</div>
+      <h2>新手最常问的 10 个问题</h2>
+      <p>都是真实会问的问题。<b style="color:#e8eef8">点开看答案，每条都有数据支撑。</b></p>
+    </div>
+    <div class="faq-list reveal" id="faqList"></div>
+  </div>
+</section>
+
+<!-- ============ 数据说明书 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">04 · Data Notes</div>
+      <h2>数据说明书</h2>
+      <p>你说过"数据必须真实有效"。这一节把<b style="color:#e8eef8">所有口径、所有已修正的错误、所有回答不了的问题</b>全部摊开。</p>
+    </div>
+
+    <div class="grid g2">
+      <div class="card card-pad reveal">
+        <h4 style="font-size:14.5px;color:#3d8bfd;margin-bottom:12px">数据来源与时间</h4>
+        <ul class="plain" style="margin-left:18px">
+          <li><b>来源：</b>天天基金（东方财富）公开接口 + 东财 F10 官方净值<b>双源校验</b> + 新浪财经实时行情。</li>
+          <li><b>快照时间：</b><span class="mono" id="builtAt"></span></li>
+          <li><b>行情时间：</b><span class="mono" id="marketTs"></span></li>
+          <li><b>滞后说明：</b>10 只 QDII（5 原油 + 5 海外美股）净值只到 <b>2026-10-26</b>，
+              比 A 股/港股基金<b>滞后 1~2 个交易日</b>。</li>
+          <li><b>机构持有：</b>四个报告期，最近一期 <b>2026-06-30</b>，滞后当前约 4 个月。</li>
+        </ul>
+      </div>
+      <div class="card card-pad reveal d1">
+        <h4 style="font-size:14.5px;color:#3d8bfd;margin-bottom:12px">全站统一的口径铁律</h4>
+        <ul class="plain" style="margin-left:18px">
+          <li><b>收益率</b>一律用 <code>ret_250d</code>：近 250 交易日、累计净值、<b>含分红再投</b>。
+              这是你账户真实到手的数。</li>
+          <li><b>板块平均</b>一律用"等权金额买入持有"的<b>算术平均</b>，不用按净值水平加权
+              （因为每份多少钱是基金公司当初随便定的）。</li>
+          <li><b>官方"近1年"字段</b>：只对<b>从未分红</b>的 29 只可信；<b>只要分过红就一律不用</b>
+              （偏差 0.08~20.61 个百分点，<b>方向不可预测</b>）。</li>
+          <li><b>组合回测</b>起点一律归一化为 1.0（有断言守住，防止凭空多算本金）。</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="font-size:16px;margin:30px 0 14px" class="reveal">已经修掉的 11 个坑</h3>
+    <div class="tbl-wrap reveal">
+      <table id="pitTable"></table>
+    </div>
+
+    <div class="note danger reveal">
+      <b>这份看板回答不了的问题（我不想装作能回答）：</b><br>
+      ① <b>Q3 到底是谁在卖油气股票</b>——持有人结构快照是 6 月 30 日的，资金流向是 9 月 30 日的，
+        <b>两者差一个季度，卖方身份没有数据</b>。<br>
+      ② <b>2026 年 10 月这批基金的持有人结构</b>——无数据。<br>
+      ③ <b>机构持有比例上升，到底是主动买入还是散户赎回导致的被动上升</b>——没有申赎明细，无法区分。<br>
+      ④ <b>未来会不会跌</b>——没有任何历史指标能预测这个。本看板所有结论都是<b>赔率与风险</b>层面的，不是方向预测。<br>
+      ⑤ <b>官方"近1年"字段在分红品种上为什么会偏</b>——成因不明。
+        曾被推测为"按单位净值基计算"，但已被 <b>3 个反例证伪</b>
+        （007466、110017、004432 正负号都相反），所以本看板<b>只标注事实、不写成因</b>。
+    </div>
+
+    <div class="note warn reveal">
+      <b>如果这份看板说错了，什么情况下会被打脸？（可逐条去查）</b><br>
+      ① 中国 10 年期国债收益率从 <b class="n">1.6412%</b> 继续下行并站稳 1 个月以上
+        → 说明"债券上行空间已耗尽"是错的。<br>
+      ② CME FedWatch 对 12 月加息的定价<b>跌破 50%</b> → 说明"FOMC 是反向事件"是错的。<br>
+      ③ 沪深300 收复 MA60（需涨 <b class="n">+9.57%</b>）并站稳 20 个交易日，
+        <b>且</b> 10 年期美债跌破 4.0%，<b>且</b> 融资余额回到 <b>25,000 亿</b>以上
+        （10/26 为 23,970.55 亿）→ 说明"现在不是买的时候"整体判断被证伪。<br>
+      ④ 恒生科技 2 只站上 MA60（需涨 <b>+17.45% / +17.55%</b>）
+        <b>且</b> 南向资金单月净流入 ≥ 1,500 亿港元 → 说明"港股是陷阱"是错的。<br>
+      ⑤ 长期债券基金 003376 的机构持有比例<b>连续两期回升</b> → 说明"机构在撤长债"是错的。
+    </div>
+
+    <div class="note reveal">
+      <b>关于"AI 分析"这件事，我想说最后一句：</b><br>
+      这份看板的所有<b>数字</b>都是程序从真实行情算出来的，你可以核对。
+      但所有<b>判断</b>——"债券最适合新手""原油别追""港股是陷阱"——
+      都是基于历史数据的推断，<b style="color:#e8eef8">它们可能错</b>。
+      我已经在上面把"什么情况下会错"逐条写出来了，你可以拿去检验。
+      <b style="color:#f5b942">能被打脸的分析，比不能被打脸的分析可信一点。</b>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b>数据来源：</b>天天基金（东方财富）公开接口 · 东财 F10 官方净值双源校验 · 新浪财经公开行情接口</div>
+    <div><b>全部指标由程序生成，未做任何主观调整。</b>所有收益率口径统一为「近250交易日 · 累计净值 · 含分红再投」。</div>
+    <div class="foot-warn">
+      本看板仅用于数据学习与展示，不构成投资建议。基金投资有风险，入市需谨慎。<br>
+      历史业绩不代表未来表现。任何"胜率""概率""最大回撤"均为历史频率统计，不构成预测。
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" aria-label="返回顶部">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+</button>
+
+<script src="_assets/data.js"></script>
+<script src="_assets/live-numbers.js"></script>
+<script src="_assets/chart.js"></script>
+<script src="_assets/anim.js"></script>
+<script src="_assets/caliber.js"></script>
+<script src="_assets/features2.js"></script>
+<script src="_assets/search.js"></script>
+<script src="_assets/export.js"></script>
+<script src="_assets/tools.js"></script>
+<script>
+(function(){
+  var D = window.DATA, U = window.UI;
+  document.getElementById('builtAt').textContent = D.builtAt;
+  document.getElementById('marketTs').textContent = D.market.ts;
+
+  /* ---------- 5 个词 ---------- */
+  (function(){
+    var T = [
+      ['年化波动率','这只基金"晃得有多厉害"。数字越大，一年里上上下下越夸张。',
+       '本看板："几乎不颠"=1.5%以下，"极颠簸"=22%以上'],
+      ['最大回撤','从最高点掉下来，最惨掉到过多少。这是你<b>实际会经历的痛苦</b>，比波动率更真实。',
+       '近一年 vs 全历史，两者能差 2 倍以上'],
+      ['全历史最大回撤','它<b>这辈子</b>最惨跌过多少。新手最容易忽略这一栏，但它才是真正的风险尺子。',
+       '40只平均：近一年 -24.74%，全历史 -42.27%'],
+      ['夏普比率','每担一份风险，换回几份超额收益。越高越划算。',
+       '债券类要小心：波动率极小、分母接近0，数字会被放大得夸张（可达 166 倍）'],
+      ['复权净值 vs 单位净值','分红那天单位净值会"掉"一截，但<b>你的钱一分没少</b>——从左口袋换到右口袋。',
+       '判断亏没亏必须看累计/复权口径，别看 App 首页那个价格'],
+      ['超买 / 超卖','RSI>70 叫超买（涨太快），RSI<30 叫超卖（跌太狠）。',
+       '<b>但超卖≠见底</b>：恒生科技 RSI 26.8 后，20日胜率只有 30.0%']
+    ];
+    document.getElementById('termRow').innerHTML = T.map(function(t,i){
+      return '<div class="term reveal d'+(i%3)+'"><h4>'+t[0]+'</h4>'+
+        '<div class="plain">'+t[1]+'</div><div class="raw">'+t[2]+'</div></div>';
+    }).join('');
+  })();
+
+  /* ---------- 口径差表 ---------- */
+  (function(){
+    var g = D.navGapTop.filter(function(x){ return Math.abs(x.divGap) > 0.5; }).slice(0,6);
+    var rows = g.map(function(x){
+      var flip = (x.ret250 > 0 && x.ret250nav < 0) || (x.ret250 < 0 && x.ret250nav > 0);
+      return {code:x.code, name:x.name, nav:x.ret250nav, ac:x.ret250,
+              gap:Math.abs(x.divGap), flip:flip};
+    });
+    var h = '<thead><tr><th class="left">代码</th><th class="left">名称</th>'+
+      '<th>单位净值口径<div style="font-weight:400;color:#7286a8;font-size:10.5px">App常见</div></th>'+
+      '<th>复权口径<div style="font-weight:400;color:#7286a8;font-size:10.5px">真实到手</div></th>'+
+      '<th>差多少</th><th class="left">这意味着什么</th></tr></thead><tbody>';
+    rows.forEach(function(r){
+      h += '<tr><td class="left"><span class="tcode">'+r.code+'</span></td>'+
+        '<td class="left"><span class="tname">'+U.esc(r.name)+'</span></td>'+
+        '<td>'+U.chg(r.nav)+'</td>'+
+        '<td><b class="'+U.cls(r.ac)+'">'+U.fmt(r.ac)+'</b></td>'+
+        '<td style="color:#f5b942;font-weight:700">'+r.gap.toFixed(2)+' pp'+
+          (r.flip?' <span class="tag danger">正负反转</span>':'')+'</td>'+
+        '<td class="left wrap-cell" style="font-size:12px;color:#96a8c2">'+
+          (r.flip ? '<b>一个说赚钱，一个说亏钱</b>——只看 App 会做出完全相反的决定'
+                  : '两个都亏，但 App 把亏损<b>夸大了 '+r.gap.toFixed(1)+' 个百分点</b>，容易恐慌割肉')+
+        '</td></tr>';
+    });
+    document.getElementById('gapTable').innerHTML = h + '</tbody>';
+  })();
+
+  /* ---------- 三档仓位 ---------- */
+  (function(){
+    var J = D.plans['J'], CASH0 = D.cash.slice().sort(function(a,b){ return b.yield7 - a.yield7; })[0];
+    var LEVELS = [
+      {w:25, t:'保守档', sub:'先试试水',
+       who:'适合完全没买过基金、或这笔钱两年内可能要用的人'},
+      {w:50, t:'平衡档', sub:'大多数人的默认选择',
+       who:'适合能接受"一年里账面浮亏 5% 以内"的人'},
+      {w:90, t:'进取档', sub:'组合内已含 20% 现金',
+       who:'适合确定三年内用不到、且能扛住更大浮亏的人'}
+    ];
+    document.getElementById('levelRow').innerHTML = LEVELS.map(function(L,i){
+      var money = 100000 * L.w / 100;
+      var after = money * (1 + J.r250 / 100);
+      var extra = money * (J.r250 - CASH0.yield7) / 100;
+      var normal = money * Math.abs(J.mdd) / 100;        /* 正常年份最深 -1.53% */
+      var extreme = money * 9.20 / 100;                  /* 四腿同时打全历史最深 -9.20% */
+      return '<div class="card card-pad reveal d'+i+'"'+(i===1?' style="border-color:rgba(245,185,66,.45)"':'')+'>'+
+        '<div style="display:flex;justify-content:space-between;align-items:baseline">'+
+          '<b style="font-size:16px">'+L.t+'</b>'+
+          '<span class="tag gold">总仓 '+L.w+'%</span></div>'+
+        '<div style="font-size:12px;color:#7b8fb0;margin:4px 0 12px">'+L.sub+'</div>'+
+        '<div class="big-num" style="font-size:28px;color:#e8eef8">'+U.comma(money)+' 元</div>'+
+        '<div style="font-size:12px;color:#7b8fb0;margin:4px 0 12px">以 10 万可投资金计</div>'+
+        '<div style="height:6px;background:#121c2f;border-radius:3px;overflow:hidden">'+
+          '<i class="lbar" data-w="'+L.w+'" style="display:block;height:100%;width:0;'+
+          'background:linear-gradient(90deg,#f5b942,#ff4d5e);transition:width 1.1s cubic-bezier(.2,.8,.2,1) '+(i*0.12)+'s"></i></div>'+
+        '<div style="font-size:12.5px;color:#96a8c2;margin-top:12px;line-height:1.85">'+
+          '若复现过去一年：<b class="hl">'+U.comma(after)+' 元</b><br>'+
+          '比全放货基多 <b class="hl">'+U.comma(extra)+' 元</b><br>'+
+          '正常年份最深浮亏 <b class="hl-up">约 '+U.comma(normal)+' 元</b>'+
+          '<span style="color:#7b8fb0;font-size:11px">（-1.53%）</span><br>'+
+          '极端情景最惨 <b class="hl-up">约 '+U.comma(extreme)+' 元</b>'+
+          '<span style="color:#7b8fb0;font-size:11px">（-9.20%）</span>'+
+        '</div>'+
+        '<div style="font-size:11.5px;color:#7b8fb0;margin-top:10px;padding-top:10px;border-top:1px solid #1a2740;line-height:1.7">'+
+          L.who+'</div>'+
+        '</div>';
+    }).join('');
+    setTimeout(function(){
+      Array.prototype.forEach.call(document.querySelectorAll('.lbar'), function(b){
+        b.style.width = b.getAttribute('data-w') + '%';
+      });
+    }, 260);
+  })();
+
+  /* ---------- 配置表 ---------- */
+  (function(){
+    var J = D.plans['J'];
+    var CASH0 = D.cash.slice().sort(function(a,b){ return b.yield7 - a.yield7; })[0];
+    var get = function(c){ return D.funds.filter(function(f){ return f.code === c; })[0]; };
+    var NOTES = {
+      '001512':['久期短（3-5年），利率反弹时跌得最少','全历史回撤 -4.14%，机构四期小幅加仓'],
+      '000015':['纯债，波动只有 0.35%，全场最不颠','全历史回撤 -4.10%，机构从53%加到77%'],
+      '003376':['久期长（7-10年），赚得最多但跌得也最狠','全历史回撤 -8.27%，机构四期撤离58%'],
+      '050025':['唯一提供"不是人民币资产"的一块','波动 12.09%，全历史回撤 -30.50%，机构大幅撤退']
+    };
+    var rows = [];
+    J.legs.forEach(function(l){
+      var f = get(l.code);
+      if (!f) return;
+      rows.push({
+        name: f.name, code: f.code, sec: f.secName,
+        w: Math.round(l.w * 100), ret: f.ret250, vol: f.vol, mdd: f.mddAll,
+        note: (NOTES[l.code]||['',''])[0], cost: (NOTES[l.code]||['',''])[1],
+        isCash: false
+      });
+    });
+    rows.push({
+      name: CASH0.name, code: CASH0.code, sec:'货币',
+      w: Math.round(J.cash*100), ret: CASH0.yield7, vol: 0, mdd: 0,
+      note:'随时能用，也是你补仓的子弹', cost:'只有 '+CASH0.yield7+'%，跑不赢通胀',
+      isCash: true
+    });
+
+    var h = '<thead><tr><th class="left">类别</th><th>建议占比</th><th>近1年</th>'+
+      '<th>波动率</th><th>全历史最深</th><th class="left">它的作用 / 它的代价</th></tr></thead><tbody>';
+    rows.forEach(function(r){
+      h += '<tr><td class="left" style="min-width:190px">'+
+        '<div class="tname">'+U.esc(r.name)+'</div>'+
+        '<div class="tcode">'+r.code+' · '+r.sec+'</div></td>'+
+        '<td><b class="hl" style="font-size:15px">'+r.w+'%</b></td>'+
+        '<td>'+U.chg(r.ret)+'</td>'+
+        '<td>'+(r.isCash?'0.00%':r.vol.toFixed(2)+'%')+'</td>'+
+        '<td class="down">'+(r.isCash?'0.00%':U.fmt(r.mdd))+'</td>'+
+        '<td class="left wrap-cell" style="font-size:12px;color:#96a8c2">'+U.esc(r.note)+
+          '<br><span style="color:#ff4d5e">代价：'+U.esc(r.cost)+'</span></td></tr>';
+    });
+    h += '<tr style="background:#121c2f"><td class="left"><b>合计</b></td>'+
+      '<td><b class="hl">'+rows.reduce(function(a,b){return a+b.w;},0)+'%</b></td>'+
+      '<td colspan="3" style="color:#7b8fb0;font-size:12px">组合真实回测：'+U.fmt(J.r250)+
+      ' / 波动 '+J.vol.toFixed(2)+'% / 回撤 '+U.fmt(J.mdd)+'</td>'+
+      '<td class="left" style="font-size:12px;color:#7b8fb0">10 万放一年约 <b class="hl">'+
+      U.comma(100000*(1+J.r250/100))+' 元</b></td></tr>';
+    document.getElementById('allocTable').innerHTML = h + '</tbody>';
+  })();
+
+  /* ---------- 别碰清单 ---------- */
+  (function(){
+    var WHY = {
+      '161226':'波动 58%（全场最高，是债券的 166 倍）；2/2 单日跌 31.50%（国内公募纪录）；机构仅 1.25%',
+      '019005':'同策略同经理，但"胜率99%"是 n=98 的取样陷阱；机构仅 0.07%（约140万元）',
+      '012348':'夏普 -1.65 全场最差；持有250天胜率 43.0% 全场最低；超卖后20日胜率仅 30%',
+      '012804':'同上；机构四期从 2.03% 撤到 0.40%；规模连续 4 期缩水 -32.2%',
+      '162411':'全历史 -87.61% 全场最深；现站 52 周最高点；持有250天胜率 51.0%（等于抛硬币）；规模两季 -67.3%',
+      '008888':'板块平均回撤只有 -11.29%，但它 -48.55%；波动 45.53%',
+      '001592':'持有250天胜率 45.3%；全历史回撤 -58.40%；规模仅 8.79 亿',
+      '011608':'持有250天胜率 47.5%；全历史回撤 -58.21%',
+      '013081':'波动 38.05%；全历史回撤 -47.96%；机构四期也在撤',
+      '501018':'现站 52 周位置 98.6%；超买时买入的20日胜率比随便买低 9.5 个百分点'
+    };
+    var order = ['161226','019005','012348','012804','162411','008888','001592','011608','013081','501018'];
+    var h = '<thead><tr><th class="left">代码</th><th class="left">名称</th><th>近1年</th>'+
+      '<th>波动率</th><th>全历史最深</th><th>1万最坏剩</th><th class="left">为什么新手别碰</th></tr></thead><tbody>';
+    order.forEach(function(code){
+      var f = D.funds.filter(function(x){ return x.code === code; })[0];
+      if (!f) return;
+      h += '<tr><td class="left"><span class="tcode">'+f.code+'</span></td>'+
+        '<td class="left" style="min-width:180px"><span class="tname">'+U.esc(f.name)+'</span></td>'+
+        '<td>'+U.chg(f.ret250)+'</td>'+
+        '<td>'+f.vol.toFixed(2)+'%</td>'+
+        '<td class="down" style="font-weight:700">'+U.fmt(f.mddAll)+'</td>'+
+        '<td style="color:#ff4d5e;font-weight:700">'+U.comma(U.worstLeft(f.mddAll))+' 元</td>'+
+        '<td class="left wrap-cell" style="font-size:12px;color:#96a8c2">'+(WHY[code]||'')+'</td></tr>';
+    });
+    document.getElementById('avoidTable').innerHTML = h + '</tbody>';
+  })();
+
+  /* ---------- 11 个坑 ---------- */
+  (function(){
+    var PIT = [
+      ['港股板块收益','-24.46%','-25.27%','原数字按"期初净值水平"加权，给跌最惨的两只配了最少的钱。等权金额买入持有才是真实体验。'],
+      ['有色板块收益','-8.27%','-4.79%','同一原因，方向相反——快照<b>夸大了 3.08 个百分点</b>的亏损。'],
+      ['原油板块收益','75.52%','76.71%','同一原因。'],
+      ['行业主题收益','-3.17%','-0.18%','同一原因。'],
+      ['A股宽基收益','-10.00%','-6.05%','同一原因。'],
+      ['债券板块收益','2.72%','2.97%','同一原因。'],
+      ['白酒近1年','-29.86%','-9.94%','官方字段是污染值：遍历全部 259 个窗口都复现不出它。它是全市场唯一 div_gap=21.6 的基金。'],
+      ['"官方近1年"字段','以为可信','分过红就别用','从未分红的 29 只与复权口径精确相等（0.00pp）；分过红的 11 只全部偏离，<b>方向不可预测</b>。'],
+      ['"近1月"字段','以为是近1年','近1月','字段拼音首字母：y=月(yuè)、n=年(nián)。syl_1y 是近1月，syl_1n 才是近1年。'],
+      ['组合回测起点','1.1','1.0','脚本 bug：现金权重被重复计入，凭空多给 10% 本金。已加断言修复。'],
+      ['"板块数字能代表个基"','默认可以','只有黄金/白银可以','判据是"板块内个基收益极差"：黄金 0.54、白银 0.45 可信；原油 61.69 完全不可信。']
+    ];
+    var h = '<thead><tr><th class="left">项目</th><th>错的 / 旧数字</th><th>采用的数字</th>'+
+      '<th class="left">为什么</th></tr></thead><tbody>';
+    PIT.forEach(function(p){
+      h += '<tr><td class="left" style="min-width:130px">'+p[0]+'</td>'+
+        '<td style="color:#7286a8;text-decoration:line-through">'+p[1]+'</td>'+
+        '<td class="hl" style="font-weight:700">'+p[2]+'</td>'+
+        '<td class="left wrap-cell" style="font-size:12px;color:#96a8c2;max-width:460px">'+p[3]+'</td></tr>';
+    });
+    document.getElementById('pitTable').innerHTML = h + '</tbody>';
+  })();
+
+  /* ---------- 三档资金换算表 ---------- */
+  (function(){
+    var MIN = 10000, MID = 50000, MAX = 100000;
+    var rows = [
+      {t:'第 0 批 · 当天买完', p:0.6667, w:'66.67%',
+       detail:'001512 25% / 000015 20% / 003376 15% / 050025 6.67%'},
+      {t:'第 1 批 · 11/04~11/06', p:0.0667, w:'6.67%', detail:'050025'},
+      {t:'第 2 批 · 12月FOMC后3日内', p:0.0666, w:'6.66%', detail:'050025'},
+      {t:'永久现金 · 一直留着', p:0.20, w:'20%', detail:'000509 货币基金'}
+    ];
+    var money = function(v){
+      return Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    };
+    var h = '<thead><tr><th class="left">批次</th><th class="left">买什么</th><th>占比</th>'+
+      '<th>1 万元</th><th>5 万元</th><th>10 万元</th></tr></thead><tbody>';
+    rows.forEach(function(r, i){
+      var isCash = r.t.indexOf('现金') >= 0;
+      h += '<tr'+(isCash?' style="background:#121c2f"':'')+'>'+
+        '<td class="left" style="min-width:150px"><b>'+r.t+'</b></td>'+
+        '<td class="left wrap-cell" style="font-size:12px;color:#96a8c2">'+r.detail+'</td>'+
+        '<td><b class="hl">'+r.w+'</b></td>'+
+        '<td class="num-cell">'+money(MIN*r.p)+' 元</td>'+
+        '<td class="num-cell">'+money(MID*r.p)+' 元</td>'+
+        '<td class="num-cell">'+money(MAX*r.p)+' 元</td></tr>';
+    });
+    /* 手续费对比行 */
+    h += '<tr style="border-top:2px solid #26385a">'+
+      '<td class="left"><b>一次买齐的手续费</b></td>'+
+      '<td class="left" style="font-size:12px;color:#96a8c2">按各基金实际申购费计算</td>'+
+      '<td>—</td>'+
+      '<td>原价 67.5 元<br><b class="hl">1折 6.8 元</b></td>'+
+      '<td>原价 337.5 元<br><b class="n hl">33.8 元</b></td>'+
+      '<td>原价 675 元<br><b class="n hl">67.5 元</b></td></tr>';
+    document.getElementById('sizeTable').innerHTML = h + '</tbody>';
+  })();
+
+
+  /* ================= 常见问题 FAQ ================= */
+  (function(){
+    var host = document.getElementById('faqList');
+    if (!host) return;
+
+    var FAQ = [
+      { q: '只有 1000 块，能买吗？',
+        a: '能。这几只基金起购都是 <b class="n">10</b> 元。但 1000 块分成 5 份意义不大——' +
+           '<b>建议先用货币基金攒到 1 万再开始</b>，因为太小的金额你感受不到波动，也练不出心态。' },
+      { q: '现在是不是不适合买，要等跌？',
+        a: '<b>没人知道明天涨跌。</b>这份看板的立场是"分批买 + 留现金"，' +
+           '而不是"猜底"。你现在开始的每一批，都比"等一个完美点位"更现实。' +
+           '<b>但有两个有日期的事件值得等一下：10/30 FOMC、11/3 美国中期选举。</b>' },
+      { q: '我买了之后一直跌，什么时候该卖？',
+        a: '先看跌多少。<b>跌 -1.53% 以内是正常波动</b>（过去一年最惨也就这样），不动。' +
+           '<b>跌穿 -3.00% 是警戒线</b>，暂停买入但不动仓位。' +
+           '<b>只有跌穿 -9.20%（四腿同时打历史最深）才考虑卖。</b>' +
+           '另外：持有不满 <b class="n">7</b> 天卖出，赎回费 <b class="n">1.5%</b> 能吃掉你半年收益。' },
+      { q: 'A 类还是 C 类？',
+        a: 'C 类没收申购费，但每年多收销售服务费（约 <b class="n">0.2%~0.4%</b>）。' +
+           '以 050025 vs 006075 实测：C 每年多付 <b class="n">0.28</b> 个百分点。<br>' +
+           '<b>申购费 1 折时，持有超 5 个月买 A 更划算；原价时要 4.3 年。</b>' +
+           '<b style="color:#f5b942">新手一律买 A。</b>' },
+      { q: '为什么我买的基金显示亏，但报告说赚？',
+        a: '两个口径不同。<b>单位净值</b>（App 首页那个）在分红后会下调，看起来"亏"；' +
+           '<b>复权净值</b>才算上分红再投，是真实到手。<br>' +
+           '最极端的例子：白酒 161725 单位净值口径 <b class="n up">-31.54%</b>，' +
+           '复权口径只有 <b class="n up">-9.94%</b>——<b>差 21.6 个百分点。</b>' },
+      { q: '一只基金涨了 100%，还能买吗？',
+        a: '<b>先看它的历史最深回撤。</b>原油涨 101.95% 的那只，历史上最深亏过 ' +
+           '<b class="n up">-76.49%</b>（1 万变 2,351 元）。<br>' +
+           '而且数据说：在"超买 + 上升趋势"时买入，20 日上涨概率只有 <b class="n">46.5%~49.0%</b>，' +
+           '比随便哪天买低 <b class="n">9~11</b> 个百分点。<b style="color:#ff8a5c">追高 = 花更贵的钱买更低的胜率。</b>' },
+      { q: '"持有 250 天胜率 94%"是不是很稳？',
+        a: '<b>先看样本量 n。</b>那个 94.4% 是复权口径下的，如果你选了现金分红，账户里看到的是亏的。<br>' +
+           '更极端的坑：白银 C 类显示 <b class="n">99.0%</b>，但 <b>n 只有 98</b>，' +
+           '全部落在上涨那两年；同经理同策略的 A 类用 <b class="n">496</b> 个样本算出来只有 <b class="n">58.1%</b>。' },
+      { q: '债券会不会亏？',
+        a: '会。<b>003376 历史上最惨亏过 <b class="n up">-8.27%</b></b>。' +
+           '而且债券今年赚的钱里，很大一部分是"利率下跌带来的涨价"——' +
+           '<b>利率已经从高位跌到 1.6412%，这块收益不可重复。</b>' },
+      { q: '我该多久看一次账户？',
+        a: '<b>每月看一次就够，别天天看。</b>数据显示：随便买、只拿 20 天，赚钱概率 ' +
+           '<b class="n">68.6%~78.8%</b>；拿满 250 天，升到 <b class="n">91.5%~94.6%</b>。<br>' +
+           '<b style="color:#f5b942">你拿得越短，越像在赌；拿满一年，才是在投资。</b>' },
+      { q: '这看板会不会是 AI 瞎编的？',
+        a: '<b>数字不是编的，判断是推断。</b>所有数值都是程序从真实行情算出来的，你可以核对；' +
+           '但"债券最适合新手""原油别追"这些是<b>基于历史数据的推断，可能错</b>。<br>' +
+           '数据说明书里我列出了<b>「什么情况下我的判断会被打脸」</b>，逐条可查。' +
+           '<b>能被打脸的分析，比不能被打脸的可信一点。</b>' }
+    ];
+
+    host.innerHTML = FAQ.map(function(item, i){
+      return '<div class="faq-item reveal d' + Math.min(i % 4, 5) + '">' +
+        '<button class="faq-q" aria-expanded="false">' +
+          '<span class="faq-no">' + (i + 1) + '</span>' +
+          '<span class="faq-qt">' + item.q + '</span>' +
+          '<span class="faq-ico">+</span>' +
+        '</button>' +
+        '<div class="faq-a"><div class="faq-a-inner">' + item.a + '</div></div>' +
+      '</div>';
+    }).join('');
+
+    Array.prototype.forEach.call(host.querySelectorAll('.faq-q'), function(btn){
+      btn.addEventListener('click', function(){
+        var item = btn.parentNode;
+        var open = item.classList.contains('open');
+        /* 手风琴：一次只开一个 */
+        Array.prototype.forEach.call(host.querySelectorAll('.faq-item'), function(x){
+          x.classList.remove('open');
+          var b = x.querySelector('.faq-q');
+          if (b) b.setAttribute('aria-expanded', 'false');
+        });
+        if (!open) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  })();
+
+  U.boot();
+})();
+</script>
+</body>
+</html>

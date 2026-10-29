@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>股票基金（18只）· 权益型 — 基金股票</title>
+<meta name="description" content="18只权益型基金：A股宽基、港股、海外美股、行业主题。含内部极差警示、超卖陷阱实证、18只逐只体检。">
+<link rel="stylesheet" href="_assets/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <a class="logo" href="总览.html">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 17l5-5 4 3 7-8"/><path d="M15 7h5v5"/>
+        </svg>
+      </span>
+      基金股票
+    </a>
+    <nav class="nav">
+      <a href="总览.html">首页</a>
+      <a href="债券基金.html" title="债券基金：钱借给国家或企业，收利息">债券</a>
+      <a href="股票基金.html" title="股票基金：钱买一篮子股票，不是买个股">股票</a>
+      <a href="商品基金.html" title="商品基金：钱买黄金、白银、原油、有色">商品</a>
+      <a href="新手百科.html">购买建议</a>
+    </nav>
+      <button class="search-trigger" type="button" aria-label="搜索">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="st-txt">搜索</span><kbd>Ctrl K</kbd>
+      </button>
+  </div>
+</div>
+
+<div class="ticker"><div class="ticker-track"></div></div>
+
+<div class="data-banner" id="dataBanner"></div>
+
+
+<main>
+<div class="wrap">
+  <div class="crumb"><a href="总览.html">首页</a> <span>/</span> <span style="color:#96a8c2">股票（权益型）</span></div>
+</div>
+
+<header class="hero" style="padding:36px 0 32px">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:0">
+      <div class="kicker" style="color:#ff4d5e">Equity Fund · 股票基金</div>
+      <h1 style="font-size:clamp(26px,3.8vw,42px)">股票基金：买的是一篮子股票，不是某一家公司<br>
+        <span style="font-size:.52em;color:#96a8c2;font-weight:600">18 只基金 · A股 / 港股 / 美股 / 行业主题</span>
+      </h1>
+      <p style="margin-top:14px">
+        <b style="color:#e8eef8">先说清楚：这一页全是「基金」，不是个股。</b>
+        这 18 只都是把钱交给基金经理、由他去买一篮子股票的产品——
+        你买一份基金，等于同时买了几十上百只股票，<b style="color:#e8eef8">而不是买某一家公司</b>。<br>
+        它们的涨跌跟着股市走，但<b>风险比买单只个股小得多</b>
+        （个股可能退市归零，跟踪指数的基金不会）。<br>
+        过去一年这 18 只的板块平均是 <b class="n up" id="hdrStockAvg"><span data-live="grp.stock">-4.24%</span></b>，
+        最惨的一只亏了 <b class="n up" id="hdrStockWorst">-37.92%</b>（天弘恒生科技ETF联接A）。
+        这一页最重要的不是"买哪个"，而是<b style="color:#f5b942">教你识别两个最容易上当的数字</b>。
+      </p>
+    </div>
+  </div>
+</header>
+
+<!-- ============ KPI ============ -->
+<section class="block" style="border-top:none;padding-top:0">
+  <div class="wrap">
+    <div class="grid g4" id="kpiRow"></div>
+    <div class="note danger reveal">
+      <b>⚠️ 这一类最危险的地方不是"会跌"，是"看起来跌得少"。</b>
+      板块平均回撤只有 <b id="secMddCombo"></b>，但里面最惨的一只跌了 <b class="hl-up" id="secMddWorst"></b>——
+      <b>差了 <span id="secMddGap"></span> 个百分点</b>。
+      "买齐一篮子"会互相抵消、显得没那么惨；但你的钱只会买其中一只。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 四个板块 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Four Sectors</div>
+      <h2>四个板块，过去一年谁赚谁亏</h2>
+      <p>同样地，"平均"这一列 = 板块里每只各买同样多的钱、拿满一年。</p>
+    </div>
+
+    <div class="chart-card reveal">
+      <div class="chart-head">
+        <h4>走势对比（起点=<span class="n">100</span>）</h4>
+        <span class="hint">鼠标移上去看数值 · 点图例隐藏某条</span>
+      </div>
+      <div id="secChart"></div>
+      <div class="legend" id="secLegend"></div>
+    </div>
+
+    <div class="tbl-wrap reveal" style="margin-top:18px">
+      <table id="secTable"></table>
+    </div>
+
+    <div class="note warn reveal">
+      <b>看"内部极差"这一列，它决定了"板块平均"能不能信：</b><br>
+      · <b>海外美股</b>极差 <b class="n hl">1.63</b>——15 只里几只 QDII 表现接近，平均数比较可信。<br>
+      · <b>A股宽基</b>极差 <b class="n">7.13</b>——沪深300 和创业板差别不小，平均数参考着看。<br>
+      · <b>行业主题</b>极差 <b class="n up">18.30</b>、<b>中国香港</b>极差 <b class="n up">25.67</b>——
+      <b>这两类的平均数基本没有意义</b>，因为它把"银行 +8.36%"和"白酒 -9.94%"平均成了一个假数字。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 超卖陷阱 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">The Trap</div>
+      <h2>最容易上当的一个直觉：跌太多就会反弹</h2>
+      <p>
+        "已经跌这么多了，总该反弹了吧"——这句话是新手亏钱的头号原因。
+        本看板有一个<b style="color:#e8eef8">最干净的对照组</b>，正好能证伪它。
+      </p>
+    </div>
+
+    <div class="note reveal">
+      <b>先解释一个词：RSI（相对强弱指数）。</b>
+      它衡量"最近涨得快还是跌得狠"，范围 0~100。
+      <b>大于 70 叫"超买"</b>（涨太快了），<b>小于 30 叫"超卖"</b>（跌太狠了）。<br>
+      很多人把它当买卖信号：超卖就买。下面的数据会告诉你，<b style="color:#ff4d5e">这个做法在两个品种上结果完全相反</b>。
+    </div>
+
+    <div class="grid g2">
+      <div class="card card-pad reveal">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+          <span class="tag ok">这个成立</span>
+          <span style="font-size:13px;color:#96a8c2">黄金 · RSI 触及 27 之后</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <span class="big-num up" style="font-size:40px">7 / 7</span>
+          <span style="font-size:13px;color:#7b8fb0">次全部上涨</span>
+        </div>
+        <div style="font-size:13px;color:#96a8c2;margin-top:10px;line-height:1.85">
+          超卖之后 60 个交易日，<b style="color:#00c58e">7 个历史样本全部为正</b>，
+          平均涨幅 <b class="n hl">+4.90%</b>。
+        </div>
+        <div class="note good" style="margin-bottom:0">
+          <b>所以"超卖会反弹"这句话，在黄金身上是对的。</b>
+        </div>
+      </div>
+
+      <div class="card card-pad reveal d1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+          <span class="tag danger">这个不成立</span>
+          <span style="font-size:13px;color:#96a8c2">恒生科技 · RSI 26.8 之后</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <span class="big-num down" style="font-size:40px">30.0%</span>
+          <span style="font-size:13px;color:#7b8fb0">后 20 日胜率（10 个样本）</span>
+        </div>
+        <div style="font-size:13px;color:#96a8c2;margin-top:10px;line-height:1.85">
+          后 20 日：<b style="color:#ff4d5e">10 个样本，胜率仅 30.0%</b>。<br>
+          后 60 日：<b style="color:#ff4d5e">9 个样本，胜率 44.4%，均值仍是 -1.06%</b>。
+        </div>
+        <div class="note danger" style="margin-bottom:0">
+          <b>同样叫"超卖"，这里跌完之后还在跌。</b>
+        </div>
+      </div>
+    </div>
+
+    <div class="note danger reveal">
+      <b>结论只有一句：</b>"RSI 超卖"这四个字<b class="hl-up">本身不含任何买卖指令</b>。
+      它只说明"最近跌得比较急"，完全不说明"接下来会涨"。<br>
+      <b style="color:#f5b942">黄金能反弹，是因为背后有央行和长期配置的钱在真金白银地接盘；
+      恒生科技不反弹，是因为没有那批钱。</b>同一个技术指标，背后有没有"接盘的钱"，结果完全不同。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 两个同样赔率的东西 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Same Odds, Very Different Ride</div>
+      <h2>"离及格线近"不等于"结果更好"</h2>
+      <p>沪深300 只需涨 4.52% 就能回到均线上方，半导体要涨 16.41%。听起来前者赔率更好？</p>
+    </div>
+
+    <div class="chart-card reveal">
+      <div class="chart-head">
+        <h4>沪深300 vs 半导体：拉平到"新手真正在乎"的维度</h4>
+        <span class="hint">数据来自 40 只基金全样本</span>
+      </div>
+      <div id="cmpChart"></div>
+      <div class="note danger" style="margin-bottom:0">
+        <b>三个数字对比：</b><br>
+        ① <b>持有 250 天的赚钱概率</b>：沪深300 <b class="n hl">54.2%</b>（n=791）
+           vs 半导体 <b class="n hl">54.4%</b>（n=261）—— <b>差 0.2 个百分点，统计上没区别</b>。<br>
+        ② <b>过去一年收益</b>：沪深300 <b class="n up">-9.23%</b> vs 半导体 <b class="n up">-5.55%</b>
+           —— <b>半导体反而亏得更少</b>。<br>
+        ③ <b>年化波动率</b>：沪深300 <b class="n">16.76%</b> vs 半导体 <b class="n up">45.53%</b> —— <b class="n">2.7 倍</b>。<br>
+        <b style="color:#ff4d5e">"回去的路短"说的是路径长度，不是回去以后过得好不好。</b>
+        两个人都不及格，一个 55 分一个 30 分，55 分那个确实离 60 分更近——
+        但历史上两人拿满分的机会一模一样。
+      </div>
+    </div>
+
+    <div class="note warn reveal">
+      <b>还有个细节值得知道：</b>"只需涨 4.52%"这个优势，是 <b>10 月 28 日那一天</b>涨出来的。
+      而那天涨的原因是隔夜纳指 +1.18%、费半 +3.6%、韩国综指 +6.63%——
+      <b>是跟着外盘涨的，不是国内自身的新增利好</b>。<br>
+      技术面上的三条确认信号目前 <b class="hl-up">0/3</b>：收复 MA20（还差 4.52%）、
+      成交连续 3 日站上 1.6 万亿（10/27 仅 1.46 万亿，是缩量阴跌）、
+      融资余额止跌 3 天（从 25,445.87 亿降到 23,970.55 亿，<b>−1,475 亿</b>）。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 风险收益全景 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Risk × Return</div>
+      <h2><span class="n">18</span> 只放在一张图上，谁在裸泳一目了然</h2>
+      <p>
+        横轴波动率、纵轴近一年收益。<b style="color:#e8eef8">这张图最能回答"我到底在为什么承担风险"。</b>
+      </p>
+    </div>
+
+    <div class="chart-card reveal">
+      <div class="chart-head">
+        <h4>权益类风险-收益散点图</h4>
+        <span class="hint">鼠标移到点上查看详情 · 点越大波动越高</span>
+      </div>
+      <div id="stockScatter"></div>
+      <div class="legend" id="stockScatterLegend"></div>
+    </div>
+
+    <div class="note danger reveal">
+      <b>看这张图要抓的一件事：绝大多数点挤在左下角。</b><br>
+      意思是：<b>它们同时承担了高风险、又没换来收益</b>。
+      真正落在<b>"低风险 + 正收益"</b>那一小块的，只有少数几只。<br>
+      <b style="color:#f5b942">这就是为什么"买股票型基金"这件事，对新手来说性价比很低——
+      你付了 20%~45% 的波动，换回的是负收益。</b>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 18 只逐只 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Every Single One</div>
+      <h2><span class="n">18</span> 只逐个体检</h2>
+      <p>点上面的按钮按板块筛选，点表头排序。<b style="color:#e8eef8">"全历史最深"这一列，请务必看。</b></p>
+    </div>
+    <div class="btnbar" id="filterBtns"></div>
+    <div class="tbl-wrap reveal">
+      <table id="fundTable"></table>
+    </div>
+
+    <div class="note">
+      <b>怎么读"全历史最深"这一列：</b>它告诉你<b>这只基金最惨的时候亏了多少</b>，
+      括号里是"1 万块最坏剩多少"。<b>近一年最深的那个数字经常只有它的一半甚至更少</b>——
+      只看近一年，你会严重低估真实风险。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 基金对比器 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Compare</div>
+      <h2>挑两三只，摆在一起看</h2>
+      <p>同一页里的基金可以直接对比。<b style="color:#e8eef8">带 ★ 的是这一项里最好的</b>，但"指标赢得多"不等于该买它。</p>
+    </div>
+    <div class="card card-pad reveal" id="compareBox" data-grp="stock"></div>
+  </div>
+</section>
+
+<!-- ============ 结论 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Verdict</div>
+      <h2>这一页的结论</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <h4>① 新手别碰"行业主题"和"港股科技"</h4>
+        <p>行业主题内部极差 18.30、港股 25.67——<b>板块平均没有意义</b>，而且这两类里最惨的个基都在 -40% 以上。
+           <b style="color:#e8eef8">你没法通过"看板块数字"来判断自己会买到哪一个。</b></p>
+      </div>
+      <div class="step reveal d1">
+        <h4>② "跌太多会反弹"是这 <span class="n">18</span> 只里最贵的错觉</h4>
+        <p>恒生科技 RSI 26.8 之后，后 20 日胜率只有 <b class="n up">30.0%</b>。
+           <b style="color:#e8eef8">超卖只说明最近跌得急，不说明接下来会涨。</b></p>
+      </div>
+      <div class="step reveal d2">
+        <h4>③ 想要权益类，从"海外美股"这一格开始</h4>
+        <p>它是这四类里唯一<b>内部极差小（1.63）、过去一年为正（<span data-live="sec.overseas">+9.99%</span>）</b>的板块。
+           但代价是：<b style="color:#ff4d5e">波动 12%~20%，全历史最深跌 30% 左右，而且机构在撤</b>
+           （050025 机构从 19.13% 撤到 1.43%）。</p>
+      </div>
+      <div class="step reveal d3">
+        <h4>④ 仓位一定要小</h4>
+        <p>这类东西的作用是"提供一点进攻性"，<b>不是"用来赚钱的主力"</b>。
+           <b style="color:#f5b942">建议总仓位不超过 20%，且只买其中波动最小的那一两只。</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b>数据来源：</b>天天基金（东方财富）公开接口 · 东财 F10 官方净值双源校验 · 新浪财经公开行情接口</div>
+    <div><b>收益率口径：</b>近250交易日 · 累计净值 · 含分红再投；板块平均为等权金额买入持有的算术平均。</div>
+    <div><b>注：</b>本页 18 只全部是<b>股票基金</b>（基金的一种），不是个股。本看板不提供任何个股推荐。</div>
+    <div class="foot-warn">
+      本页仅用于数据学习与展示，不构成投资建议。基金投资有风险，入市需谨慎。<br>
+      所有"胜率""概率""最大回撤"均为历史频率统计，不构成预测。
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" aria-label="返回顶部">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+</button>
+
+<script src="_assets/data.js"></script>
+<script src="_assets/live-numbers.js"></script>
+<script src="_assets/chart.js"></script>
+<script src="_assets/anim.js"></script>
+<script src="_assets/caliber.js"></script>
+<script src="_assets/features2.js"></script>
+<script src="_assets/search.js"></script>
+<script src="_assets/export.js"></script>
+<script src="_assets/tools.js"></script>
+<script>
+(function(){
+  var D = window.DATA, U = window.UI;
+  var FUNDS = D.funds.filter(function(f){ return f.grp === 'stock'; });
+  var SECS = D.sectors.filter(function(s){ return s.grp === 'stock'; });
+
+  /* ---------- KPI ---------- */
+  (function(){
+    var best = FUNDS.slice().sort(function(a,b){ return b.ret250 - a.ret250; })[0];
+    var worst = FUNDS.slice().sort(function(a,b){ return a.ret250 - b.ret250; })[0];
+    var deep = FUNDS.slice().sort(function(a,b){ return a.mddAll - b.mddAll; })[0];
+    var items = [
+      {lbl:'4 个板块平均近一年', val:D.groups.stock.avg, suf:'%',
+       note:'18 只权益型基金的整体表现',
+       sub:'波动 '+D.groups.stock.vol.toFixed(2)+'%，最惨个基 '+U.fmt(D.groups.stock.worstMdd)},
+      {lbl:'赚最多的一只', val:best.ret250, suf:'%',
+       note:best.name, sub:'但全历史最深亏过 '+U.fmt(best.mddAll)},
+      {lbl:'亏最深的一只', val:worst.ret250, suf:'%',
+       note:worst.name, sub:'全历史最深 '+U.fmt(worst.mddAll)+'，1万剩 '+U.comma(U.worstLeft(worst.mddAll))+' 元'},
+      {lbl:'全历史最惨的一只', val:deep.mddAll, suf:'%', sign:false,
+       note:deep.name, sub:'1 万块最坏剩 '+U.comma(U.worstLeft(deep.mddAll))+' 元'}
+    ];
+    document.getElementById('kpiRow').innerHTML = items.map(function(it,i){
+      var c = U.sigCol(it.val, it.neutral);
+      return '<div class="kpi reveal d'+i+'" style="--kc:'+c+'">'+
+        '<div class="k-lbl">'+it.lbl+'</div>'+
+        '<div class="k-val" style="color:'+c+'" data-count="'+it.val+'" data-suffix="'+it.suf+'"'+
+          (it.sign===false?' data-sign="false"':'')+'>'+
+          U.countText(it.val, 2, it.suf, it.sign!==false)+'</div>'+
+        '<div class="k-note">'+U.esc(it.note)+'</div>'+
+        '<div class="k-sub">'+it.sub+'</div></div>';
+    }).join('');
+
+    /* 板块回撤对比 */
+    var mt = 0, mw = 0;
+    SECS.forEach(function(s){ mt = Math.min(mt, s.mddCombo); mw = Math.min(mw, s.mddWorst); });
+    document.getElementById('secMddCombo').textContent = U.fmt(mt);
+    document.getElementById('secMddWorst').textContent = U.fmt(mw);
+    document.getElementById('secMddGap').textContent = (Math.abs(mw) - Math.abs(mt)).toFixed(2);
+  })();
+
+  /* ---------- 板块折线 ---------- */
+  (function(){
+    var PAL = ['#ff4d5e','#f5b942','#3d8bfd','#a78bfa'];
+    var series = SECS.map(function(s,i){
+      return {name:s.name, short:s.name, data:s.seq, color:PAL[i%PAL.length]};
+    });
+    window.Chart2.line(document.getElementById('secChart'), {
+      axis: D.axis, series: series, base: 100, height: 360,
+      legendEl: document.getElementById('secLegend')
+    });
+  })();
+
+  /* ---------- 板块表 ---------- */
+  U.sortableTable({
+    table: document.getElementById('secTable'),
+    rows: SECS,
+    defaultSort: {key:'arith', dir:-1},
+    cols: [
+      {key:'name', label:'板块', type:'str', align:'left',
+       render:function(r){
+         return '<a class="sec-link" href="板块/'+r.name+'.html" title="点开看'+r.name+'的详细数据">'+r.name+' <span class="go-arrow">→</span></a>';
+       }},
+      {key:'n', label:'只数', dec:0},
+      {key:'arith', label:'平均收益',
+       render:function(r){ return '<span class="num-cell '+U.cls(r.arith)+'">'+U.fmt(r.arith)+'</span>'; }},
+      {key:'best', label:'最好的', render:function(r){ return U.chg(r.best); }},
+      {key:'worst', label:'最差的', render:function(r){ return U.chg(r.worst); }},
+      {key:'spread', label:'内部极差',
+       render:function(r){
+         var t = r.spread < 2 ? 'ok' : (r.spread < 10 ? '' : 'danger');
+         return '<span class="tag '+t+'">'+r.spread.toFixed(2)+'</span>';
+       }},
+      {key:'vol', label:'波动率', render:function(r){ return r.vol.toFixed(2)+'%'; }},
+      {key:'mddCombo', label:'买齐一篮子的回撤',
+       render:function(r){ return '<span class="down">'+U.fmt(r.mddCombo)+'</span>'; }},
+      {key:'mddWorst', label:'单一只最惨',
+       render:function(r){ return '<span class="down" style="font-weight:700">'+U.fmt(r.mddWorst)+'</span>'; }}
+    ]
+  });
+
+  /* ---------- 沪深300 vs 半导体 对比图 ---------- */
+  (function(){
+    var a = D.funds.filter(function(f){ return f.code==='000051'; })[0];
+    var b = D.funds.filter(function(f){ return f.code==='008888'; })[0];
+    if (!a || !b) return;
+    window.Chart2.bar(document.getElementById('cmpChart'), {
+      labelW: 220, rowH: 44,
+      items: [
+        {label:'持有250天胜率（%）', value:a.hold250, color:'#3d8bfd',
+         text:a.hold250.toFixed(1)+'% vs '+b.hold250.toFixed(1)+'%'},
+        {label:'近一年收益（绝对值%）', value:Math.abs(a.ret250), color:'#5f9ea0',
+         text:U.fmt(a.ret250)+' vs '+U.fmt(b.ret250)},
+        {label:'全年波动率（%）', value:a.vol, color:'#f5b942',
+         text:a.vol.toFixed(2)+'% vs '+b.vol.toFixed(2)+'%'},
+        {label:'全历史最深回撤（绝对值%）', value:Math.abs(a.mddAll), color:'#ff4d5e',
+         text:U.fmt(a.mddAll)+' vs '+U.fmt(b.mddAll)}
+      ]
+    });
+  })();
+
+  /* ---------- 18 只表 ---------- */
+  (function(){
+    var filterOpts = SECS.map(function(s){
+      return {v:s.sec, t:s.name+' ('+s.n+')'};
+    });
+    U.sortableTable({
+      table: document.getElementById('fundTable'),
+      rows: FUNDS,
+      filterEl: document.getElementById('filterBtns'),
+      filterKey: 'sec',
+      filterAll: '全部 18 只',
+      filterOptions: filterOpts,
+      defaultSort: {key:'score', dir:-1},
+      cols: [
+        {key:'code', label:'代码', type:'str', align:'left',
+         render:function(r){ return '<span class="tcode">'+r.code+'</span>'; }},
+        {key:'name', label:'名称', type:'str', align:'left', width:'210px',
+         render:function(r){ return '<a class="fund-link tname" href="基金详情/'+r.code+'.html" title="看完整档案">'+U.esc(r.name)+'</a>'; }},
+        {key:'secName', label:'板块', type:'str'},
+        {key:'score', label:'新手友好度',
+         render:function(r){
+           return '<b>'+r.score.toFixed(1)+'</b><div class="score-bar"><i data-w="'+r.score+'"></i></div>';
+         }},
+        {key:'ret250', label:'近1年',
+         render:function(r){ return '<span class="num-cell '+U.cls(r.ret250)+'">'+U.fmt(r.ret250)+'</span>'; }},
+        {key:'vol', label:'波动率',
+         render:function(r){ return r.vol.toFixed(2)+'%<div style="font-size:10.5px;color:#7286a8">'+r.riskTag+'</div>'; }},
+        {key:'mdd250', label:'近1年最深',
+         render:function(r){ return '<span class="down">'+U.fmt(r.mdd250)+'</span>'; }},
+        {key:'mddAll', label:'全历史最深',
+         render:function(r){
+           return '<span class="down" style="font-weight:700">'+U.fmt(r.mddAll)+'</span>'+
+             '<div style="font-size:10.5px;color:#7286a8">1万剩 '+U.comma(U.worstLeft(r.mddAll))+'</div>';
+         }},
+        {key:'sharpe', label:'夏普',
+         render:function(r){ return '<span class="'+U.cls(r.sharpe)+'">'+U.fmtNum(r.sharpe)+'</span>'; }},
+        {key:'hold250', label:'持有250天胜率',
+         render:function(r){
+           var t = r.hold250 >= 70 ? 'ok' : (r.hold250 < 50 ? 'danger' : '');
+           return '<span class="tag '+t+'">'+U.fmtNum(r.hold250,1)+'%</span>'+
+             '<div style="font-size:10.5px;color:#7286a8">n='+(r.n250||'—')+'</div>';
+         }},
+        {key:'instDelta', label:'机构四期',
+         render:function(r){
+           if (r.instDelta === null || r.instDelta === undefined) return '—';
+           return '<span class="'+U.cls(r.instDelta)+'">'+U.tri(r.instDelta)+U.fmtNum(r.instDelta,1)+'pp</span>'+
+             '<div style="font-size:10.5px;color:#7286a8">'+U.fmtNum(r.inst[0],1)+'→'+U.fmtNum(r.inst[3],1)+'%</div>';
+         }},
+        {key:'scale', label:'规模(亿)', render:function(r){ return U.fmtNum(r.scale,2); }},
+        {key:'verdict', label:'大白话点评 / 警示', type:'str', align:'left', sortable:false, width:'280px',
+         render:function(r){
+           var w = r.warns.length
+             ? '<div style="margin-top:5px;display:flex;gap:4px;flex-wrap:wrap">'+
+               r.warns.map(function(x){ return '<span class="tag risk">'+U.esc(x)+'</span>'; }).join('')+'</div>'
+             : '';
+           return '<div style="font-size:12px;color:#e8eef8">'+U.esc(r.verdict)+'</div>'+w;
+         }}
+      ]
+    });
+    U.boot();
+  })();
+
+  /* ---------- 权益类风险收益散点 ---------- */
+  (function(){
+    var host = document.getElementById('stockScatter');
+    if (!host) return;
+    var SC = {ashare:'#22d3ee', hk:'#ff8a5c', overseas:'#6aacff', sector:'#a78bfa'};
+    var pts = FUNDS.map(function(f){
+      return {
+        x: f.vol, y: f.ret250,
+        color: SC[f.sec] || '#888',
+        r: Math.max(4.5, Math.min(9, f.vol / 6)),
+        label: f.name,
+        sub: f.code + ' · ' + f.secName,
+        extra: '全历史最深 ' + U.fmt(f.mddAll, 1) + '｜52周位置 ' +
+               (f.pos52 === null ? '—' : f.pos52.toFixed(0) + '%') +
+               '｜胜率 ' + (f.hold250 === null ? '—' : f.hold250.toFixed(1) + '%')
+      };
+    });
+    window.Chart2.scatter(host, {
+      points: pts, height: 450,
+      xLabel: '年化波动率 →（越往右越颠簸）',
+      yLabel: '近一年收益率 →（越往上越赚）'
+    });
+    var lg = document.getElementById('stockScatterLegend');
+    if (lg) {
+      lg.innerHTML = SECS.map(function(s){
+        return '<span style="cursor:default"><i style="background:'+(SC[s.sec]||'#888')+'"></i>'+
+          s.name+'（'+s.n+' 只 · 平均 '+U.fmt(s.arith)+'）</span>';
+      }).join('');
+    }
+  })();
+})();
+</script>
+</body>
+</html>

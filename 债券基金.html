@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>债券基金（4只）· 债券与现金 — 基金股票</title>
+<meta name="description" content="4只债券基金的逐只体检：波动率、回撤、久期风险、机构持有变化，用大白话讲清债基到底赚的是什么钱。">
+<link rel="stylesheet" href="_assets/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <a class="logo" href="总览.html">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 17l5-5 4 3 7-8"/><path d="M15 7h5v5"/>
+        </svg>
+      </span>
+      基金股票
+    </a>
+    <nav class="nav">
+      <a href="总览.html">首页</a>
+      <a href="债券基金.html" title="债券基金：钱借给国家或企业，收利息">债券</a>
+      <a href="股票基金.html" title="股票基金：钱买一篮子股票，不是买个股">股票</a>
+      <a href="商品基金.html" title="商品基金：钱买黄金、白银、原油、有色">商品</a>
+      <a href="新手百科.html">购买建议</a>
+    </nav>
+      <button class="search-trigger" type="button" aria-label="搜索">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="st-txt">搜索</span><kbd>Ctrl K</kbd>
+      </button>
+  </div>
+</div>
+
+<div class="ticker"><div class="ticker-track"></div></div>
+
+<div class="data-banner" id="dataBanner"></div>
+
+
+<main>
+<div class="wrap">
+  <div class="crumb"><a href="总览.html">首页</a> <span>/</span> <span style="color:#96a8c2">债券基金</span></div>
+</div>
+
+<header class="hero" style="padding:36px 0 32px">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:0">
+      <div class="kicker" style="color:#3d8bfd">Bond Fund · 债券基金</div>
+      <h1 style="font-size:clamp(26px,3.8vw,42px)">债券基金：不刺激<br>
+        <span style="font-size:.52em;color:#96a8c2;font-weight:600">但它是你整个仓位的地基</span>
+      </h1>
+      <p style="margin-top:14px">
+        这一页只有 <b style="color:#e8eef8">4 只债券基金 + 2 只货币基金</b>。
+        它们的共同点是：<b style="color:#3d8bfd">波动小到几乎看不出来</b>，
+        近一年最深的一次下跌也只有 <b style="color:#e8eef8">0.20%</b>。
+        但这不代表没风险——<b style="color:#f5b942">债券今年赚的钱，很大一块明年赚不到了</b>。这一页会讲清为什么。
+      </p>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 关键数字 ============ -->
+<section class="block" style="border-top:none;padding-top:0">
+  <div class="wrap">
+    <div class="grid g4" id="kpiRow"></div>
+    <div class="note good reveal">
+      <b>先给你一个参照：</b>余额宝现在七日年化 <b class="hl" id="cashYield"></b>。
+      这 4 只债券基金近一年收益是 <b id="bondRange"></b>。
+      <b>也就是说，跌得最少的那只，收益也就比放着不动多一点点</b>——
+      这就是"稳健"的真实含义：<b style="color:#e8eef8">不是帮你赚大钱，是帮你少亏钱、且睡得着。</b>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 债券到底赚什么钱 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">The Core Truth</div>
+      <h2>债券赚的两种钱，你必须分清</h2>
+      <p>这决定了"今年赚的 5%，明年还能不能赚到"。</p>
+    </div>
+
+    <div class="grid g2">
+      <div class="card card-pad reveal">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <span class="tag blue">票息</span>
+          <span style="font-size:12px;color:#7b8fb0">借钱给别人收的利息</span>
+        </div>
+        <p style="font-size:13.5px;color:#96a8c2;line-height:1.9">
+          你把钱借给国家或企业，对方按约定付利息。这部分是<b style="color:#e8eef8">确定的、可重复的</b>。
+        </p>
+        <div class="note good" style="margin-bottom:0">
+          <b>人话：</b>这部分是"工资"，只要不出事，年年都有。
+        </div>
+      </div>
+
+      <div class="card card-pad reveal d1">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <span class="tag danger">价差</span>
+          <span style="font-size:12px;color:#7b8fb0">债券本身涨价带来的</span>
+        </div>
+        <p style="font-size:13.5px;color:#96a8c2;line-height:1.9">
+          利率下降时，你手里那张"老债券"更值钱了，因为有人的新债券利息更低。
+          <b style="color:#ff4d5e">这部分是不可重复的</b>。
+        </p>
+        <div class="note danger" style="margin-bottom:0">
+          <b>人话：</b>这部分是"年终奖"，发一次就没了。而且<b>利率反弹时，它会倒扣回去</b>。
+        </div>
+      </div>
+    </div>
+
+    <!-- 利率位置可视化 -->
+    <div class="chart-card reveal" style="margin-top:18px">
+      <div class="chart-head">
+        <h4>中国 <span class="n">10</span> 年期国债收益率：现在的位置</h4>
+        <span class="hint">数据：中债 SKY_10Y · 2026-10-21</span>
+      </div>
+      <div id="rateViz"></div>
+      <div class="note danger" style="margin-bottom:0">
+        <b>这就是问题所在：</b>现在的 10 年期国债收益率是 <b class="n up">1.6412%</b>——
+        <b>已经是历史极低位</b>。这意味着"价差"这个年终奖已经发得差不多了。<br>
+        更要命的是反过来：<b>如果利率往回走一点，7-10 年的长债跌得最快</b>。
+        003376 历史上最惨亏过 <b class="n up">8.27%</b>——对一只"稳健"基金来说，这不小。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 久期风险 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Duration Risk</div>
+      <h2>同样是债券，为什么有的跌 <span class="n">0.2%</span>、有的跌 <span class="n">8%</span></h2>
+      <p>答案是"久期"——听起来很专业，其实就是<b style="color:#e8eef8">"这笔钱借出去多久"</b>。</p>
+    </div>
+
+    <div class="note reveal">
+      <b>一句话搞懂久期：</b>你借钱给别人，借 1 年和借 10 年，哪个风险大？<b>当然是 10 年</b>——
+      因为中间利率会变，而你已经锁死了。<br>
+      <b>债券基金也一样：久期越长，对利率变化越敏感。</b>利率跌，它涨得最多；利率涨，它跌得最狠。
+    </div>
+
+    <div class="chart-card reveal">
+      <div class="chart-head">
+        <h4>4 只债券基金的"全历史最深跌幅"对比</h4>
+        <span class="hint">这是它这辈子最惨的一次，不是近一年</span>
+      </div>
+      <div id="mddViz"></div>
+      <div class="note warn" style="margin-bottom:0">
+        <b>看出规律了吗？</b>全历史跌得最深的 003376，正是久期最长的那只（7-10 年国开债）。
+        而 001512（3-5 年）和 000015（纯债）跌得就浅得多。<br>
+        <b style="color:#f5b942">所以"债券安全"这句话是粗的。真正该问的是：这只债基的久期有多长？</b>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 机构在干什么 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Smart Money</div>
+      <h2>机构在撤谁、在加谁</h2>
+      <p>
+        这是本看板新发现的一个证据维度：每只基金都有<b style="color:#e8eef8">连续四个报告期的"机构持有比例"</b>。
+        机构钱多、研究深，它们的动作不一定对，但至少<b>不是拍脑袋</b>。
+      </p>
+    </div>
+
+    <div class="chart-card reveal">
+      <div class="chart-head">
+        <h4>4 只债券基金的机构持有比例变化（四个报告期）</h4>
+        <span class="hint">2024-12-31 → 2025-06-30 → 2025-12-31 → 2026-06-30</span>
+      </div>
+      <div id="instChart"></div>
+      <div class="legend" id="instLegend"></div>
+    </div>
+
+    <div class="note warn reveal">
+      <b>读出来的两件事：</b><br>
+      ① <b>000015 华夏纯债</b>：机构从 53.39% 一路加到 <b class="n hl">77.37%</b>（+23.98 个百分点，四期连续上升）——
+      这是 42 只里机构加仓最猛的一只。<br>
+      ② <b>003376 广发7-10年国开债</b>：机构从 22.07% 一路撤到 <b class="n up">9.32%</b>（−12.75 个百分点，撤了 58%）——
+      撤的正是久期最长的那只。
+    </div>
+
+    <div class="note danger reveal">
+      <b>⚠️ 但我必须把这个数据的边界说清楚，否则你会用错它：</b><br>
+      机构持有比例上升，可能是<b>机构主动买入</b>，也可能是<b>散户大量赎回导致机构占比"被动"变高</b>。
+      <b>数据里没有申赎明细，无法区分这两种情况。</b><br>
+      <b>所以这只是"旁证"，不是"信号"。</b>它不能单独作为买卖依据，只能作为"这只基金的持有人结构正在变"的提示。
+    </div>
+  </div>
+</section>
+
+<!-- ============ 逐只体检 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Every Single One</div>
+      <h2>4 只逐个体检</h2>
+      <p>点表头可以排序。每一行都告诉你"它适合谁、它的代价是什么"。</p>
+    </div>
+    <div class="tbl-wrap reveal">
+      <table id="fundTable"></table>
+    </div>
+
+    <div class="grid g2 reveal" style="margin-top:18px" id="deepCards"></div>
+  </div>
+</section>
+
+<!-- ============ 货币基金 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Cash</div>
+      <h2>货币基金：不是投资，是"停钱的地方"</h2>
+      <p>它不会让你赚钱，它的作用是<b style="color:#e8eef8">让你随时能拿出钱，同时比活期利息高一点</b>。</p>
+    </div>
+    <div class="grid g2" id="cashRow"></div>
+    <div class="note reveal">
+      <b>说句实在话：</b>余额宝七日年化 <b class="n hl">0.837%</b>，
+      10 万块放一年是 <b class="n">100,837 元</b>——只多了 837 块。
+      <b>但它是你唯一的"子弹"</b>：市场真跌出机会的时候，只有它能让立刻出手。
+      <b style="color:#f5b942">所以别嫌它少，你必须留一部分在这里。</b>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 基金对比器 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Compare</div>
+      <h2>挑两三只，摆在一起看</h2>
+      <p>同一页里的基金可以直接对比。<b style="color:#e8eef8">带 ★ 的是这一项里最好的</b>，但"指标赢得多"不等于该买它。</p>
+    </div>
+    <div class="card card-pad reveal" id="compareBox" data-grp="fund"></div>
+  </div>
+</section>
+
+<!-- ============ 结论 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Verdict</div>
+      <h2>这一页的结论</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <h4>① 债券是目前最适合新手的品种</h4>
+        <p>不是因为它涨得多，而是因为<b style="color:#e8eef8">它跌的时候你扛得住</b>。波动 0.35%~1.24%，
+           近一年最深跌 0.20%~0.67%。<b>这是唯一一个"跌了你也不会慌"的位置</b>。</p>
+      </div>
+      <div class="step reveal d1">
+        <h4>② 但别指望它明年还赚 <span class="n">5%</span></h4>
+        <p>今年这 5% 里，很大一部分是"利率从高位跌到 1.6412%"带来的涨价。
+           <b style="color:#ff4d5e">利率已经低到不能再低，这块收益不可重复</b>。
+           明年更可能只赚到票息那部分。</p>
+      </div>
+      <div class="step reveal d2">
+        <h4>③ 长债要少放，短债可以多放</h4>
+        <p>003376（7-10年）历史上最惨亏 8.27%，是 001512（3-5年，-4.14%）的两倍。
+           <b style="color:#f5b942">而且机构正在从长债撤退、往纯债加仓</b>——
+           虽然这只是旁证，但方向上值得参考。</p>
+      </div>
+      <div class="step reveal d3">
+        <h4>④ 一定要留现金</h4>
+        <p>不是为了赚那 0.837%，是为了<b style="color:#e8eef8">在市场真跌出机会时，你有子弹</b>。
+           全仓进去的人，跌的时候只能看着。</p>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:30px" class="reveal">
+      <a class="btn on" href="新手百科.html" style="display:inline-block;padding:11px 28px;font-size:14px;text-decoration:none">
+        看完整配置方案（含三档仓位换算）→
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b>数据来源：</b>天天基金（东方财富）公开接口 · 东财 F10 官方净值双源校验 · 新浪财经公开行情接口</div>
+    <div><b>收益率口径：</b>近250交易日 · 累计净值 · 含分红再投；板块平均为等权金额买入持有的算术平均。</div>
+    <div><b>机构持有数据：</b>连续四个报告期（2024-12-31 / 2025-06-30 / 2025-12-31 / 2026-06-30），
+      最近一期滞后于当前约 4 个月。</div>
+    <div class="foot-warn">
+      本页仅用于数据学习与展示，不构成投资建议。基金投资有风险，入市需谨慎。<br>
+      历史业绩不代表未来表现，历史最大回撤不代表未来最大亏损。
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" aria-label="返回顶部">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+</button>
+
+<script src="_assets/data.js"></script>
+<script src="_assets/live-numbers.js"></script>
+<script src="_assets/chart.js"></script>
+<script src="_assets/anim.js"></script>
+<script src="_assets/caliber.js"></script>
+<script src="_assets/features2.js"></script>
+<script src="_assets/search.js"></script>
+<script src="_assets/export.js"></script>
+<script src="_assets/tools.js"></script>
+<script>
+(function(){
+  var D = window.DATA, U = window.UI;
+  var FUNDS = D.funds.filter(function(f){ return f.grp === 'fund'; });
+  var BONDS = D.sectors.filter(function(s){ return s.grp === 'fund'; });
+  var CASH = D.cash.slice().sort(function(a,b){ return b.yield7 - a.yield7; });
+
+  /* ---------- KPI ---------- */
+  (function(){
+    var best = FUNDS.slice().sort(function(a,b){ return b.ret250 - a.ret250; })[0];
+    var safest = FUNDS.slice().sort(function(a,b){ return a.vol - b.vol; })[0];
+    var deep = FUNDS.slice().sort(function(a,b){ return a.mddAll - b.mddAll; })[0];
+    var items = [
+      {lbl:'债券板块平均近一年', val:BONDS[0].arith, suf:'%',
+       note:'4 只债券基金各买同样多的钱，拿满一年',
+       sub:'波动仅 '+BONDS[0].vol.toFixed(2)+'%，近一年最深跌 '+U.fmt(BONDS[0].mddWorst)},
+      {lbl:'最稳的一只（波动最小）', val:safest.vol, suf:'%', neutral:true, sign:false,
+       note:safest.name, sub:'近一年 '+U.fmt(safest.ret250)+'，回撤 '+U.fmt(safest.mdd250)},
+      {lbl:'赚最多的一只', val:best.ret250, suf:'%',
+       note:best.name, sub:'但历史最深也亏过 '+U.fmt(best.mddAll)},
+      {lbl:'历史最深的那只', val:deep.mddAll, suf:'%',
+       note:deep.name, sub:'1 万块最坏剩 '+U.comma(U.worstLeft(deep.mddAll))+' 元'}
+    ];
+    document.getElementById('kpiRow').innerHTML = items.map(function(it,i){
+      var c = U.sigCol(it.val, it.neutral);
+      return '<div class="kpi reveal d'+i+'" style="--kc:'+c+'">'+
+        '<div class="k-lbl">'+it.lbl+'</div>'+
+        '<div class="k-val" style="color:'+c+'" data-count="'+it.val+'" data-suffix="'+it.suf+'"'+
+          (it.sign===false?' data-sign="false"':'')+'>'+
+          U.countText(it.val, 2, it.suf, it.sign!==false)+'</div>'+
+        '<div class="k-note">'+U.esc(it.note)+'</div>'+
+        '<div class="k-sub">'+it.sub+'</div></div>';
+    }).join('');
+  })();
+
+  document.getElementById('cashYield').textContent = CASH[0].yield7.toFixed(3) + '%';
+  (function(){
+    var rs = BONDS[0];
+    document.getElementById('bondRange').innerHTML =
+      '<b class="hl">' + U.fmt(rs.worst) + ' ~ ' + U.fmt(rs.best) + '</b>';
+  })();
+
+  /* ---------- 利率位置可视化 ---------- */
+  (function(){
+    /* 用一个横向刻度表示历史区间，标出当前位置 */
+    var host = document.getElementById('rateViz');
+    var cur = 1.6412;
+    var lo = 1.4, hi = 4.0;  /* 用于展示的合理区间 */
+    var pct = Math.max(2, Math.min(98, (cur - lo) / (hi - lo) * 100));
+
+    var html = '';
+    html += '<div style="position:relative;height:64px;margin:8px 0 4px">';
+    /* 轨道 */
+    html += '<div style="position:absolute;left:0;right:0;top:26px;height:8px;border-radius:4px;'+
+      'background:linear-gradient(90deg,#00c58e,#f5b942 55%,#ff4d5e)"></div>';
+    /* 刻度 */
+    [1.4,2.0,2.6,3.2,4.0].forEach(function(v){
+      var p = (v - lo) / (hi - lo) * 100;
+      html += '<div style="position:absolute;left:'+p+'%;top:40px;transform:translateX(-50%);'+
+        'font-size:10.5px;color:#7286a8;font-family:ui-monospace,monospace">'+v.toFixed(1)+'%</div>';
+      html += '<div style="position:absolute;left:'+p+'%;top:34px;width:1px;height:5px;background:#26385a"></div>';
+    });
+    /* 当前位置标记 */
+    html += '<div id="rateMark" style="position:absolute;left:'+pct+'%;top:6px;transform:translateX(-50%);'+
+      'transition:left 1.4s cubic-bezier(.2,.8,.2,1)">'+
+      '<div style="background:#f5b942;color:#1a1200;font-size:11.5px;font-weight:800;'+
+      'padding:3px 9px;border-radius:5px;white-space:nowrap;box-shadow:0 0 16px rgba(245,185,66,.5)">'+
+      '现在 1.6412%</div>'+
+      '<div style="width:2px;height:20px;background:#f5b942;margin:0 auto;box-shadow:0 0 10px rgba(245,185,66,.7)"></div>'+
+      '</div>';
+    html += '</div>';
+    html += '<div style="display:flex;justify-content:space-between;font-size:11px;color:#7b8fb0;margin-top:26px">'+
+      '<span>← 利率低（债券已涨很多，价差空间小）</span>'+
+      '<span>利率高（债券便宜，价差空间大）→</span></div>';
+    host.innerHTML = html;
+
+    /* 动画：从右侧滑到当前位置，暗示"一路往下走" */
+    setTimeout(function(){
+      var m = document.getElementById('rateMark');
+      if(!m) return;
+      m.style.left = '88%';
+      setTimeout(function(){ m.style.left = pct + '%'; }, 260);
+    }, 400);
+  })();
+
+  /* ---------- 久期风险条形图 ---------- */
+  (function(){
+    var rows = FUNDS.slice().sort(function(a,b){ return a.mddAll - b.mddAll; });
+    window.Chart2.bar(document.getElementById('mddViz'), {
+      labelW: 260, rowH: 52,
+      items: rows.map(function(f){
+        /* 条形长度已表达严重程度，颜色统一用中性蓝，不与"涨红跌绿"冲突 */
+        var col = f.mddAll < -6 ? '#e8a93c' : '#3d8bfd';
+        return {
+          label: f.name.slice(0, 16) + ' ' + f.code,
+          value: Math.abs(f.mddAll),
+          color: col,
+          text: U.fmt(f.mddAll) + '（1万剩 ' + U.comma(U.worstLeft(f.mddAll)) + '）'
+        };
+      })
+    });
+  })();
+
+  /* ---------- 机构持有变化 ---------- */
+  (function(){
+    var rows = FUNDS.filter(function(f){ return f.inst && f.inst.length >= 2; })
+      .sort(function(a,b){ return (b.instDelta||0) - (a.instDelta||0); });
+    var PAL = ['#00c58e','#3d8bfd','#f5b942','#ff4d5e'];
+    var series = rows.map(function(f,i){
+      return {
+        name: f.code + ' ' + f.name.slice(0,12),
+        short: f.code,
+        data: f.inst,
+        color: PAL[i % PAL.length]
+      };
+    });
+    window.Chart2.line(document.getElementById('instChart'), {
+      axis: rows[0].instCats || ['第1期','第2期','第3期','第4期'],
+      series: series, height: 300, legendEl: document.getElementById('instLegend'),
+      yFmt: function(v){ return v.toFixed(0) + '%'; },
+      vFmt: function(v){ return v.toFixed(2) + '%'; }
+    });
+  })();
+
+  /* ---------- 基金表 ---------- */
+  (function(){
+    var cols = [
+      {key:'code', label:'代码', type:'str', align:'left',
+       render:function(r){ return '<span class="tcode">'+r.code+'</span>'; }},
+      {key:'name', label:'名称', type:'str', align:'left',
+       render:function(r){ return '<a class="fund-link tname" href="基金详情/'+r.code+'.html" title="看完整档案">'+U.esc(r.name)+'</a>'; }, width:'200px'},
+      {key:'score', label:'新手友好度',
+       render:function(r){
+         return '<b>'+r.score.toFixed(1)+'</b><div class="score-bar gold"><i data-w="'+r.score+'"></i></div>';
+       }},
+      {key:'ret250', label:'近1年',
+       render:function(r){ return '<span class="num-cell '+U.cls(r.ret250)+'">'+U.fmt(r.ret250)+'</span>'; }},
+      {key:'vol', label:'波动率',
+       render:function(r){ return r.vol.toFixed(2)+'%<div style="font-size:10.5px;color:#7286a8">'+r.riskTag+'</div>'; }},
+      {key:'mdd250', label:'近1年最深',
+       render:function(r){ return '<span class="down">'+U.fmt(r.mdd250)+'</span>'; }},
+      {key:'mddAll', label:'全历史最深',
+       render:function(r){ return '<span class="down" style="font-weight:700">'+U.fmt(r.mddAll)+'</span>'; }},
+      {key:'sharpe', label:'夏普',
+       render:function(r){ return '<span class="'+U.cls(r.sharpe)+'">'+U.fmtNum(r.sharpe)+'</span>'; }},
+      {key:'hold250', label:'持有250天胜率',
+       render:function(r){
+         var t = r.hold250 >= 70 ? 'ok' : (r.hold250 < 50 ? 'danger' : '');
+         return '<span class="tag '+t+'">'+U.fmtNum(r.hold250,1)+'%</span>'+
+           '<div style="font-size:10.5px;color:#7286a8">n='+(r.n250||'—')+'</div>';
+       }},
+      {key:'instDelta', label:'机构四期变化',
+       render:function(r){
+         if (r.instDelta === null || r.instDelta === undefined) return '—';
+         var c = r.instDelta > 0 ? 'up' : 'down';
+         return '<span class="'+c+'">'+U.tri(r.instDelta)+U.fmtNum(r.instDelta,1)+'pp</span>'+
+           '<div style="font-size:10.5px;color:#7286a8">'+U.fmtNum(r.inst[0],1)+'→'+U.fmtNum(r.inst[3],1)+'%</div>';
+       }},
+      {key:'scale', label:'规模(亿)',
+       render:function(r){ return U.fmtNum(r.scale,2); }},
+      {key:'rate', label:'费率',
+       render:function(r){ return U.fmtNum(r.rate,2)+'%'; }},
+      {key:'verdict', label:'大白话点评', type:'str', align:'left', sortable:false, width:'260px',
+       render:function(r){
+         var w = r.warns.length
+           ? '<div style="margin-top:5px;display:flex;gap:4px;flex-wrap:wrap">'+
+             r.warns.map(function(x){ return '<span class="tag risk">'+U.esc(x)+'</span>'; }).join('')+'</div>'
+           : '';
+         return '<div style="font-size:12px;color:#e8eef8">'+U.esc(r.verdict)+'</div>'+w;
+       }}
+    ];
+    U.sortableTable({
+      table: document.getElementById('fundTable'),
+      rows: FUNDS, cols: cols, defaultSort: {key:'score', dir:-1}
+    });
+    U.boot();
+  })();
+
+  /* ---------- 逐只深度卡 ---------- */
+  (function(){
+    var NOTE = {
+      '003376':'久期最长（7-10年）。利率跌它涨得最多，利率涨它跌得最狠。历史上最惨亏 8.27%。机构四期撤离 58%。',
+      '001512':'久期中等（3-5年）。历史最深亏 4.14%，是长债的一半。机构四期小幅加仓。',
+      '000015':'纯债，波动只有 0.35%——这 4 只里最不颠的。机构四期从 53% 加到 77%，全场加仓最猛。',
+      '110017':'名字叫"增强回报"，其实是债+少量股票的混合。它的 250 日单位净值几乎没动（-0.06%），收益几乎全靠分红再投。'
+    };
+    var ROLE = {
+      '003376':'进攻位 · 赚最多也最颠',
+      '001512':'平衡位 · 稳中有收益',
+      '000015':'压舱石 · 几乎不颠',
+      '110017':'增强位 · 债券里带点股'
+    };
+    /* 按收益排序给名次，让"谁更好"一眼可见 */
+    var RANK = FUNDS.slice().sort(function(a,b){ return b.ret250 - a.ret250; })
+                     .map(function(x){ return x.code; });
+
+    /* 按名次排序展示，不能按原数组顺序（否则会出现 NO.4 / NO.1 / NO.3 这种乱序） */
+    var ORDERED = FUNDS.slice().sort(function(a,b){
+      return RANK.indexOf(a.code) - RANK.indexOf(b.code);
+    });
+
+    document.getElementById('deepCards').innerHTML = ORDERED.map(function(f,i){
+      var rk = RANK.indexOf(f.code) + 1;
+      var medal = ['🥇','🥈','🥉','4️⃣'][rk-1] || '';
+      var star = '';
+      if (f.instDelta !== null && f.instDelta >= 10) star = '<span class="tag ok">机构大幅加仓</span>';
+      else if (f.instDelta !== null && f.instDelta <= -10) star = '<span class="tag danger">机构大幅撤退</span>';
+
+      /* 波动条：把 0~8% 映射成 0~100% 宽度，视觉化"颠不颠" */
+      var volPct = Math.min(100, f.vol / 8 * 100);
+      /* 机构占比迷你条 */
+      var instNow = f.inst ? f.inst[f.inst.length-1] : null;
+      var instW = instNow === null ? 0 : Math.min(100, instNow);
+
+      return '<div class="bond-card reveal d'+Math.min(i,3)+'">'+
+
+        /* 头部：名次 + 全名（大字高亮）+ 收益 */
+        '<div class="bc-head">'+
+          '<div class="bc-rank">'+medal+'<span>NO.'+rk+'</span></div>'+
+          '<div class="bc-title">'+
+            '<h4>'+U.esc(f.name)+'</h4>'+
+            '<div class="bc-meta">'+f.code+' · '+U.esc(f.ftype||'')+'</div>'+
+          '</div>'+
+          '<div class="bc-ret '+U.cls(f.ret250)+'">'+U.fmt(f.ret250)+'<small>近一年</small></div>'+
+        '</div>'+
+
+        /* 角色标签 */
+        '<div class="bc-role">'+U.esc(ROLE[f.code]||'')+'</div>'+
+
+        /* 三个关键指标（带条形可视化） */
+        '<div class="bc-stats">'+
+          '<div class="bc-stat">'+
+            '<div class="bs-label">波动率 <b>'+f.vol.toFixed(2)+'%</b></div>'+
+            '<div class="bs-bar"><i style="width:'+volPct+'%;background:linear-gradient(90deg,#3d8bfd,#22d3ee)"></i></div>'+
+          '</div>'+
+          '<div class="bc-stat">'+
+            '<div class="bs-label">历史最深 <b class="down">'+U.fmt(f.mddAll)+'</b></div>'+
+            '<div class="bs-bar"><i style="width:'+Math.min(100,Math.abs(f.mddAll)/10*100)+'%;background:linear-gradient(90deg,#e8a93c,#ff8a5c)"></i></div>'+
+          '</div>'+
+          '<div class="bc-stat">'+
+            '<div class="bs-label">机构持有 <b>'+(instNow===null?'—':instNow.toFixed(1)+'%')+'</b>'+
+              (f.instDelta!==null?' <span class="'+U.cls(f.instDelta)+'" style="font-size:11px">('+
+              (f.instDelta>0?'+':'')+f.instDelta.toFixed(1)+'pp)</span>':'')+'</div>'+
+            '<div class="bs-bar"><i style="width:'+instW+'%;background:linear-gradient(90deg,#a78bfa,#3d8bfd)"></i></div>'+
+          '</div>'+
+        '</div>'+
+
+        /* 警示标签 */
+        (star?'<div class="bc-tags">'+star+'</div>':'')+
+
+        /* 点评 */
+        '<div class="bc-note">'+U.esc(NOTE[f.code]||f.verdict)+'</div>'+
+      '</div>';
+    }).join('');
+  })();
+
+  /* ---------- 货基 ---------- */
+  (function(){
+    document.getElementById('cashRow').innerHTML = CASH.map(function(c,i){
+      var y = c.yield7;
+      return '<div class="card card-pad reveal d'+i+'">'+
+        '<div class="tname" style="font-size:15px">'+U.esc(c.name)+'</div>'+
+        '<div class="tcode" style="margin-top:3px">'+c.code+'</div>'+
+        '<div style="display:flex;align-items:baseline;gap:8px;margin-top:14px">'+
+          '<span class="big-num up" style="font-size:30px" data-count="'+y+'" data-dec="3" data-suffix="%" data-sign="false">'+U.fmtNum(y,3)+'%</span>'+
+          '<span style="font-size:12px;color:#7b8fb0">七日年化</span></div>'+
+        '<div style="font-size:12.5px;color:#96a8c2;margin-top:10px;line-height:1.8">'+
+          '万份收益 <b class="hl">'+U.fmtNum(c.million,4)+'</b> 元/天<br>'+
+          '10 万块放一年约 <b class="hl">'+U.comma(100000*(1+y/100))+' 元</b>（多赚 '+U.comma(100000*y/100)+' 元）'+
+        '</div></div>';
+    }).join('');
+  })();
+})();
+</script>
+</body>
+</html>

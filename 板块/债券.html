@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>债券 · 板块详情 — 基金股票</title>
+<meta name="description" content="稳健地基 · 唯一适合新手重仓的方向。债券板块 4 只基金的逐只详情、风险收益、机构持有变化与新手结论。">
+<link rel="stylesheet" href="../_assets/style.css">
+</head>
+<body data-sec="bond" style="--sec-color:#3d8bfd">
+
+<div class="topbar">
+  <div class="topbar-in">
+    <a class="logo" href="../总览.html">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 17l5-5 4 3 7-8"/><path d="M15 7h5v5"/>
+        </svg>
+      </span>
+      基金股票
+    </a>
+    <nav class="nav">
+      <a href="../总览.html">首页</a>
+      <a href="../债券基金.html" title="债券基金：钱借给国家或企业，收利息">债券</a>
+      <a href="../股票基金.html" title="股票基金：钱买一篮子股票，不是买个股">股票</a>
+      <a href="../商品基金.html" title="商品基金：钱买黄金、白银、原油、有色">商品</a>
+      <a href="../新手百科.html">购买建议</a>
+    </nav>
+      <button class="search-trigger" type="button" aria-label="搜索">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span class="st-txt">搜索</span><kbd>Ctrl K</kbd>
+      </button>
+  </div>
+</div>
+
+<div class="ticker"><div class="ticker-track"></div></div>
+
+<div class="data-banner" id="dataBanner"></div>
+
+
+<main>
+<div class="wrap">
+  <div class="crumb">
+    <a href="../总览.html">首页</a> <span>/</span>
+    <span style="color:#7b8fb0">债券基金</span> <span>/</span>
+    <span style="color:#e8eef8">债券</span>
+  </div>
+</div>
+
+<!-- ============ Hero ============ -->
+<header class="hero" style="padding:32px 0 30px">
+  <div class="wrap">
+    <div class="kicker" style="color:#3d8bfd;font-size:11.5px;font-weight:600;letter-spacing:2.2px;margin-bottom:8px">
+      Bonds
+    </div>
+    <div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:14px">
+      <h1 style="font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-1px;margin:0">债券</h1>
+      <div class="big-num" id="sHeroVal" style="font-size:clamp(26px,3.4vw,40px);color:#3d8bfd;line-height:1"></div>
+    </div>
+    <div style="font-size:13px;color:#7b8fb0;margin-bottom:16px">稳健地基 · 唯一适合新手重仓的方向</div>
+    <div id="sHeroNote" style="font-size:13px;color:#96a8c2"></div>
+    <p style="color:#96a8c2;font-size:15px;max-width:820px;line-height:1.9;margin-top:16px">债券是这 9 个板块里<b>唯一一个"跌了你也不会慌"</b>的地方：波动 <b class="n hl">0.78%</b>，近一年最深只跌 <b class="n">-0.67%</b>，收益 <b class="n"><span data-live="sec.bond">+2.94%</span></b>。<b style="color:#e8eef8">但你必须知道：它今年赚的钱，明年赚不到了。</b></p>
+  </div>
+</header>
+
+<!-- ============ 一句话记忆点 ============ -->
+<section class="block" style="border-top:none;padding-top:0;padding-bottom:0">
+  <div class="wrap">
+    <div class="memo-card reveal" style="--mc:#3d8bfd">
+      <div class="memo-tag">一句话记住这个板块</div>
+      <div class="memo-line">你的地基，但今年的收益明年赚不到</div>
+      <div class="memo-trap">
+        <b>⚠️ 最容易搞错的地方</b>
+        <span>别以为"债券不会亏"。003376 历史上最惨亏过 8.27%。而且它今年赚的很大一部分是"利率下跌带来的涨价"，不可重复。</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KPI ============ -->
+<section class="block" style="border-top:none;padding-top:0">
+  <div class="wrap">
+    <div class="grid g3" id="sKpi" style="grid-template-columns:repeat(6,1fr)"></div>
+  </div>
+</section>
+
+<!-- ============ 走势 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Trend</div>
+      <h2>过去一年，它跑赢还是跑输了市场</h2>
+      <p>实线是<b style="color:#e8eef8">本板块</b>，灰色虚线是<b>九大板块平均</b>。起点都归一到 100。</p>
+    </div>
+    <div class="chart-card reveal">
+      <div class="chart-head">
+        <h4>债券 vs 九大板块平均</h4>
+        <span class="hint">鼠标移上去看具体数值</span>
+      </div>
+      <div id="sChart"></div>
+      <div class="legend" id="sChartLegend"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 内部结构 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Internal Structure</div>
+      <h2>板块内部的 4 只，各自站在什么位置</h2>
+      <p>横轴波动率、纵轴收益。<b style="color:#e8eef8">点越靠左上越划算。</b></p>
+    </div>
+    <div class="chart-card reveal">
+      <div class="chart-head">
+        <h4>债券 · 风险收益散点</h4>
+        <span class="hint">鼠标移到点上查看详情</span>
+      </div>
+      <div id="sScatter"></div>
+    </div>
+
+    <div class="chart-card reveal" style="margin-top:18px">
+      <div class="chart-head">
+        <h4>这个板块的"平均"能信吗</h4>
+        <span class="hint">看内部极差</span>
+      </div>
+      <div id="sSpread"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 逐只详情 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Every Fund</div>
+      <h2>4 只逐个体检</h2>
+      <p>按近一年收益排序。<b style="color:#e8eef8">每张卡都有它的风险条和历史最深跌幅。</b></p>
+    </div>
+    <div class="grid g2" id="sFunds"></div>
+  </div>
+</section>
+
+<!-- ============ 情景模拟 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">What If</div>
+      <h2>如果你投 <span class="n">1</span> 万块，会变成多少</h2>
+      <p>同一笔钱，买法不同、运气不同，结果差多少。<b style="color:#e8eef8">这是最直观的一张表。</b></p>
+    </div>
+    <div class="card card-pad reveal" id="sSimulate"></div>
+    <div class="note warn reveal">
+      <b>最后一行才是真正的下限。</b>前四行是"过去一年发生过的事"，
+      最后一行是"历史上最惨的时候发生过的事"——<b style="color:#e8eef8">它们都真实发生过，不是假设。</b>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 九大板块排名 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Ranking</div>
+      <h2>它在九大板块里排第几</h2>
+      <p>按近一年收益排。<b style="color:#e8eef8">带 ▶ 的那条就是你现在看的这个板块。</b></p>
+    </div>
+    <div class="chart-card reveal">
+      <div class="chart-head">
+        <h4>九大板块近一年收益排名</h4>
+        <span class="hint">点其他板块名可跳转</span>
+      </div>
+      <div id="sRankChart"></div>
+    </div>
+    <div class="note reveal">
+      <b>排名看什么：</b>不是看"谁第一"，而是看<b style="color:#e8eef8">你现在看的这个板块，
+      在过去一年里是跑在前面还是落在后面</b>。<br>
+      <b style="color:#f5b942">排名是后视镜——它告诉你发生了什么，不告诉你接下来会发生什么。</b>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 资金动向 ============ -->
+<section class="block" id="sInstBox">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Smart Money</div>
+      <h2>机构在加还是在撤</h2>
+      <p>连续四个报告期的机构持有比例。<b style="color:#e8eef8">机构不一定对，但至少不是拍脑袋。</b></p>
+    </div>
+    <div class="chart-card reveal">
+      <div class="chart-head">
+        <h4>债券 · 机构持有比例变化</h4>
+        <span class="hint">2024-12-31 → 2026-06-30</span>
+      </div>
+      <div id="sInstChart"></div>
+      <div class="legend" id="sInstLegend"></div>
+    </div>
+    <div class="note warn reveal">
+      <b>⚠️ 用这条数据前必须知道：</b>机构持有比例上升，可能是<b>机构主动买入</b>，
+      也可能是<b>散户大量赎回导致占比"被动"变高</b>。
+      <b>数据里没有申赎明细，无法区分这两种情况。</b><br>
+      <b style="color:#f5b942">所以这只是"旁证"，不是"信号"，不能单独作为买卖依据。</b>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 结论 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Verdict</div>
+      <h2>这个板块，新手该怎么办</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal d0">
+        <h4>① 债券赚的两种钱，必须分清</h4>
+        <p><b>票息</b>（借钱收利息）= 确定的、可重复的，像工资。<br><b>价差</b>（利率下降带来的涨价）= 不可重复的，像年终奖，而且<b>利率反弹时会倒扣回去</b>。<br><b style="color:#f5b942">今年这 5% 里，很大一部分是"价差"。</b></p>
+      </div>
+      <div class="step reveal d1">
+        <h4>② 利率已经低到不能再低</h4>
+        <p>中国 10 年期国债收益率 <b class="n hl">1.6412%</b>，是历史极低位。<b>这意味着"涨价"这个年终奖已经发得差不多了。</b>反过来，利率只要往回走一点，<b>7-10 年的长债跌得最快</b>。</p>
+      </div>
+      <div class="step reveal d2">
+        <h4>③ 同样是债券，久期差一倍风险就差一倍</h4>
+        <p>003376（7-10 年）全历史最深 <b class="n up">-8.27%</b>；001512（3-5 年）是 <b class="n">-4.14%</b>；000015（纯债）是 <b class="n">-4.10%</b>。<br><b>久期越长，对利率越敏感。</b></p>
+      </div>
+      <div class="step reveal d3">
+        <h4>④ 结论：这是你的"地基"，但要选对久期</h4>
+        <p>建议配置 <b>50%~60%</b> 的资金在这里，其中<b>长债不要超过 15%</b>。理由见右侧机构动向——<b>机构正在从长债撤退，往纯债加仓</b>。</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:30px" class="reveal">
+      <a class="btn on" href="../新手百科.html" style="display:inline-block;padding:11px 28px;font-size:14px;text-decoration:none">
+        看完整购买建议与配置方案 →
+      </a>
+    </div>
+  </div>
+</section>
+
+  <!-- ============ 相关板块推荐 ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Related</div>
+      <h2>买它的同时，还该看什么</h2>
+      <p>按<b style="color:#e8eef8">相关系数</b>分组：左边是能帮你分散的，右边是跟它差不多的。<b>点进去可以对比。</b></p>
+    </div>
+    <div class="card card-pad reveal" id="relatedBox"></div>
+  </div>
+</section>
+
+<!-- 上一个 / 下一个板块 -->
+  <div class="wrap" style="padding-bottom:10px">
+    <div class="prev-next" id="sPrevNext"></div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b>数据来源：</b>天天基金（东方财富）公开接口 · 东财 F10 官方净值双源校验 · 新浪财经公开行情接口</div>
+    <div><b>收益率口径：</b>近250交易日 · 累计净值 · 含分红再投；板块平均为等权金额买入持有的算术平均。</div>
+    <div><b>机构持有：</b>四个报告期，最近一期 2026-06-30，滞后当前约 4 个月。</div>
+    <div class="foot-warn">
+      本页仅用于数据学习与展示，不构成投资建议。基金投资有风险，入市需谨慎。<br>
+      历史业绩不代表未来表现，历史最大回撤不代表未来最大亏损。
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" aria-label="返回顶部">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+</button>
+
+<script src="../_assets/data.js"></script>
+<script src="../_assets/live-numbers.js"></script>
+<script>window.SECTOR = { id: 'bond', fn: '债券' };</script>
+<script src="../_assets/chart.js"></script>
+<script src="../_assets/anim.js"></script>
+<script src="../_assets/caliber.js"></script>
+<script src="../_assets/search.js"></script>
+<script src="../_assets/export.js"></script>
+<script src="../_assets/tools.js"></script>
+<script src="../_assets/sector.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数据校验 — 基金股票</title>
+<meta name="description" content="对全部 40 只基金和 9 大板块做 12 项交叉校验：走势图收益是否等于表格、板块平均是否等于成分股等权平均等。">
+<link rel="stylesheet" href="_assets/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <a class="logo" href="总览.html">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 17l5-5 4 3 7-8"/><path d="M15 7h5v5"/>
+        </svg>
+      </span>
+      基金股票
+    </a>
+    <nav class="nav">
+      <a href="总览.html">首页</a>
+      <a href="债券基金.html" title="债券基金：钱借给国家或企业，收利息">债券</a>
+      <a href="股票基金.html" title="股票基金：钱买一篮子股票，不是买个股">股票</a>
+      <a href="商品基金.html" title="商品基金：钱买黄金、白银、原油、有色">商品</a>
+      <a href="新手百科.html">购买建议</a>
+    </nav>
+  </div>
+</div>
+
+<div class="ticker"><div class="ticker-track"></div></div>
+
+<main>
+<div class="wrap">
+  <div class="crumb"><a href="总览.html">首页</a> <span>/</span> <span style="color:#e8eef8">数据校验</span></div>
+</div>
+
+<header class="hero" style="padding:30px 0 26px">
+  <div class="wrap">
+    <div class="kicker" style="color:#00c58e;font-size:11.5px;font-weight:600;letter-spacing:2.2px;margin-bottom:8px">Data Audit</div>
+    <h1 style="font-size:clamp(24px,3.4vw,38px);font-weight:800;letter-spacing:-.8px;margin:0 0 14px">这份数据可信吗，自己验一遍</h1>
+    <p style="color:#96a8c2;font-size:15px;max-width:820px;line-height:1.9;margin:0">我这个看板说"数据真实准确"，但<b style="color:#e8eef8">你不能只信我说的</b>。这一页每次打开都会<b style="color:#e8eef8">当场重算</b>一遍所有关键指标，<b>任何一项对不上都会标红</b>。</p>
+  </div>
+</header>
+
+<section class="block" style="border-top:none;padding-top:0">
+  <div class="wrap">
+    <div class="card card-pad reveal" id="auditBox"></div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Detail</div>
+      <h2>逐项校验结果</h2>
+      <p>每一项都列出「它声称什么」「重算出来什么」「差多少」。</p>
+    </div>
+    <div class="card card-pad reveal" id="auditList"></div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Method</div>
+      <h2>这 12 项分别在校验什么</h2>
+    </div>
+    <div class="tbl-wrap reveal">
+      <table>
+        <thead><tr><th class="left">校验项</th><th class="left">为什么重要</th></tr></thead>
+        <tbody>
+          <tr><td class="left"><b>走势图 vs 表格收益</b></td>
+            <td class="left wrap-cell">如果走势图算出来 -5.9%、表格写 -10.2%，你就不知道该信哪个。
+              <b>这是曾经真实出现过的错误</b>（窗口差 13 天导致），已修。</td></tr>
+          <tr><td class="left"><b>板块平均 = 成分股等权平均</b></td>
+            <td class="left wrap-cell">板块数字必须是"每只各买同样多的钱"的算术平均。
+              如果按净值水平加权，会因为"每份更贵的基金占更大权重"而失真。</td></tr>
+          <tr><td class="left"><b>极差 = 最好 − 最差</b></td>
+            <td class="left wrap-cell">极差决定"板块平均能不能代表个基"。极差大就说明平均数在骗人。</td></tr>
+          <tr><td class="left"><b>组合权重合计 = 100%</b></td>
+            <td class="left wrap-cell">权重不满 100% 意味着有笔钱不知去向，或者重复计入。</td></tr>
+          <tr><td class="left"><b>归因合计 ≈ 组合收益</b></td>
+            <td class="left wrap-cell">各腿贡献相加应接近组合实际收益（差值是复利效应，应 &lt;0.5pp）。</td></tr>
+          <tr><td class="left"><b>相关性矩阵对称 & 对角=1</b></td>
+            <td class="left wrap-cell">A 和 B 的相关应等于 B 和 A；自己和自己必然 =1。不对称说明算法有 bug。</td></tr>
+          <tr><td class="left"><b>波动率/回撤合理性</b></td>
+            <td class="left wrap-cell">波动率不应为负或超过 100%；回撤必须是负数。</td></tr>
+          <tr><td class="left"><b>序列长度一致</b></td>
+            <td class="left wrap-cell">所有基金和板块的走势序列必须等长，否则图表会错位。</td></tr>
+          <tr><td class="left"><b>组合回测起点 = 100</b></td>
+            <td class="left wrap-cell">起点不归一等于"凭空多算本金"。曾经因为这个 bug 多算了 10%。</td></tr>
+          <tr><td class="left"><b>无空值/NaN</b></td>
+            <td class="left wrap-cell">核心指标不能缺失，否则页面会显示"undefined"。</td></tr>
+          <tr><td class="left"><b>净值日期合理性</b></td>
+            <td class="left wrap-cell">QDII 净值滞后 1~2 天属正常，但不能更久。</td></tr>
+          <tr><td class="left"><b>分红口径标注完整</b></td>
+            <td class="left wrap-cell">分过红的基金必须同时给出两个口径，否则用户会误判盈亏。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note danger reveal">
+      <b>⚠️ 校验通过 ≠ 数据正确。</b>这一页只能证明"内部自洽"（各数字之间不矛盾）。
+      <b>如果原始数据源本身错了，校验是发现不了的。</b><br>
+      所以页面底部会显示数据来源与抓取时间，你可以自己去天天基金核对其中任意一只。
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b>数据来源：</b>天天基金（东方财富）公开接口 · 东财 F10 官方净值双源校验 · 新浪财经公开行情接口</div>
+    <div><b>收益率口径：</b>近250交易日 · 累计净值 · 含分红再投</div>
+    <div class="foot-warn">
+      本页仅用于数据学习与展示，不构成投资建议。基金投资有风险，入市需谨慎。<br>
+      历史业绩不代表未来表现，历史最大回撤不代表未来最大亏损。
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" aria-label="返回顶部">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+</button>
+
+<script src="_assets/data.js"></script>
+<script src="_assets/live-numbers.js"></script>
+<script src="_assets/chart.js"></script>
+<script src="_assets/anim.js"></script>
+<script src="_assets/caliber.js"></script>
+<script src="_assets/search.js"></script>
+<script src="_assets/export.js"></script>
+<script src="_assets/tools.js"></script>
+<script src="_assets/datacheck.js"></script>
+</body>
+</html>
