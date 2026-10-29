@@ -122,7 +122,9 @@ jobs:
           echo "==================================="
 
           # push 失败时必须把真实原因打出来，否则只看到 exit code 1 无从下手
-          if git push origin HEAD 2>&1; then
+          # 明确指定 HEAD:main —— checkout@v4 在部分事件下是 detached HEAD，
+          # 裸 git push 会报 "fatal: You are not currently on a branch"
+          if git push origin HEAD:main 2>&1; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
             echo "✅ 已提交 ${STAMP} 的数据"
           else
