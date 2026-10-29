@@ -207,12 +207,19 @@
       }
     }
 
+    /* 分三组：管钱 / 挑选 / 记录验证 */
     var TOOLS = [
-      { n: '我的持仓', d: '记录你买了什么，算盈亏和占比', u: pre + '持仓跟踪.html', ic: '💼' },
-      { n: '买入成本', d: '算手续费，看要涨多少才回本', u: pre + '买入成本.html', ic: '🧾' },
-      { n: '定投计算器', d: '用真实净值算定投效果', u: pre + '定投计算器.html', ic: '📈' },
-      { n: '我的自选', d: '收藏的基金集中对比', u: pre + '自选清单.html', ic: '☆' },
-      { n: '数据校验', d: '当场重算 14 项，验证数据可信', u: pre + '数据校验.html', ic: '✓' }
+      { g: '管我的钱', n: '我的持仓', d: '记录你买了什么，算盈亏和占比', u: pre + '持仓跟踪.html', ic: '💼' },
+      { g: '管我的钱', n: '再平衡提醒', d: '仓位偏了多少，该加该减哪只', u: pre + '再平衡.html', ic: '⚖' },
+      { g: '管我的钱', n: '持仓体检', d: '一页纸报告，可打印可分享', u: pre + '体检报告.html', ic: '📋' },
+      { g: '管我的钱', n: '定投计划表', d: '把方案变成能打勾的清单', u: pre + '定投计划.html', ic: '📅' },
+      { g: '挑选工具', n: '基金筛选器', d: '按条件从 64 只里挑', u: pre + '筛选器.html', ic: '🔍' },
+      { g: '挑选工具', n: '任意对比', d: '跨板块比 2~4 只 + 相关性', u: pre + '对比器.html', ic: '⚖' },
+      { g: '挑选工具', n: '定投计算器', d: '用真实净值算定投效果', u: pre + '定投计算器.html', ic: '📈' },
+      { g: '挑选工具', n: '买入成本', d: '算手续费，看要涨多少才回本', u: pre + '买入成本.html', ic: '🧾' },
+      { g: '挑选工具', n: '我的自选', d: '收藏的基金集中对比', u: pre + '自选清单.html', ic: '☰' },
+      { g: '记录与验证', n: '决策日志', d: '记下当时为什么买，避免自我欺骗', u: pre + '决策日志.html', ic: '📓' },
+      { g: '记录与验证', n: '数据校验', d: '当场重算 14 项，验证数据可信', u: pre + '数据校验.html', ic: '✓' }
     ];
 
     /* 高亮：当前页在工具里的话，给导航项加个标记 */
@@ -233,13 +240,20 @@
 
     var panel = document.createElement('div');
     panel.className = 'nt-panel';
+    var lastG = '';
     panel.innerHTML = TOOLS.map(function (t) {
-      return '<a class="nt-item" href="' + t.u + '">' +
+      var head = '';
+      if (t.g && t.g !== lastG) {
+        head = '<div class="nt-group">' + t.g + '</div>';
+        lastG = t.g;
+      }
+      return head +
+        '<a class="nt-item" href="' + t.u + '">' +
         '<span class="nt-ic">' + t.ic + '</span>' +
         '<span class="nt-txt"><b>' + t.n + '</b><small>' + t.d + '</small></span>' +
         '</a>';
     }).join('') +
-      '<div class="nt-foot">这几个工具都能直接用，数据只在你自己电脑里</div>';
+      '<div class="nt-foot">数据只在你自己电脑里，不上传不同步</div>';
 
     wrap.appendChild(btn);
     wrap.appendChild(panel);
