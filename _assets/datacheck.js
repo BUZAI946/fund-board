@@ -1,4 +1,4 @@
-/* 数据校验：12 项自动交叉验证 */
+/* 数据校验：自动交叉验证（项数以 results.length 为准，勿写死）*/
 (function () {
   'use strict';
   var D = window.DATA, U = window.UI;
@@ -29,7 +29,7 @@
     });
     add('走势图收益 = 表格收益', bad === 0,
       bad === 0
-        ? '40 只全部自洽，最大残差 ' + worst.toFixed(3) + 'pp（降采样取整）'
+        ? D.funds.length + ' 只全部自洽，最大残差 ' + worst.toFixed(3) + 'pp（降采样取整）'
         : bad + ' 只不自洽，最差 ' + worstName + ' 差 ' + worst.toFixed(2) + 'pp',
       worst);
   })();
@@ -143,7 +143,7 @@
       if (f.mdd250 !== null && f.mdd250 > 0) bad.push(f.code + ' 近一年回撤为正');
     });
     add('波动率/回撤数值合理', bad.length === 0,
-      bad.length === 0 ? '40 只全部合理（波动 0~100%，回撤为负）' : bad.slice(0, 3).join('; '));
+      bad.length === 0 ? D.funds.length + ' 只全部合理（波动 0~100%，回撤为负）' : bad.slice(0, 3).join('; '));
   })();
 
   /* ---------- 10. 序列长度一致 ---------- */
@@ -186,7 +186,7 @@
       });
     });
     add('核心指标无空值/NaN', bad.length === 0,
-      bad.length === 0 ? '40 只 × 6 个核心字段全部有值'
+      bad.length === 0 ? D.funds.length + ' 只 × 6 个核心字段全部有值'
         : bad.slice(0, 5).join('、') + ' 共 ' + bad.length + ' 处为空');
   })();
 

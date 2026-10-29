@@ -472,7 +472,7 @@
        render:function(r){
          return '<a class="sec-link" href="板块/'+r.name+'.html" title="点开看'+r.name+'的详细数据">'+r.name+' <span class="go-arrow">→</span></a>';
        }},
-      {key:'n', label:'只数', dec:0,
+      {key:'n', label:'只数', fmt:'int',
        render:function(r){ return '<span class="num-cell">'+r.n+'</span>'; }},
       {key:'arith', label:'平均收益',
        render:function(r){ return '<span class="num-cell '+U.cls(r.arith)+'">'+U.fmt(r.arith)+'</span>'; }},

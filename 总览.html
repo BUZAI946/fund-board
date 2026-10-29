@@ -154,12 +154,12 @@
   </div>
 </section>
 
-<!-- ================= 九大板块 ================= -->
+<!-- ================= 全部板块 ================= -->
 <section class="block" data-emph data-tone="data">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Sectors</div>
-      <h2>九大板块，过去一年谁赚谁亏</h2>
+      <h2><span data-live="totals.sectors" data-fmt="count">15</span> 个板块，过去一年谁赚谁亏</h2>
       <p>"平均"这一列 = 你把板块里每只基金<b style="color:#e8eef8">各买同样多的钱</b>、拿满一年，真实得到的结果。</p>
     </div>
 
@@ -186,7 +186,7 @@
     </div>
 
     <!-- 板块热力图 -->
-    <h3 style="font-size:16px;margin:30px 0 14px" class="reveal">九大板块热力图 · 一眼看清谁在赚谁在亏</h3>
+    <h3 style="font-size:16px;margin:30px 0 14px" class="reveal"><span data-live="totals.sectors" data-fmt="count">15</span> 个板块热力图 · 一眼看清谁在赚谁在亏</h3>
     <div class="heat-grid reveal" id="heatGrid"></div>
     <div class="note" style="margin-top:14px">
       <b>怎么读：</b>色块越红 = 过去一年涨越多；越绿 = 跌越狠。
@@ -278,7 +278,7 @@
 
     <div class="card card-pad reveal" style="margin-top:16px">
       <div class="chart-head" style="margin-bottom:14px">
-        <h4 id="tmChartTitle">九大板块 · 区间收益排名</h4>
+        <h4 id="tmChartTitle"><span data-live="totals.sectors" data-fmt="count">15</span> 个板块 · 区间收益排名</h4>
         <span class="hint">红色赚 / 绿色亏（中国习惯）</span>
       </div>
       <div id="tmChart"></div>
@@ -328,7 +328,7 @@
         <div style="font-size:34px;font-weight:800;font-family:var(--font-num);color:#f5b942;line-height:1">
           <span data-count="22" data-dec="0" data-sign="false" data-suffix="/60">22/60</span>
         </div>
-        <h4 style="margin:10px 0 8px;font-size:15px">40 只里有 22 只夏普为负</h4>
+        <h4 style="margin:10px 0 8px;font-size:15px">60 只里有 22 只夏普为负</h4>
         <p style="font-size:13px;color:#96a8c2;line-height:1.8">
           夏普为负 = 白担风险还倒贴。超过一半的标的，过去一年是"
           <b style="color:#e8eef8">拿你的心惊肉跳，换了个负收益</b>"。
@@ -366,7 +366,7 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Correlation</div>
-      <h2>九大板块，谁跟谁是一回事</h2>
+      <h2><span data-live="totals.sectors" data-fmt="count">15</span> 个板块，谁跟谁是一回事</h2>
       <p>
         格子里的数字是<b style="color:#e8eef8">相关系数</b>（−1 到 +1）。
         <b style="color:#ff8a5c">红色 = 同涨同跌（分散无效）</b>，
@@ -495,7 +495,7 @@
       <h2>框一段，看这段发生了什么</h2>
       <p>
         上面时间机器只能拖一个起点。<b style="color:#e8eef8">这里可以框任意一段区间</b>，
-        看九个板块在这段时间里的表现差异。
+        看全部板块在这段时间里的表现差异。
       </p>
     </div>
     <div class="card card-pad reveal" id="rangeChartBox"></div>
@@ -689,7 +689,7 @@
     defaultSort: {key:'arith', dir:-1},
     cols: [
       {key:'name', label:'板块', type:'str', align:'left'},
-      {key:'n', label:'只数', dec:0},
+      {key:'n', label:'只数', fmt:'int'},
       {key:'arith', label:'平均收益', render:function(r){ return '<span class="num-cell '+U.cls(r.arith)+'">'+U.fmt(r.arith)+'</span>'; }},
       {key:'best', label:'里面最好的', render:function(r){ return U.chg(r.best); }},
       {key:'worst', label:'里面最差的', render:function(r){ return U.chg(r.worst); }},
@@ -697,7 +697,12 @@
       {key:'vol', label:'波动率', render:function(r){ return r.vol.toFixed(2)+'%'; }},
       {key:'mddCombo', label:'买齐一篮子的回撤', render:function(r){ return '<span class="down">'+U.fmt(r.mddCombo)+'</span>'; }},
       {key:'mddWorst', label:'单一只最惨', render:function(r){ return '<span class="down" style="font-weight:700">'+U.fmt(r.mddWorst)+'</span>'; }},
-      {key:'trust', label:'板块数字能信吗', type:'str'}
+      /* 【修 bug】trust 字段存的是 HTML 字符串，但这列没写 render，
+         sortableTable 会走 U.esc() 把 <span> 转义成文本，
+         页面上直接显示 <span class="tag danger">不可信</span> 一堆代码。
+         加 render 原样输出即可。 */
+      {key:'trust', label:'板块数字能信吗', sortable:false,
+       render:function(r){ return r.trust; }}
     ]
   });
 
@@ -857,14 +862,12 @@
         'title="点开看'+s.name+'的详细数据" style="background:'+bg+';border-color:'+bd+'">'+
         '<div class="heat-top">'+dot+'<span class="heat-name">'+s.name+'</span>'+
           '<span class="heat-n">'+s.n+'只</span></div>'+
-        '<div class="heat-valrow">'+
-          '<div class="heat-val" style="color:'+col+'">'+sign+v.toFixed(2)+'%</div>'+
-          trust+
-        '</div>'+
+        '<div class="heat-val" style="color:'+col+'">'+sign+v.toFixed(2)+'%</div>'+
         '<div class="heat-foot">'+
           '<span>最差 <b style="'+(s.worst>=0?'color:#ff4d5e':'color:#00c58e')+'">'+s.worst.toFixed(1)+'%</b></span>'+
           '<span>波动 '+s.vol.toFixed(0)+'%</span>'+
         '</div>'+
+        (trust ? '<div class="heat-spread">'+trust+'</div>' : '')+
       '</a>';
     }).join('');
   })();
@@ -1159,7 +1162,7 @@
       elChart.innerHTML = '';
       window.Chart2.bar(elChart, { labelW: 130, rowH: 40, items: items });
 
-      elTitle.textContent = '九大板块 · 从 ' + axis[i] + ' 买入到现在的收益';
+      elTitle.textContent = '全部板块 · 从 ' + axis[i] + ' 买入到现在的收益';
 
       /* 三张解读 */
       var best = rows[0], worst = rows[rows.length - 1];
@@ -1180,7 +1183,7 @@
       /* 教学点：随选的时间段不同而变 */
       var lesson;
       if (i === 0) {
-        lesson = '<b>这是整段 250 个交易日。</b>九大板块里只有 <b class="n">' +
+        lesson = '<b>这是整段 250 个交易日。</b>全部板块里只有 <b class="n">' +
           posCnt + '</b> 个是赚的，<b class="n">' + (9 - posCnt) + '</b> 个在亏——' +
           '<b style="color:#f5b942">这就是"过去一年"的真实分布。</b>';
       } else if (i >= MAXI - 2) {

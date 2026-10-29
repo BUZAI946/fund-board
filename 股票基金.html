@@ -391,7 +391,7 @@
   /* ---------- 板块折线 ---------- */
   (function(){
     /* 颜色由 Chart2.palette 按数量自动生成，不再写死数组（避免多条线撞色） */
-    var PAL = (window.Chart2 && window.Chart2.palette) ? window.Chart2.palette(rows.length) : null;
+    var PAL = (window.Chart2 && window.Chart2.palette) ? window.Chart2.palette(SECS.length) : null;
     var series = SECS.map(function(s,i){
       return {name:s.name, short:s.name, data:s.seq, color:PAL[i%PAL.length]};
     });
@@ -411,7 +411,7 @@
        render:function(r){
          return '<a class="sec-link" href="板块/'+r.name+'.html" title="点开看'+r.name+'的详细数据">'+r.name+' <span class="go-arrow">→</span></a>';
        }},
-      {key:'n', label:'只数', dec:0},
+      {key:'n', label:'只数', fmt:'int'},
       {key:'arith', label:'平均收益',
        render:function(r){ return '<span class="num-cell '+U.cls(r.arith)+'">'+U.fmt(r.arith)+'</span>'; }},
       {key:'best', label:'最好的', render:function(r){ return U.chg(r.best); }},

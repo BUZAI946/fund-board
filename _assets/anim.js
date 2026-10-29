@@ -346,7 +346,26 @@
 
       var tbody = '<tbody>' + list.map(function (r) {
         var tds = cols.map(function (c) {
-          var v = c.render ? c.render(r) : (c.type === 'str' ? U.esc(r[c.key]) : U.fmt(r[c.key], c.dec));
+          /* 支持三种输出：
+             - 有 render：自定义
+             - type:'str'：转义后的纯文本
+             - fmt:'int' ：整数（不带 + 号和 %），用于"只数"这类列
+             - 默认      ：U.fmt 带 +/- 和 %，用于收益率
+             原实现只有前两种，导致 {key:'n', label:'只数', dec:0}
+             渲染成 "+5%"，语义错误。 */
+          var cellVal;
+          if (c.render) {
+            cellVal = c.render(r);
+          } else if (c.type === 'str') {
+            cellVal = U.esc(r[c.key]);
+          } else if (c.fmt === 'int') {
+            var iv = r[c.key];
+            cellVal = (iv === null || iv === undefined || isNaN(iv))
+              ? '—' : String(Math.round(iv));
+          } else {
+            cellVal = U.fmt(r[c.key], c.dec);
+          }
+          var v = cellVal;
           var klass = [c.align === 'left' ? 'left' : '', c.cls ? c.cls(r) : ''].join(' ').trim();
           return '<td class="' + klass + '">' + v + '</td>';
         }).join('');

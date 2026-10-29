@@ -1030,11 +1030,7 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:26px 0}
    正好压在同样位于右上角的 .heat-n（只数）上面，两个数字重叠。
    而且默认 opacity:0，只有 .hot 才显示 —— 极差 2~10 那档等于永远看不见。
    现在改成正常流，放在数字行右侧的空白处，始终可见。 */
-.heat-valrow{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:8px;margin:4px 0 auto;
-}
-.heat-valrow .heat-val{margin:0}
+/* heat-valrow 已废弃：极差移到底部独立行（见 .heat-spread） */
 .heat-warn{
   flex-shrink:0;
   font-size:10.5px;padding:2px 6px;border-radius:4px;
@@ -1046,6 +1042,14 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:26px 0}
 .heat-warn.hot{
   background:rgba(245,185,66,.26);color:#f5b942;
   border-color:rgba(245,185,66,.5);
+}
+/* 极差独立成行，放在格子最底部、左对齐。
+   之前放在数字右侧和"只数"同在右边缘，虽然几何上不重叠，
+   但视觉上挤在一起分不清，用户两次反馈看不清。 */
+.heat-spread{
+  margin-top:7px;padding-top:6px;
+  border-top:0.5px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;
 }
 
 /* 散点图容器最小高度 */
