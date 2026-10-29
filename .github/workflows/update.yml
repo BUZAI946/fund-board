@@ -5,8 +5,21 @@ name: 每日更新基金数据
 # schedule 事件会延迟，极端情况下排队任务会被丢弃」，所以避开整点。
 on:
   schedule:
-    - cron: '17 12 * * *'
-  workflow_dispatch:        # 也可以手动触发（在 Actions 页面点 Run workflow）
+    # 【为什么一天跑多次】
+    # GitHub 官方文档明确写：高负载时段（每小时开头）定时任务会延迟，
+    # 「如果负载足够高，排队中的任务可能被直接丢弃」。
+    # 免费账号优先级最低，实测原设置（每天一次 UTC 12:17）连续多天 0 次触发。
+    #
+    # 对策：一天排 3 次，只要任意一次成功就够。晚跑的那次会因为"数据没变化"自动跳过提交。
+    # 时间都避开整点（17/37/57 分），减少被丢包的概率。
+    #
+    #   UTC 12:37 = 北京 20:37   ← 收盘后，净值陆续更新
+    #   UTC 14:37 = 北京 22:37   ← 补跑
+    #   UTC 22:37 = 北京 06:37   ← 次日凌晨兜底
+    - cron: '37 12 * * *'
+    - cron: '37 14 * * *'
+    - cron: '37 22 * * *'
+  workflow_dispatch:        # 手动触发（Actions 页面点 Run workflow）
 
 # 需要写权限才能把新数据提交回仓库
 permissions:
@@ -54,6 +67,17 @@ jobs:
         working-directory: tools
         run: python build_site_data.py
 
+      # ---------- 重新生成页面 ----------
+      # 【重要】板块页 / 货币页 / 详情页的正文里有大量"生成时写死"的数字
+      # （比如"本板块 5 只，近一年平均 +2.02%"）。
+      # 只更新 data.js 不重新生成页面，这些数字就会一天天过时。
+      - name: 5/5 重新生成全部页面
+        working-directory: deliverables
+        run: |
+          python gen_sector_pages.py
+          python gen_cash_page.py
+          python gen_fund_pages.py
+
       # ---------- 数据体检（失败不阻断，只告警）----------
       - name: 数据体检
         id: health
@@ -97,8 +121,9 @@ jobs:
           git config user.name  "fund-board-bot"
           git config user.email "bot@users.noreply.github.com"
 
-          # 只提交数据文件，不动代码
+          # 提交：数据 + 重新生成的页面（不动代码和配置）
           git add _assets/data.js
+          git add 板块/ 基金详情/ 2>/dev/null || true
 
           if git diff --staged --quiet; then
             echo "数据没有变化，跳过提交"
