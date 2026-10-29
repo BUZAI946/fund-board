@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>债券 · 板块详情 — 基金股票</title>
-<meta name="description" content="稳健地基 · 唯一适合新手重仓的方向。债券板块 4 只基金的逐只详情、风险收益、机构持有变化与新手结论。">
+<title>美国股市 · 板块详情 — 基金股票</title>
+<meta name="description" content="标普500 / 纳斯达克100 · 全球最强的一批公司。美国股市板块 5 只基金的逐只详情、风险收益、机构持有变化与新手结论。">
 <link rel="stylesheet" href="../_assets/style.css">
 </head>
-<body data-sec="bond" style="--sec-color:#3d8bfd">
+<body data-sec="us" style="--sec-color:#3d8bfd">
 
 <div class="topbar">
   <div class="topbar-in">
@@ -21,29 +21,22 @@
     </a>
     <nav class="nav">
       <a href="../总览.html">首页</a>
-      <a href="../债券基金.html" title="债券基金：钱借给国家或企业，收利息">债券</a>
-      <a href="../股票基金.html" title="股票基金：钱买一篮子股票，不是买个股">股票</a>
-      <a href="../商品基金.html" title="商品基金：钱买黄金、白银、原油、有色">商品</a>
+      <a href="../债券基金.html" title="债券基金">债券</a>
+      <a href="../股票基金.html" title="股票基金">股票</a>
+      <a href="../商品基金.html" title="商品基金">商品</a>
       <a href="../新手百科.html">购买建议</a>
     </nav>
-      <button class="search-trigger" type="button" aria-label="搜索">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-        <span class="st-txt">搜索</span><kbd>Ctrl K</kbd>
-      </button>
   </div>
 </div>
 
 <div class="ticker"><div class="ticker-track"></div></div>
 
-<div class="data-banner" id="dataBanner"></div>
-
-
 <main>
 <div class="wrap">
   <div class="crumb">
     <a href="../总览.html">首页</a> <span>/</span>
-    <span style="color:#7b8fb0">债券基金</span> <span>/</span>
-    <span style="color:#e8eef8">债券</span>
+    <span style="color:#7b8fb0">股票基金</span> <span>/</span>
+    <span style="color:#e8eef8">美国股市</span>
   </div>
 </div>
 
@@ -51,15 +44,15 @@
 <header class="hero" style="padding:32px 0 30px">
   <div class="wrap">
     <div class="kicker" style="color:#3d8bfd;font-size:11.5px;font-weight:600;letter-spacing:2.2px;margin-bottom:8px">
-      Bonds
+      US Equity
     </div>
     <div style="display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:14px">
-      <h1 style="font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-1px;margin:0">债券</h1>
+      <h1 style="font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-1px;margin:0">美国股市</h1>
       <div class="big-num" id="sHeroVal" style="font-size:clamp(26px,3.4vw,40px);color:#3d8bfd;line-height:1"></div>
     </div>
-    <div style="font-size:13px;color:#7b8fb0;margin-bottom:16px">稳健地基 · 唯一适合新手重仓的方向</div>
+    <div style="font-size:13px;color:#7b8fb0;margin-bottom:16px">标普500 / 纳斯达克100 · 全球最强的一批公司</div>
     <div id="sHeroNote" style="font-size:13px;color:#96a8c2"></div>
-    <p style="color:#96a8c2;font-size:15px;max-width:820px;line-height:1.9;margin-top:16px">债券是这 9 个板块里<b>唯一一个"跌了你也不会慌"</b>的地方：波动 <b class="n hl">0.78%</b>，近一年最深只跌 <b class="n">-0.67%</b>，收益 <b class="n"><span data-live="sec.bond">+2.94%</span></b>。<b style="color:#e8eef8">但你必须知道：它今年赚的钱，明年赚不到了。</b></p>
+    <p style="color:#96a8c2;font-size:15px;max-width:820px;line-height:1.9;margin-top:16px">美股是<b style="color:#e8eef8">过去十年全球表现最好的权益资产</b>——本板块 5 只，近一年 +10.45%，波动 16.73%。<b>但它有两个隐性成本：汇率和净值滞后，很多人从来没算过。</b></p>
   </div>
 </header>
 
@@ -68,10 +61,10 @@
   <div class="wrap">
     <div class="memo-card reveal" style="--mc:#3d8bfd">
       <div class="memo-tag">一句话记住这个板块</div>
-      <div class="memo-line">你的地基，但今年的收益明年赚不到</div>
+      <div class="memo-line">你买的不只是美股，还是一份美元资产</div>
       <div class="memo-trap">
         <b>⚠️ 最容易搞错的地方</b>
-        <span>别以为"债券不会亏"。003376 历史上最惨亏过 8.27%。而且它今年赚的很大一部分是"利率下跌带来的涨价"，不可重复。</span>
+        <span>别忽略汇率：人民币升值 3%，你的美股基金凭空少 3%，跟美股涨不涨没关系。</span>
       </div>
     </div>
   </div>
@@ -94,7 +87,7 @@
     </div>
     <div class="chart-card reveal">
       <div class="chart-head">
-        <h4>债券 vs 九大板块平均</h4>
+        <h4>美国股市 vs 九大板块平均</h4>
         <span class="hint">鼠标移上去看具体数值</span>
       </div>
       <div id="sChart"></div>
@@ -108,12 +101,12 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Internal Structure</div>
-      <h2>板块内部的 4 只，各自站在什么位置</h2>
+      <h2>板块内部的 5 只，各自站在什么位置</h2>
       <p>横轴波动率、纵轴收益。<b style="color:#e8eef8">点越靠左上越划算。</b></p>
     </div>
     <div class="chart-card reveal">
       <div class="chart-head">
-        <h4>债券 · 风险收益散点</h4>
+        <h4>美国股市 · 风险收益散点</h4>
         <span class="hint">鼠标移到点上查看详情</span>
       </div>
       <div id="sScatter"></div>
@@ -134,7 +127,7 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Every Fund</div>
-      <h2>4 只逐个体检</h2>
+      <h2>5 只逐个体检</h2>
       <p>按近一年收益排序。<b style="color:#e8eef8">每张卡都有它的风险条和历史最深跌幅。</b></p>
     </div>
     <div class="grid g2" id="sFunds"></div>
@@ -190,7 +183,7 @@
     </div>
     <div class="chart-card reveal">
       <div class="chart-head">
-        <h4>债券 · 机构持有比例变化</h4>
+        <h4>美国股市 · 机构持有比例变化</h4>
         <span class="hint">2024-12-31 → 2026-06-30</span>
       </div>
       <div id="sInstChart"></div>
@@ -214,20 +207,20 @@
     </div>
     <div class="steps">
       <div class="step reveal d0">
-        <h4>① 债券赚的两种钱，必须分清</h4>
-        <p><b>票息</b>（借钱收利息）= 确定的、可重复的，像工资。<br><b>价差</b>（利率下降带来的涨价）= 不可重复的，像年终奖，而且<b>利率反弹时会倒扣回去</b>。<br><b style="color:#f5b942">今年这 5% 里，很大一部分是"价差"。</b></p>
+        <h4>① 你买的不只是美股，还是一份美元资产</h4>
+        <p>QDII 基金用人民币申购，换成美元去买美股。<b style="color:#e8eef8">所以你的收益 = 美股涨跌 + 美元兑人民币涨跌。</b><br><b style="color:#ff8a5c">人民币升值 3%，你的美股基金就凭空少 3%，跟美股涨不涨没关系。</b></p>
       </div>
       <div class="step reveal d1">
-        <h4>② 利率已经低到不能再低</h4>
-        <p>中国 10 年期国债收益率 <b class="n hl">1.6412%</b>，是历史极低位。<b>这意味着"涨价"这个年终奖已经发得差不多了。</b>反过来，利率只要往回走一点，<b>7-10 年的长债跌得最快</b>。</p>
+        <h4>② QDII 的净值永远滞后 1~2 天</h4>
+        <p>因为要等美股收盘、再换算汇率、再公布净值。<b>所以你看到的"今日净值"，实际是前一两天的。</b>本板块的基金净值日就比其他板块晚——这不是数据错了。</p>
       </div>
       <div class="step reveal d2">
-        <h4>③ 同样是债券，久期差一倍风险就差一倍</h4>
-        <p>003376（7-10 年）全历史最深 <b class="n up">-8.27%</b>；001512（3-5 年）是 <b class="n">-4.14%</b>；000015（纯债）是 <b class="n">-4.10%</b>。<br><b>久期越长，对利率越敏感。</b></p>
+        <h4>③ 标普500 和纳斯达克100 差很多</h4>
+        <p>标普500 是 500 家大公司（含金融、消费、医药），纳斯达克100 是 100 家科技公司。<b>后者的波动明显更大。</b>本板块内部极差 2.58 个百分点。</p>
       </div>
       <div class="step reveal d3">
-        <h4>④ 结论：这是你的"地基"，但要选对久期</h4>
-        <p>建议配置 <b>50%~60%</b> 的资金在这里，其中<b>长债不要超过 15%</b>。理由见右侧机构动向——<b>机构正在从长债撤退，往纯债加仓</b>。</p>
+        <h4>④ 结论：20% 是合理上限</h4>
+        <p>本看板建议组合 J 给标普500 <b>20%</b>。<b style="color:#f5b942">它的作用是"和 A 股不同步"，不是"涨得更多"</b>——但你要接受汇率这个额外变量。</p>
       </div>
     </div>
     <div style="text-align:center;margin-top:30px" class="reveal">
@@ -238,19 +231,7 @@
   </div>
 </section>
 
-  <!-- ============ 相关板块推荐 ============ -->
-<section class="block">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <div class="kicker">Related</div>
-      <h2>买它的同时，还该看什么</h2>
-      <p>按<b style="color:#e8eef8">相关系数</b>分组：左边是能帮你分散的，右边是跟它差不多的。<b>点进去可以对比。</b></p>
-    </div>
-    <div class="card card-pad reveal" id="relatedBox"></div>
-  </div>
-</section>
-
-<!-- 上一个 / 下一个板块 -->
+  <!-- 上一个 / 下一个板块 -->
   <div class="wrap" style="padding-bottom:10px">
     <div class="prev-next" id="sPrevNext"></div>
   </div>
@@ -274,14 +255,9 @@
 </button>
 
 <script src="../_assets/data.js"></script>
-<script src="../_assets/live-numbers.js"></script>
-<script>window.SECTOR = { id: 'bond', fn: '债券' };</script>
+<script>window.SECTOR = { id: 'us', fn: '美国股市' };</script>
 <script src="../_assets/chart.js"></script>
 <script src="../_assets/anim.js"></script>
-<script src="../_assets/caliber.js"></script>
-<script src="../_assets/search.js"></script>
-<script src="../_assets/export.js"></script>
-<script src="../_assets/tools.js"></script>
 <script src="../_assets/sector.js"></script>
 </body>
 </html>

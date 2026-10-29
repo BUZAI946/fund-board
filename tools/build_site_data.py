@@ -19,25 +19,35 @@ SRC = os.path.join(_TOOLS, 'data.js')          # build.py 的产物
 OUTDIR = os.path.join(_ROOT, '_assets')        # 站点资源目录
 OUT = os.path.join(OUTDIR, 'data.js')
 
-SEC = {'gold': '黄金', 'silver': '白银', 'oil': '原油', 'metal': '有色',
-       'overseas': '海外美股', 'hk': '中国香港', 'ashare': 'A股宽基',
-       'sector': '行业主题', 'bond': '债券', 'cash': '货币'}
+# ===== 全部配置来自 pool.json（唯一来源）=====
+_CFG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'pool.json')
+CFG = json.load(open(_CFG_PATH, encoding='utf-8'))
 
-# 资产大类分组
-GROUP = {
-    'fund':      (['bond'], '稳健型 · 债券与现金', '这笔钱主要靠"利息"赚钱，波动极小，是新手的地基'),
-    'stock':     (['ashare', 'hk', 'overseas', 'sector'], '权益型 · 买的是股票',
-                  '这类基金的钱主要投在股票上，涨跌都跟着股市走'),
-    'commodity': (['gold', 'silver', 'oil', 'metal'], '商品型 · 黄金原油这些实物',
-                  '这类基金买的是黄金、原油、金属等实物或期货，跟股市不同步'),
-}
-SEC_ORDER = ['gold', 'silver', 'oil', 'metal', 'overseas', 'hk', 'ashare', 'sector', 'bond']
+SECTORS_CFG = CFG['sectors']          # key -> {name, group, order, desc, funds}
 
-CASH_ANN = 0.00902  # 000509 广发钱袋子货币A 七日年化，作组合里现金部分的收益
+# 板块中文名
+SEC = {k: v['name'] for k, v in SECTORS_CFG.items()}
+# 板块 → 大类
+SEC2GRP = {k: v['group'] for k, v in SECTORS_CFG.items()}
+# 按 order 排序的板块顺序（不含 cash，cash 单独处理）
+SEC_ORDER = [k for k, v in sorted(SECTORS_CFG.items(), key=lambda x: x[1]['order'])
+             if k != 'cash']
+# 大类定义：key -> (板块列表, 标题, 说明)
+GROUP = {}
+for gk, gv in CFG['groups'].items():
+    members = [k for k, v in sorted(SECTORS_CFG.items(), key=lambda x: x[1]['order'])
+               if v['group'] == gk]
+    GROUP[gk] = (members, gv['title'], gv['desc'])
+
+# （CASH_ANN 移到 D 定义之后再算）
 
 raw = io.open(SRC, encoding='utf-8').read()
 D = json.loads(raw[raw.index('=') + 1:].strip().rstrip(';'))
 F = D['funds']
+
+# 现金收益率：从数据里取货基的七日年化（不再硬编码 0.902%）
+_CASH_CODE = CFG.get('cash_yield_code', '000509')
+CASH_ANN = (F.get(_CASH_CODE, {}).get('y7') or 0.902) / 100
 
 nav_codes = [c for c, f in F.items() if f.get('kind') == 'nav']
 maps = {c: {x['d']: x['v'] for x in F[c]['series'][-260:]} for c in nav_codes}
@@ -221,37 +231,12 @@ for sec in SEC_ORDER:
     })
 
 # ---------- 组合回测 ----------
-PLANS = {
-    'A': ('极保守 · 纯债券', ([('110017', 1), ('003376', 1), ('000015', 1), ('001512', 1)], 0),
-          '4只债券基金平均分配，一点股票都不碰'),
-    'B': ('稳健核心', ([('003376', .40), ('000015', .20), ('050025', .20), ('007466', .10)], .10),
-          '债券40% + 纯债20% + 标普500 20% + 红利低波10% + 现金10%'),
-    'C': ('均衡+卫星(6只)', ([('000051', .25), ('006479', .15), ('110017', .25), ('000217', .15), ('001594', .10), ('160416', .10)], 0),
-          '债券打底，配黄金、美股、A股、油气各一小份'),
-    'D': ('九板块均配', ([('000217', 1), ('161226', 1), ('501018', 1), ('004432', 1), ('006479', 1), ('000071', 1), ('000051', 1), ('001594', 1), ('110017', 1)], 0),
-          '九大板块每样买一点，看似分散其实什么都沾'),
-    'E': ('单押黄金(抄底)', ([('000217', 1)], 0), '只买一只黄金基金，赌它跌多了会反弹'),
-    'F': ('单押原油(追高)', ([('501018', 1)], 0), '只买一只原油基金，涨得最猛的时候追进去'),
-    'G': ('进攻型(四类高波动)', ([('001592', 1), ('008888', 1), ('012348', 1), ('161226', 1)], 0),
-          '创业板+半导体+港股科技+白银，全仓进攻'),
-    'H': ('原方案(长债占30%)', ([('003376', .30), ('000015', .20), ('001512', .10), ('050025', .20)], .20),
-          '长债30% + 纯债20% + 中短债10% + 标普500 20% + 现金20%'),
-    'J': ('★ 本看板建议组合', ([('001512', .25), ('000015', .20), ('003376', .15), ('050025', .20)], .20),
-          '中短债25% + 纯债20% + 长债15% + 标普500 20% + 现金20%'),
-    'I': ('对照：单买一只长债', ([('003376', 1)], 0), '一分不分散，全部买那只长债基金'),
-}
-PLAN_VERDICT = {
-    'A': '几乎不颠簸，但收益也只比货基强一点',
-    'B': '另一种均衡配方，含红利低波',
-    'C': '看似均衡，但收益几乎全来自那10%的石油股基金',
-    'D': '看着最分散，其实什么都沾一点，波动反而更大',
-    'E': '反面教材：以为跌多了会反弹，结果又跌一成',
-    'F': '收益第一，但别学：它历史最深亏过76%',
-    'G': '反面教材：四类高波动凑一起，最惨',
-    'H': '原方案：长债占30%，回测收益略高，但久期风险集中',
-    'J': '本看板最终推荐：机构在撤的长债降权，机构在加的中短债提权',
-    'I': '波动/回撤/夏普更漂亮，但收益略输、历史回撤更深',
-}
+# 组合定义来自 pool.json
+PLANS = {}
+PLAN_VERDICT = {}
+for pk, pv in CFG['plans'].items():
+    PLANS[pk] = (pv['name'], ([(c, w) for c, w in pv['legs']], pv.get('cash', 0)), pv.get('note', ''))
+    PLAN_VERDICT[pk] = pv.get('verdict', '')
 
 
 def backtest(plan, cash_w):
@@ -363,8 +348,11 @@ correlations = {
 }
 
 # ---------- 建议组合 J 的收益归因（每条腿贡献多少 pp）----------
-J_LEGS = [('001512', .25), ('000015', .20), ('003376', .15), ('050025', .20)]
-J_CASH = .20
+# 归因用建议组合 J（从配置读，不再硬编码）
+_J = CFG['plans']['J']
+_J_SUM = sum(w for _, w in _J['legs'])
+J_CASH = _J.get('cash', 0)
+J_LEGS = [(c, w / _J_SUM * (1 - J_CASH)) for c, w in _J['legs']]
 attr = []
 for code, w in J_LEGS:
     ret = win_ret(code)
@@ -374,7 +362,7 @@ for code, w in J_LEGS:
         'sec': F[code]['sec'],
     })
 attr.append({
-    'code': '000509', 'name': '现金（货币基金）', 'w': round(J_CASH * 100, 1),
+    'code': CFG.get('cash_yield_code', '000509'), 'name': '现金（货币基金）', 'w': round(J_CASH * 100, 1),
     'ret': round(CASH_ANN * 100, 3), 'contrib': round(J_CASH * CASH_ANN * 100, 3),
     'sec': 'cash',
 })

@@ -4,18 +4,11 @@ import os, re, json, time, concurrent.futures as cf, requests, datetime
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 RAW = os.path.join(BASE, 'raw')
-POOL = {
-    'gold':    ['000217', '000216', '002611', '000307', '000218', '518880', '159934'],
-    'silver':  ['161226', '019005'],
-    'oil':     ['501018', '161129', '160723', '162411', '160416'],
-    'metal':   ['007910', '004432', '160221', '013081'],
-    'overseas':['006479', '000834', '050025', '006075', '270042'],
-    'hk':      ['000071', '000948', '012348', '012804'],
-    'ashare':  ['000051', '000962', '001592', '011608'],
-    'sector':  ['003095', '161725', '008888', '001594', '007466'],
-    'bond':    ['110017', '003376', '000015', '001512'],
-    'cash':    ['000198', '000509'],
-}
+import os, json
+_CFG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'pool.json')
+CFG = json.load(open(_CFG_PATH, encoding='utf-8'))
+# 板块 → 基金代码列表（唯一来源就是 pool.json）
+POOL = {k: v['funds'] for k, v in CFG['sectors'].items()}
 CODES = [c for v in POOL.values() for c in v]
 UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/122 Safari/537.36'
 
@@ -72,7 +65,10 @@ def market():
 
 
 if __name__ == '__main__':
-    json.dump(POOL, open(os.path.join(BASE, 'pool.json'), 'w', encoding='utf-8'), ensure_ascii=False)
+    # 【重要】不要写回 pool.json！
+    # pool.json 是人工维护的唯一配置源，程序写回会把它降级成简版
+    # （丢掉 sectors 结构、板块名、组合定义），导致 build.py KeyError。
+    # 这里只导出基金代码列表供调试，不覆盖配置。
     with cf.ThreadPoolExecutor(max_workers=8) as ex:
         res = list(ex.map(f10, CODES))
     print('f10 ok:', sum(1 for _, s in res if s in ('ok', 'cached')), '/', len(CODES))

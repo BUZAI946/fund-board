@@ -6,18 +6,11 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 RAW = os.path.join(BASE, 'raw')
 DAY = datetime.timedelta(days=1)
 
-POOL = {
-    'gold':    ['000217', '000216', '002611', '000307', '000218', '518880', '159934'],
-    'silver':  ['161226', '019005'],
-    'oil':     ['501018', '161129', '160723', '162411', '160416'],
-    'metal':   ['007910', '004432', '160221', '013081'],
-    'overseas':['006479', '000834', '050025', '006075', '270042'],
-    'hk':      ['000071', '000948', '012348', '012804'],
-    'ashare':  ['000051', '000962', '001592', '011608'],
-    'sector':  ['003095', '161725', '008888', '001594', '007466'],
-    'bond':    ['110017', '003376', '000015', '001512'],
-    'cash':    ['000198', '000509'],
-}
+import os, json
+_CFG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'pool.json')
+CFG = json.load(open(_CFG_PATH, encoding='utf-8'))
+# 板块 → 基金代码列表（唯一来源就是 pool.json）
+POOL = {k: v['funds'] for k, v in CFG['sectors'].items()}
 CODES = [c for v in POOL.values() for c in v]
 
 type_map = {}
