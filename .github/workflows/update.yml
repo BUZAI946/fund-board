@@ -90,7 +90,10 @@ jobs:
 
       # ---------- 提交 ----------
       - name: 提交更新
+        id: commit
         run: |
+          set -o pipefail
+
           git config user.name  "fund-board-bot"
           git config user.email "bot@users.noreply.github.com"
 
@@ -99,15 +102,43 @@ jobs:
 
           if git diff --staged --quiet; then
             echo "数据没有变化，跳过提交"
-            echo "changed=false" >> $GITHUB_OUTPUT
-          else
-            STAMP=$(date -u -d '+8 hours' '+%Y-%m-%d')
-            git commit -m "data: 更新基金数据 ${STAMP}" \
-              -m "自动抓取 42 只基金净值 + 16 项行情，重算全部指标。来源：天天基金公开接口。"
-            git push
-            echo "已提交 ${STAMP} 的数据"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
-        id: commit
+
+          STAMP=$(date -u -d '+8 hours' '+%Y-%m-%d')
+          echo "准备提交日期：${STAMP}"
+          echo "改动统计："
+          git diff --staged --stat
+
+          git commit -m "data: 更新基金数据 ${STAMP}" \
+            -m "自动抓取基金净值 + 行情，重算全部指标。来源：天天基金公开接口。"
+
+          echo ""
+          echo "=========== push 前诊断 ==========="
+          echo "remote:"; git remote -v
+          echo "branch:"; git branch --show-current
+          echo "HEAD:"; git log --oneline -1
+          echo "==================================="
+
+          # push 失败时必须把真实原因打出来，否则只看到 exit code 1 无从下手
+          if git push origin HEAD 2>&1; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "✅ 已提交 ${STAMP} 的数据"
+          else
+            RC=$?
+            echo ""
+            echo "::error::git push 失败（退出码 $RC）"
+            echo "::error::最常见原因：仓库的 Workflow permissions 被设成只读。"
+            echo "::error::修复路径：Settings → Actions → General → Workflow permissions"
+            echo '::error::          选 "Read and write permissions" → Save'
+            echo "::error::改完重新点 Run workflow 即可，不用改任何代码。"
+            echo ""
+            echo "--- 补充排查 ---"
+            echo "GITHUB_TOKEN 是否存在：${GITHUB_TOKEN:+是}${GITHUB_TOKEN:-否}"
+            git ls-remote --heads origin 2>&1 | head -3 || true
+            exit 1
+          fi
 
       # ---------- 汇总 ----------
       - name: 结果汇总
