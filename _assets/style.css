@@ -4629,3 +4629,338 @@ html[data-theme="light"] header.hero::before{opacity:.5}
     body table{display:block;overflow-x:auto}
   }
 }
+
+
+/* ===========================================================
+   视觉优化 v3
+   -----------------------------------------------------------
+   量化诊断（5 个页面截图逐像素统计）：
+     · 纯深色像素占 95~98%，中间调只有 4~7%  → 面板和背景几乎同色，看着"平"
+     · 总览页右侧 1/3 内容密度只有左侧的 17%  → 460px 宽的死区
+     · 宏观雷达页中间调 12.3%、右侧密度 117% → 明显更"满"
+
+   所以这次改三件事，按影响排序：
+     1. hero 右侧填上当日行情（消除最大死区）
+     2. 面板底色分层 + 顶部微光（提高中间调占比）
+     3. 表格加迷你条 / 标题吸顶 / 阅读进度条（细节质感）
+   =========================================================== */
+
+/* ---------- 1) Hero 双栏 ---------- */
+.hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(0,0.85fr);
+  gap:44px;
+  align-items:center;
+}
+.hero-l{min-width:0}
+.hero-r{min-width:0}
+
+@media(max-width:1000px){
+  .hero-grid{grid-template-columns:1fr;gap:26px}
+  .hero-r{order:2}
+}
+
+/* 当日行情小卡 */
+#heroTape{
+  background:linear-gradient(168deg,var(--panel2),var(--bg2));
+  border:0.5px solid var(--line2);
+  border-radius:14px;
+  padding:16px 17px 14px;
+  position:relative;
+  overflow:hidden;
+}
+/* 顶部一条主题色微光，让卡片"浮"起来 */
+#heroTape::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan) 25%,var(--blue) 75%,transparent);
+  opacity:.5;
+}
+.ht-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-bottom:13px;
+}
+.ht-title{
+  font-size:11px;font-weight:700;color:var(--num-3);
+  letter-spacing:1.6px;
+}
+.ht-legend{
+  display:flex;align-items:center;gap:5px;
+  font-size:10.5px;color:var(--num-4);
+  font-family:var(--font-num);
+}
+.ht-d{
+  display:inline-block;width:5px;height:5px;border-radius:50%;
+}
+.ht-d.up{background:var(--up)}
+.ht-d.down{background:var(--down)}
+.ht-d:first-child{margin-left:0}
+
+.ht-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--line);
+  border-radius:9px;overflow:hidden;
+}
+@media(max-width:1240px){.ht-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.ht-grid{grid-template-columns:repeat(2,1fr)}}
+
+.ht-card{
+  display:flex;flex-direction:column;gap:3px;
+  padding:10px 11px;
+  background:var(--panel);
+  text-decoration:none;
+  transition:background .16s;
+}
+.ht-card:hover{background:var(--panel3)}
+.ht-n{
+  font-size:10px;color:var(--num-4);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.ht-p{
+  font-family:var(--font-num);font-size:15px;font-weight:800;
+  letter-spacing:-.5px;line-height:1.1;color:var(--num-1);
+}
+.ht-p.up{color:var(--up)}
+.ht-p.down{color:var(--down)}
+.ht-p.flat{color:var(--num-2)}
+.ht-c{
+  font-family:var(--font-num);font-size:10px;font-weight:700;
+}
+.ht-c.up{color:var(--up)}
+.ht-c.down{color:var(--down)}
+.ht-c.flat{color:var(--num-4)}
+
+.ht-more{
+  display:block;margin-top:12px;
+  font-size:10.5px;color:var(--dim2);
+  text-decoration:none;text-align:right;
+  transition:color .16s;
+}
+.ht-more:hover{color:var(--cyan)}
+
+/* ---------- 2) 面板底色分层：让卡片"浮"起来 ---------- */
+/* 诊断：卡片原来用 linear-gradient(165deg, var(--panel2), var(--panel))，
+   两个色只差一点，在深色背景上几乎看不出边界。
+   现在改成"底色略亮 + 顶部一道极淡高光 + 更清晰的边框"。 */
+.card,.chart-card,.card-pad,.bond-card,.plan-card{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.022), transparent 42%),
+    var(--panel);
+  border-color:var(--line2);
+  box-shadow:0 1px 0 rgba(255,255,255,.03) inset,
+             0 8px 24px -12px rgba(0,0,0,.6);
+}
+/* hover 时边框微微发亮，增加"可交互"感 */
+.card:hover,.chart-card:hover{
+  border-color:var(--line-hard);
+  transition:border-color .2s;
+}
+
+/* 表格容器同样提亮 */
+.tbl-wrap{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.016), transparent 30%),
+    var(--panel);
+  box-shadow:0 1px 0 rgba(255,255,255,.025) inset;
+}
+
+/* ---------- 3) 表格内迷你条 ---------- */
+/* 数字旁边一条极细横条，长度=相对大小。专业终端都这么做，扫读快一倍。 */
+.mini-bar{
+  display:inline-block;
+  width:52px;height:5px;
+  background:var(--panel3);
+  border-radius:3px;
+  overflow:hidden;
+  vertical-align:middle;
+  margin-left:7px;
+  flex-shrink:0;
+}
+.mini-bar i{
+  display:block;height:100%;border-radius:3px;
+  transition:width .55s cubic-bezier(.2,.8,.2,1);
+}
+.mini-bar i.up{background:linear-gradient(90deg,rgba(255,77,94,.45),var(--up))}
+.mini-bar i.down{background:linear-gradient(90deg,rgba(0,197,142,.45),var(--down))}
+.mini-bar i.gold{background:linear-gradient(90deg,rgba(245,185,66,.45),var(--gold))}
+.mini-bar i.blue{background:linear-gradient(90deg,rgba(61,139,253,.45),var(--blue))}
+
+/* 数字 + 条 的行内布局 */
+.num-line{
+  display:flex;align-items:center;justify-content:flex-end;
+  gap:0;
+}
+
+/* ---------- 4) 区块标题吸顶 ---------- */
+/* 14 个区块的页面很长，滚到中间容易"不知道自己在第几块" */
+.sec-head.sticky{
+  position:sticky;
+  top:52px;
+  z-index:20;
+  background:linear-gradient(180deg,var(--bg) 72%,rgba(5,8,15,0));
+  padding-top:10px;
+  padding-bottom:8px;
+  margin-top:-10px;
+}
+.sec-head.sticky h2{
+  font-size:clamp(18px,2vw,22px);
+  padding-bottom:0;
+  transition:font-size .2s;
+}
+.sec-head.sticky h2::after{opacity:.35}
+.sec-head.sticky p{
+  max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .2s,opacity .2s;
+}
+
+/* ---------- 5) 顶部阅读进度条 ---------- */
+.read-bar{
+  position:fixed;top:0;left:0;
+  height:2px;width:0;
+  background:linear-gradient(90deg,var(--blue),var(--cyan),var(--purple));
+  z-index:9999;
+  pointer-events:none;
+  box-shadow:0 0 10px rgba(34,211,238,.6);
+  transition:width .08s linear;
+}
+
+/* ---------- 6) 图表卡片顶部主题色微光 ---------- */
+.chart-card{
+  position:relative;
+}
+.chart-card::before{
+  content:"";position:absolute;top:0;left:24px;right:24px;height:1px;
+  background:linear-gradient(90deg,var(--blue),transparent 55%);
+  opacity:.28;pointer-events:none;border-radius:inherit;
+}
+
+/* ---------- 7) 亮色主题配套 ---------- */
+html[data-theme="light"] #heroTape{
+  background:linear-gradient(168deg,#fff,#f3f6fb);
+  border-color:rgba(20,40,80,.14);
+}
+html[data-theme="light"] .card,
+html[data-theme="light"] .chart-card,
+html[data-theme="light"] .card-pad{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.9), transparent 42%),
+    #fff;
+  border-color:rgba(20,40,80,.13);
+  box-shadow:0 1px 3px rgba(20,40,80,.06);
+}
+html[data-theme="light"] .tbl-wrap{background:#fff}
+html[data-theme="light"] .sec-head.sticky{
+  background:linear-gradient(180deg,#f7f9fc 72%,rgba(247,249,252,0));
+}
+html[data-theme="light"] .ht-card{background:#fff}
+html[data-theme="light"] .ht-card:hover{background:#f0f4fa}
+html[data-theme="light"] .mini-bar{background:rgba(20,40,80,.09)}
+
+@media(max-width:760px){
+  .sec-head.sticky{top:48px}
+  .sec-head.sticky p{display:none}
+  .mini-bar{width:36px}
+}
+
+
+/* ===========================================================
+   板块轮动图（RRG）
+   =========================================================== */
+.rrg-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;flex-wrap:wrap;margin-bottom:16px;
+}
+.rrg-tr-l{display:flex;align-items:center;gap:11px;flex-wrap:wrap}
+.rrg-lbl{font-size:11px;color:var(--num-4);letter-spacing:.6px}
+.rrg-tabs{display:flex;gap:5px;flex-wrap:wrap}
+.rrg-tab{
+  padding:5px 13px;border-radius:14px;cursor:pointer;
+  background:var(--panel2);border:1px solid var(--line2);
+  color:var(--sub);font-size:11.5px;font-family:inherit;transition:.16s;
+}
+.rrg-tab:hover{border-color:var(--purple);color:var(--text)}
+.rrg-tab.on{
+  background:linear-gradient(135deg,rgba(167,139,250,.28),rgba(167,139,250,.08));
+  border-color:rgba(167,139,250,.55);color:#c4b5fd;font-weight:700;
+}
+.rrg-hint{font-size:10.5px;color:var(--num-4);font-family:var(--font-num)}
+
+#rrgChart{
+  background:radial-gradient(120% 100% at 50% 0%, rgba(61,139,253,.045), transparent 65%);
+  border:0.5px solid var(--line-soft);
+  border-radius:10px;
+  padding:6px;
+}
+.rrg-legend{
+  display:flex;gap:20px;flex-wrap:wrap;
+  margin-top:14px;padding-top:12px;
+  border-top:0.5px solid var(--line-soft);
+  font-size:10.5px;color:var(--num-4);
+}
+.rrg-lg b{color:var(--num-3)}
+.rrg-lg i{
+  display:inline-block;width:7px;height:7px;border-radius:2px;
+  margin:0 3px 0 7px;vertical-align:middle;
+}
+
+/* 象限明细 */
+.rrg-cols{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:16px;
+}
+.rrg-qh{
+  display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;
+  padding:0 0 8px 10px;margin-bottom:9px;
+  border-left:2.5px solid var(--line2);
+}
+.rrg-qh b{font-size:13.5px}
+.rrg-qn{
+  font-size:10.5px;color:var(--num-4);
+  font-family:var(--font-num);
+}
+.rrg-qa{
+  flex-basis:100%;font-size:10.5px;color:var(--dim2);
+  line-height:1.5;margin-top:2px;
+}
+.rrg-qlist{display:flex;flex-direction:column;gap:1px}
+.rrg-item{
+  display:grid;grid-template-columns:1fr 64px 66px 56px;
+  align-items:center;gap:6px;
+  padding:8px 10px;border-radius:7px;
+  text-decoration:none;color:inherit;
+  transition:background .14s;
+}
+.rrg-item:hover{background:rgba(255,255,255,.045)}
+.rrg-iname{
+  font-size:12px;color:var(--text);font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.rrg-ir{
+  font-family:var(--font-num);font-size:12px;font-weight:700;
+  text-align:right;
+}
+.rrg-ir.up{color:var(--up)}
+.rrg-ir.down{color:var(--down)}
+.rrg-ix{
+  font-family:var(--font-num);font-size:10.5px;text-align:right;
+}
+.rrg-ix.up{color:var(--up)}
+.rrg-ix.down{color:var(--down)}
+.rrg-iy{
+  font-family:var(--font-num);font-size:10.5px;text-align:right;
+}
+.rrg-iy.up{color:var(--down)}   /* 动能转好 = "好事"，但涨跌色中文语境里保持语义：用绿表示改善 */
+.rrg-iy.down{color:var(--up)}
+
+@media(max-width:700px){
+  .rrg-item{grid-template-columns:1fr 58px 56px;gap:5px}
+  .rrg-ix{display:none}
+  .rrg-cols{grid-template-columns:1fr}
+}
+
+/* 表格内迷你走势线 */
+.spark{
+  display:block;
+  opacity:.9;
+  transition:opacity .16s;
+}
+tr:hover .spark{opacity:1}

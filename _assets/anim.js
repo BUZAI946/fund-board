@@ -193,6 +193,43 @@
   }
 
   /* ---------------- 顶部阅读进度条 ---------------- */
+
+  /* =========================================================
+     区块标题吸顶
+     ---------------------------------------------------------
+     总览页 16 个区块、近 8000px 长，滚到中段很容易"不知道
+     自己在看第几块"。这里用 IntersectionObserver 给进入视口
+     顶部的 .sec-head 加 .sticky，CSS 里做了 sticky 定位 + 缩小
+     标题 + 收起副标题的动作。
+
+     为什么用 IntersectionObserver 而不是 scroll 事件：
+     scroll 每次都算 getBoundingClientRect 会掉帧，这个页面
+     已经有 16 个区块 + 若干图表，不能再加负担。
+     ========================================================= */
+  function initStickyHeads() {
+    if (typeof IntersectionObserver !== 'function') return;
+    var heads = document.querySelectorAll('section.block .sec-head');
+    if (!heads.length) return;
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var el = en.target;
+        /* 顶部越过 60px 且还没离开视口底部 → 吸顶 */
+        if (en.boundingClientRect.top < 60 && en.isIntersecting) {
+          el.classList.add('sticky');
+        } else {
+          el.classList.remove('sticky');
+        }
+      });
+    }, {
+      /* 视口上下各收缩一点，避免边缘抖动 */
+      rootMargin: '-60px 0px -70% 0px',
+      threshold: 0
+    });
+
+    Array.prototype.forEach.call(heads, function (h) { io.observe(h); });
+  }
+
   function initReadProgress() {
     /* 防御：缺少 DOM API 的环境直接跳过，不影响其他功能 */
     if (typeof window.addEventListener !== 'function' || !document.body) return;
@@ -416,6 +453,7 @@
     initTicker();
     initToTop();
     initReadProgress();
+    initStickyHeads();
     initSideNav();
     /* 标注当前页导航
        注意：文件名是中文时，location.pathname 返回的是 URL 编码形式

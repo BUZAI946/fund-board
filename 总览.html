@@ -42,18 +42,22 @@
 
 <!-- ================= HERO ================= -->
 <header class="hero">
-  <div class="wrap">
-    <h1>过去一年，<em>涨最猛的赚了 102%</em><br>跌最惨的亏了 40%</h1>
-    <p>
-      这是一份给完全不懂基金的人看的看板。60 只基金、15 个板块，每一个数字都来自真实行情快照，
-      没有任何一个是我估的。你不用懂"夏普比率"，也能看懂自己该买什么。
-    </p>
-    <div class="hero-meta">
-      <span><i class="dot-live"></i>数据快照 <b id="builtAt"></b></span>
-      <span>行情时间 <b id="marketTs"></b></span>
-      <span>60 只基金 · 15 大板块 · 10 种组合真实回测</span>
+  <div class="wrap hero-grid">
+    <div class="hero-l">
+      <h1>过去一年，<em>涨最猛的赚了 102%</em><br>跌最惨的亏了 40%</h1>
+      <p>
+        这是一份给完全不懂基金的人看的看板。60 只基金、15 个板块，每一个数字都来自真实行情快照，
+        没有任何一个是我估的。你不用懂"夏普比率"，也能看懂自己该买什么。
+      </p>
+      <div class="hero-meta">
+        <span><i class="dot-live"></i>数据快照 <b id="builtAt"></b></span>
+        <span>行情时间 <b id="marketTs"></b></span>
+        <span>60 只基金 · 15 大板块 · 10 种组合真实回测</span>
+      </div>
     </div>
 
+    <!-- 右侧：当日行情速览（原来的 hero 右侧 460px 是纯空白，实测内容密度只有左侧的 17%） -->
+    <aside class="hero-r" id="heroTape" aria-label="当日行情速览"></aside>
   </div>
 </header>
 
@@ -674,13 +678,42 @@
   });
 
   /* ---- 板块表 ---- */
+  /* 迷你条的归一化基准：取全样本最大值，条长 = 值/最大值 */
+  var SEC_MAX = {
+    arith: Math.max.apply(null, D.sectors.map(function(x){ return Math.abs(x.arith); })) || 1,
+    vol:   Math.max.apply(null, D.sectors.map(function(x){ return x.vol; })) || 1,
+    mdd:   Math.max.apply(null, D.sectors.map(function(x){ return Math.abs(x.mddCombo); })) || 1
+  };
+  /* 迷你走势线：把 64 个点压成 60x18 的 SVG 折线。
+     加这一列的目的是——现在"近一年收益"只是一个数字，
+     看不出"是怎么走到这个数的"。一根线能立刻区分
+     "稳步上涨" 和 "暴涨后回落"。 */
+  function sparkline(seq, tone) {
+    if (!seq || seq.length < 2) return '';
+    var W = 60, H = 18, P = 1.5;
+    var mn = Math.min.apply(null, seq), mx = Math.max.apply(null, seq);
+    var rg = (mx - mn) || 1;
+    var pts = seq.map(function (v, i) {
+      var x = P + i / (seq.length - 1) * (W - P * 2);
+      var y = H - P - (v - mn) / rg * (H - P * 2);
+      return x.toFixed(1) + ',' + y.toFixed(1);
+    }).join(' ');
+    var col = tone === 'up' ? '#ff4d5e' : (tone === 'down' ? '#00c58e' : '#7b8fb0');
+    return '<svg class="spark" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" ' +
+      'preserveAspectRatio="none" aria-hidden="true">' +
+      '<polyline points="' + pts + '" fill="none" stroke="' + col + '" ' +
+      'stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round" opacity=".85"/>' +
+      '</svg>';
+  }
+
   var secRows = D.sectors.map(function(s){
     var trust = s.spread < 2 ? '<span class="tag ok">可信</span>'
       : (s.spread < 10 ? '<span class="tag">一般</span>' : '<span class="tag danger">不可信</span>');
     return {
       name: s.name, n: s.n, arith: s.arith, best: s.best, worst: s.worst,
       spread: s.spread, vol: s.vol, mddCombo: s.mddCombo, mddWorst: s.mddWorst,
-      trust: trust
+      trust: trust,
+      seq: s.seq
     };
   });
   U.sortableTable({
@@ -689,13 +722,36 @@
     defaultSort: {key:'arith', dir:-1},
     cols: [
       {key:'name', label:'板块', type:'str', align:'left'},
+      {key:'seq', label:'一年走势', sortable:false, render:function(r){
+        return sparkline(r.seq, r.arith >= 0 ? 'up' : 'down');
+      }},
       {key:'n', label:'只数', fmt:'int'},
-      {key:'arith', label:'平均收益', render:function(r){ return '<span class="num-cell '+U.cls(r.arith)+'">'+U.fmt(r.arith)+'</span>'; }},
+      {key:'arith', label:'平均收益', render:function(r){
+        var w = Math.min(100, Math.abs(r.arith) / SEC_MAX.arith * 100);
+        var cls = r.arith >= 0 ? 'up' : 'down';
+        return '<span class="num-line">' +
+          '<span class="num-cell '+U.cls(r.arith)+'">'+U.fmt(r.arith)+'</span>' +
+          '<span class="mini-bar"><i class="'+cls+'" style="width:'+w.toFixed(0)+'%"></i></span>' +
+        '</span>';
+      }},
       {key:'best', label:'里面最好的', render:function(r){ return U.chg(r.best); }},
       {key:'worst', label:'里面最差的', render:function(r){ return U.chg(r.worst); }},
       {key:'spread', label:'内部极差', dec:2, render:function(r){ return r.spread.toFixed(2); }},
-      {key:'vol', label:'波动率', render:function(r){ return r.vol.toFixed(2)+'%'; }},
-      {key:'mddCombo', label:'买齐一篮子的回撤', render:function(r){ return '<span class="down">'+U.fmt(r.mddCombo)+'</span>'; }},
+      {key:'vol', label:'波动率', render:function(r){
+        var w = Math.min(100, r.vol / SEC_MAX.vol * 100);
+        /* 波动率没有涨跌好坏，用 gold 表示"风险量级" */
+        return '<span class="num-line">' +
+          '<span>'+r.vol.toFixed(2)+'%</span>' +
+          '<span class="mini-bar"><i class="gold" style="width:'+w.toFixed(0)+'%"></i></span>' +
+        '</span>';
+      }},
+      {key:'mddCombo', label:'买齐一篮子的回撤', render:function(r){
+        var w = Math.min(100, Math.abs(r.mddCombo) / SEC_MAX.mdd * 100);
+        return '<span class="num-line">' +
+          '<span class="down">'+U.fmt(r.mddCombo)+'</span>' +
+          '<span class="mini-bar"><i class="down" style="width:'+w.toFixed(0)+'%"></i></span>' +
+        '</span>';
+      }},
       {key:'mddWorst', label:'单一只最惨', render:function(r){ return '<span class="down" style="font-weight:700">'+U.fmt(r.mddWorst)+'</span>'; }},
       /* 【修 bug】trust 字段存的是 HTML 字符串，但这列没写 render，
          sortableTable 会走 U.esc() 把 <span> 转义成文本，
@@ -870,6 +926,62 @@
         (trust ? '<div class="heat-spread">'+trust+'</div>' : '')+
       '</a>';
     }).join('');
+  })();
+
+  /* ================= Hero 右侧：当日行情速览 ================= */
+  /* 原来 hero 右侧 460px 是纯空白（实测内容密度只有左侧 17%）——
+     这里放 8 个最关键的当日行情，让首屏一眼看到"今天什么在动"。 */
+  (function(){
+    var host = document.getElementById('heroTape');
+    if (!host) return;
+
+    var VARS = [
+      { k:'XAU',   n:'伦敦金',    u:'$/盎司', d:0 },
+      { k:'XAG',   n:'伦敦银',    u:'$/盎司', d:2 },
+      { k:'CL',    n:'WTI原油',   u:'$/桶',   d:2 },
+      { k:'CU',    n:'沪铜',      u:'元/吨',  d:0 },
+      { k:'IXIC',  n:'纳斯达克',  u:'点',     d:0 },
+      { k:'HSI',   n:'恒生指数',  u:'点',     d:0 },
+      { k:'SH000001', n:'上证指数', u:'点',   d:0 },
+      { k:'USDCNY', n:'美元/人民币', u:'',    d:4 }
+    ];
+
+    var M = {};
+    ((D.market && D.market.items) || []).forEach(function(x){ M[x.key] = x; });
+
+    var cards = VARS.map(function(v){
+      var it = M[v.k];
+      if (!it) return '';
+      var chg = it.chg || 0;
+      var tone = chg > 0 ? 'up' : (chg < 0 ? 'down' : 'flat');
+      var sign = chg > 0 ? '+' : '';
+      var p = it.price;
+      var pTxt = p >= 1000 ? U.comma(p) : (p >= 10 ? p.toFixed(2) : p.toFixed(v.d || 2));
+      return '<a class="ht-card" href="宏观雷达.html" title="看完整宏观环境与板块敏感度">' +
+        '<span class="ht-n">' + v.n + '</span>' +
+        '<b class="ht-p ' + tone + '">' + pTxt + '</b>' +
+        '<span class="ht-c ' + tone + '">' + sign + chg.toFixed(2) + '%</span>' +
+      '</a>';
+    }).join('');
+
+    /* 涨跌家数小结 */
+    var ups = 0, downs = 0;
+    VARS.forEach(function(v){
+      var it = M[v.k];
+      if (it && it.chg > 0) ups++;
+      else if (it && it.chg < 0) downs++;
+    });
+
+    host.innerHTML =
+      '<div class="ht-head">' +
+        '<span class="ht-title">当日行情</span>' +
+        '<span class="ht-legend">' +
+          '<i class="ht-d up"></i>' + ups + ' 涨 ' +
+          '<i class="ht-d down"></i>' + downs + ' 跌' +
+        '</span>' +
+      '</div>' +
+      '<div class="ht-grid">' + cards + '</div>' +
+      '<a class="ht-more" href="宏观雷达.html">看宏观雷达：环境 + 板块敏感度 + 今日财经要闻 →</a>';
   })();
 
   /* ================= 风险-收益散点图 ================= */

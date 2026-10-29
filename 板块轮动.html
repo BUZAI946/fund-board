@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>板块轮动 — 基金股票</title>
+<meta name="description" content="用 RRG 四象限看资金正在从哪个板块流向哪个板块：领先 / 走弱 / 落后 / 改善。">
+<link rel="stylesheet" href="_assets/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <a class="logo" href="总览.html">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 17l5-5 4 3 7-8"/><path d="M15 7h5v5"/>
+        </svg>
+      </span>
+      基金股票
+    </a>
+    <nav class="nav">
+      <a href="总览.html">首页</a>
+      <a href="债券基金.html">债券</a>
+      <a href="股票基金.html">股票</a>
+      <a href="商品基金.html">商品</a>
+      <a href="新手百科.html">购买建议</a>
+    </nav>
+  </div>
+</div>
+
+<div class="ticker"><div class="ticker-track"></div></div>
+
+<main>
+<div class="wrap">
+  <div class="crumb"><a href="总览.html">首页</a> <span>/</span> <span style="color:#e8eef8">板块轮动</span></div>
+</div>
+
+<header class="hero" style="padding:30px 0 26px">
+  <div class="wrap">
+    <div class="kicker" style="color:#a78bfa;font-size:11.5px;font-weight:600;letter-spacing:2.2px;margin-bottom:8px">
+      Rotation Map
+    </div>
+    <h1 style="font-size:clamp(24px,3.4vw,38px);font-weight:800;letter-spacing:-.8px;margin:0 0 14px">
+      钱正在从哪个板块，流向哪个板块
+    </h1>
+    <p style="color:#96a8c2;font-size:15px;max-width:820px;line-height:1.9;margin:0">
+      这一页用的是 <b style="color:#e8eef8">RRG（相对轮动图）</b>——
+      把每个板块拆成两个维度：<b>它比平均强多少</b>（横轴）和
+      <b>它在变强还是变弱</b>（纵轴）。<br>
+      横轴告诉你<b>现在的位置</b>，纵轴告诉你<b>接下来可能往哪走</b>。
+      <b style="color:#f5b942">两者组合，才看得出"钱在搬家"。</b>
+    </p>
+  </div>
+</header>
+
+<!-- 四象限图 -->
+<section class="block" data-tone="action" style="border-top:none;padding-top:0">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Quadrant</div>
+      <h2>四象限定位</h2>
+      <p>
+        横轴往右 = 比平均强，纵轴往上 = 动能在增强。
+        <b style="color:#e8eef8">点的大小 = 该板块最近 20 日收益的绝对值。</b>
+      </p>
+    </div>
+
+    <div class="card card-pad reveal" style="padding:20px">
+      <div class="rrg-toolbar">
+        <div class="rrg-tr-l">
+          <span class="rrg-lbl">观察窗口</span>
+          <div class="rrg-tabs" id="rrgWin">
+            <button class="rrg-tab on" data-w="20">近 20 日</button>
+            <button class="rrg-tab" data-w="60">近 60 日</button>
+            <button class="rrg-tab" data-w="120">近 120 日</button>
+            <button class="rrg-tab" data-w="250">近一年</button>
+          </div>
+        </div>
+        <div class="rrg-tr-r">
+          <span class="rrg-hint" id="rrgHint"></span>
+        </div>
+      </div>
+      <div id="rrgChart"></div>
+      <div class="rrg-legend" id="rrgLegend"></div>
+    </div>
+
+    <div class="note reveal">
+      <b>怎么读这张图（三句话）：</b><br>
+      ① <b style="color:#ff4d5e">右上（领先）</b>：又强又还在变强——钱正在这里，但也要小心是不是最后一棒。<br>
+      ② <b style="color:#f5b942">右下（走弱）</b>：还强，但动能在衰减——<b>这是最该警惕的位置</b>，
+         因为账面上还在赚，看不出问题。<br>
+      ③ <b style="color:#4ecfa4">左上（改善）</b>：还弱，但动能在转好——<b>这是最值得研究的位置</b>，
+         因为它还没被大多数人注意到。
+    </div>
+  </div>
+</section>
+
+<!-- 四象限明细 -->
+<section class="block" data-tone="data">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Breakdown</div>
+      <h2>每个板块落在哪一格</h2>
+      <p>同一批板块，换成文字表格看。<b style="color:#e8eef8">含"从哪来、往哪去"的判断。</b></p>
+    </div>
+    <div class="card card-pad reveal" id="rrgTable"></div>
+  </div>
+</section>
+
+<!-- 怎么用 -->
+<section class="block" data-tone="warn">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="kicker">Caveats</div>
+      <h2>这张图的三个局限，必须知道</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <h4>① 它是"相对"指标，不是"绝对"指标</h4>
+        <p>一个板块落在"领先"格，<b style="color:#e8eef8">只说明它比其他板块好</b>——
+        如果全市场都在跌，领先的板块可能也是亏的。<br>
+        <b style="color:#ff8a5c">别把"相对强"当成"会赚钱"。</b></p>
+      </div>
+      <div class="step reveal d1">
+        <h4>② 窗口一变，象限会跳</h4>
+        <p>这就是为什么上面给了四个窗口。<b>近 20 日适合看短期轮动，近一年适合看长期格局。</b><br>
+        <b style="color:#f5b942">如果在 20 日和 250 日里都落在"领先"，那才叫真的强；
+        只在 20 日领先而长期落后，往往是反弹而不是趋势。</b></p>
+      </div>
+      <div class="step reveal d2">
+        <h4>③ 它不预测拐点，只描述"正在发生"</h4>
+        <p>RRG 能告诉你"这个板块的动能刚开始转好"，
+        <b style="color:#ff8a5c">但不能告诉你"它会转好多久"。</b><br>
+        用它做筛选（缩小关注范围），不要用它做择时（决定今天买明天卖）。</p>
+      </div>
+      <div class="step reveal d3">
+        <h4>④ 我们只有 250 天数据，样本偏短</h4>
+        <p><b style="color:#e8eef8">这是最实在的局限。</b>近 250 个交易日的样本，
+        算不出完整的周期轮动规律。<br>
+        <b style="color:#f5b942">所以这一页的价值是"看清当下格局"，
+        而不是"总结历史规律"。</b>真正的 RRG 通常用 3~5 年数据。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b>数据来源：</b>天天基金（东方财富）公开接口 · 近 250 交易日累计净值</div>
+    <div><b>计算方法：</b>相对强弱 = 本板块区间收益 − 全部板块等权平均；相对动量 = 近 1/3 窗口收益 − 前 1/3 窗口收益</div>
+    <div class="foot-warn">
+      本页仅用于数据学习与展示，不构成投资建议。基金投资有风险，入市需谨慎。<br>
+      RRG 是相对强弱的描述工具，不预测未来收益。样本仅 250 个交易日，不足以代表完整市场周期。
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" aria-label="返回顶部">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 11l6-6 6 6"/></svg>
+</button>
+
+<script src="_assets/data.js"></script>
+<script src="_assets/live-numbers.js"></script>
+<script src="_assets/chart.js"></script>
+<script src="_assets/anim.js"></script>
+<script src="_assets/caliber.js"></script>
+<script src="_assets/search.js"></script>
+<script src="_assets/export.js"></script>
+<script src="_assets/tools.js"></script>
+<script src="_assets/rrg.js"></script>
+</body>
+</html>
