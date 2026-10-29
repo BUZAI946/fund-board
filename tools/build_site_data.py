@@ -375,6 +375,17 @@ attribution = {
 # 不必额外导出，前端用 sectors[].seq 近似即可；精确模拟放在前端用每日收益
 daily_returns = {k: [round(x * 100, 4) for x in v] for k, v in sec_daily.items()}
 
+# 新闻（可选：没抓到就是空列表，页面会自动隐藏该区块）
+NEWS = []
+try:
+    _np = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'news_raw.json')
+    if os.path.exists(_np):
+        _nj = json.load(open(_np, encoding='utf-8'))
+        NEWS = (_nj.get('items') or [])[:24]
+        print('新闻 %d 条（%s）' % (len(NEWS), _nj.get('ts', '')))
+except Exception as _e:
+    print('新闻读取失败:', type(_e).__name__)
+
 out = {
     'builtAt': D['built_at'],
     'axis': downsample(DS),
@@ -389,6 +400,7 @@ out = {
     'correlations': correlations,
     'attribution': attribution,
     'dailyReturns': daily_returns,
+    'news': NEWS,
 }
 
 os.makedirs(OUTDIR, exist_ok=True)

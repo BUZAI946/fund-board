@@ -42,6 +42,84 @@ SINA = {
 }
 
 
+def news():
+    """抓最新财经新闻（东财基金资讯 + 新浪财经滚动）。
+    只取标题/时间/链接，**不做任何自动因果判断** ——
+    一条新闻影响哪个板块是人的判断，程序不该替用户下结论。
+    """
+    UA2 = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+           'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36')
+    out = []
+
+    # 东财基金资讯
+    try:
+        u = ('https://np-listapi.eastmoney.com/comm/web/getNewsByColumns'
+             '?client=web&biz=web_news_col&column=345&order=1'
+             '&needInteractData=0&page_index=1&page_size=20')
+        r = requests.get(u, headers={'User-Agent': UA2}, timeout=20)
+        if r.status_code == 200:
+            j = r.json()
+            for x in (j.get('data') or {}).get('list') or []:
+                t = (x.get('title') or '').strip()
+                if not t:
+                    continue
+                out.append({
+                    'src': '东财',
+                    'title': t,
+                    'time': (x.get('showTime') or x.get('date') or '')[:19],
+                    'url': x.get('url') or x.get('newsUrl') or '',
+                })
+    except Exception as e:
+        print('  news eastern err:', type(e).__name__)
+
+    # 新浪财经滚动
+    try:
+        u2 = ('https://feed.mix.sina.com.cn/api/roll/get'
+              '?pageid=153&lid=2516&num=20&page=1')
+        r2 = requests.get(u2, headers={'User-Agent': UA2}, timeout=20)
+        if r2.status_code == 200:
+            j2 = r2.json()
+            for x in (j2.get('result') or {}).get('data') or []:
+                t = (x.get('title') or '').strip()
+                if not t:
+                    continue
+                import datetime as _dt
+                ct = x.get('ctime')
+                tstr = ''
+                if ct:
+                    try:
+                        tstr = _dt.datetime.fromtimestamp(int(ct)).strftime('%Y-%m-%d %H:%M:%S')
+                    except Exception:
+                        tstr = ''
+                out.append({
+                    'src': '新浪',
+                    'title': t,
+                    'time': tstr,
+                    'url': x.get('url') or '',
+                })
+    except Exception as e:
+        print('  news sina err:', type(e).__name__)
+
+    # 去重 + 按时间倒序（没时间的排后面）
+    seen = set()
+    uniq = []
+    for x in out:
+        k = x['title'][:26]
+        if k in seen:
+            continue
+        seen.add(k)
+        uniq.append(x)
+    uniq.sort(key=lambda x: x['time'] or '0000', reverse=True)
+    uniq = uniq[:24]
+
+    json.dump({'ts': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+               'items': uniq},
+              open(os.path.join(BASE, 'news_raw.json'), 'w', encoding='utf-8'),
+              ensure_ascii=False)
+    print('news ok:', len(uniq))
+    return uniq
+
+
 def market():
     out = {}
     items = list(SINA.items())
@@ -75,5 +153,8 @@ if __name__ == '__main__':
     print('f10 fail:', [(c, s) for c, s in res if s not in ('ok', 'cached')])
     m = market()
     print('market keys:', len(m))
+    nw = news()
+    for x in nw[:5]:
+        print('  ·', (x['time'] or '')[:16], x['title'][:50])
     for k in ['hf_XAU', 'hf_XAG', 'hf_CL', 'gb_ixic', 'rt_hkHSI', 'sh000001', 'fx_susdcny']:
         print(' ', k, (m.get(k) or '')[:90])
