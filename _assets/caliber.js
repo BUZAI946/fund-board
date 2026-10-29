@@ -32,5 +32,11 @@
       (qdii ? '<span class="db-note">（' + qdii + ' 只 QDII 滞后 1~2 天）</span>' : '') +
     '</span>' +
     '<span class="db-pill">全站统一口径</span>' +
-    '<span class="db-funds">全站 40 只均为基金：债券4 / 股票18 / 商品18，无个股</span>';
+    /* 【修复】原来写死「40 只：债券4/股票18/商品18」，扩充到 60 只后全站横幅都在说错话。
+       改为从数据实时计算，一处改动全站 92 个页面的横幅都跟着对。 */
+    '<span class="db-funds">全站 ' + (D.funds || []).length + ' 只均为基金：' +
+      '债券' + ((D.groups && D.groups.fund && D.groups.fund.n) || 0) +
+      ' / 股票' + ((D.groups && D.groups.stock && D.groups.stock.n) || 0) +
+      ' / 商品' + ((D.groups && D.groups.commodity && D.groups.commodity.n) || 0) +
+      '，无个股</span>';
 })();

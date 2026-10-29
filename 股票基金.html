@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>股票基金（18只）· 权益型 — 基金股票</title>
-<meta name="description" content="18只权益型基金：A股宽基、港股、海外美股、行业主题。含内部极差警示、超卖陷阱实证、18只逐只体检。">
+<title>股票基金（27只）· 权益型 — 基金股票</title>
+<meta name="description" content="27只权益型基金：A股宽基、红利低波、中国香港、美国股市、其他发达市场、新兴市场、行业主题（7个板块）。含内部极差警示、超卖陷阱实证、27只逐只体检。">
 <link rel="stylesheet" href="_assets/style.css">
 </head>
 <body>
@@ -48,16 +48,16 @@
     <div class="sec-head" style="margin-bottom:0">
       <div class="kicker" style="color:#ff4d5e">Equity Fund · 股票基金</div>
       <h1 style="font-size:clamp(26px,3.8vw,42px)">股票基金：买的是一篮子股票，不是某一家公司<br>
-        <span style="font-size:.52em;color:#96a8c2;font-weight:600">18 只基金 · A股 / 港股 / 美股 / 行业主题</span>
+        <span style="font-size:.52em;color:#96a8c2;font-weight:600"><span data-live="grp.stock.n" data-fmt="count" data-nocolor>27</span> 只基金 · A股宽基 / 红利低波 / 中国香港 / 美国股市 / 其他发达市场 / 新兴市场 / 行业主题（<span data-live="grp.stock.nSec" data-fmt="count" data-suffix=" 类" data-nocolor>7 类</span>）</span>
       </h1>
       <p style="margin-top:14px">
         <b style="color:#e8eef8">先说清楚：这一页全是「基金」，不是个股。</b>
-        这 18 只都是把钱交给基金经理、由他去买一篮子股票的产品——
+        这 <span data-live="grp.stock.n" data-fmt="count" data-nocolor>27</span> 只都是把钱交给基金经理、由他去买一篮子股票的产品——
         你买一份基金，等于同时买了几十上百只股票，<b style="color:#e8eef8">而不是买某一家公司</b>。<br>
         它们的涨跌跟着股市走，但<b>风险比买单只个股小得多</b>
         （个股可能退市归零，跟踪指数的基金不会）。<br>
-        过去一年这 18 只的板块平均是 <b class="n up" id="hdrStockAvg"><span data-live="grp.stock">-4.24%</span></b>，
-        最惨的一只亏了 <b class="n up" id="hdrStockWorst">-37.92%</b>（天弘恒生科技ETF联接A）。
+        过去一年这 <span data-live="grp.stock.n" data-fmt="count" data-nocolor>27</span> 只的板块平均是 <b class="n up" id="hdrStockAvg"><span data-live="grp.stock">-6.67%</span></b>，
+        最惨的一只亏了 <b class="n up" id="hdrStockWorst"><span data-live="fund.012804.ret250" data-nocolor>-43.76%</span></b>（广发恒生科技ETF联接A，天弘恒生科技ETF联接A 亏 -43.75%，几乎并列）。
         这一页最重要的不是"买哪个"，而是<b style="color:#f5b942">教你识别两个最容易上当的数字</b>。
       </p>
     </div>
@@ -70,19 +70,20 @@
     <div class="grid g4" id="kpiRow"></div>
     <div class="note danger reveal">
       <b>⚠️ 这一类最危险的地方不是"会跌"，是"看起来跌得少"。</b>
-      板块平均回撤只有 <b id="secMddCombo"></b>，但里面最惨的一只跌了 <b class="hl-up" id="secMddWorst"></b>——
+      七个板块里，就算买齐一篮子、摊得最均匀，最深也回撤了 <b id="secMddCombo"></b>；
+      而单只最惨的一只跌了 <b class="hl-up" id="secMddWorst"></b>——
       <b>差了 <span id="secMddGap"></span> 个百分点</b>。
       "买齐一篮子"会互相抵消、显得没那么惨；但你的钱只会买其中一只。
     </div>
   </div>
 </section>
 
-<!-- ============ 四个板块 ============ -->
+<!-- ============ 七个板块 ============ -->
 <section class="block">
   <div class="wrap">
     <div class="sec-head reveal">
-      <div class="kicker">Four Sectors</div>
-      <h2>四个板块，过去一年谁赚谁亏</h2>
+      <div class="kicker">Seven Sectors</div>
+      <h2>七个板块，过去一年谁赚谁亏</h2>
       <p>同样地，"平均"这一列 = 板块里每只各买同样多的钱、拿满一年。</p>
     </div>
 
@@ -101,10 +102,14 @@
 
     <div class="note warn reveal">
       <b>看"内部极差"这一列，它决定了"板块平均"能不能信：</b><br>
-      · <b>海外美股</b>极差 <b class="n hl">1.63</b>——15 只里几只 QDII 表现接近，平均数比较可信。<br>
-      · <b>A股宽基</b>极差 <b class="n">7.13</b>——沪深300 和创业板差别不小，平均数参考着看。<br>
-      · <b>行业主题</b>极差 <b class="n up">18.30</b>、<b>中国香港</b>极差 <b class="n up">25.67</b>——
-      <b>这两类的平均数基本没有意义</b>，因为它把"银行 +8.36%"和"白酒 -9.94%"平均成了一个假数字。
+      · <b>美国股市</b>极差 <b class="n hl">2.58</b>——<span data-live="sec.us.n" data-fmt="count" data-suffix=" 只" data-nocolor>5 只</span> QDII 表现很接近，平均数最可信。<br>
+      · <b>行业主题</b>极差 <b class="n">4.35</b>（3 只）、<b>A股宽基</b>极差 <b class="n">11.11</b>（4 只）——
+      都还算接近，但要记住里面装的是完全不同的东西。<br>
+      · <b>红利低波</b>极差 <b class="n">12.32</b>——它把"银行 <span data-live="fund.001594.ret250">+12.66%</span>"
+      和"富国中证红利 <span data-live="fund.100032.ret250">+0.34%</span>"平均成了一个 <span data-live="sec.dividend">+6.17%</span>。<br>
+      · <b>其他发达市场</b>极差 <b class="n up">20.93</b>、<b>中国香港</b>极差 <b class="n up">26.25</b>、
+      <b>新兴市场</b>极差 <b class="n up">47.14</b>——<b>这三类的平均数基本没有意义</b>，
+      因为它们把完全不同国家的行情，平均成了一个假数字。
     </div>
   </div>
 </section>
@@ -187,19 +192,20 @@
     <div class="chart-card reveal">
       <div class="chart-head">
         <h4>沪深300 vs 半导体：拉平到"新手真正在乎"的维度</h4>
-        <span class="hint">数据来自 40 只基金全样本</span>
+        <span class="hint">数据来自 <span data-live="totals.funds" data-fmt="count" data-nocolor>60</span> 只基金全样本</span>
       </div>
       <div id="cmpChart"></div>
       <div class="note danger" style="margin-bottom:0">
         <b>三个数字对比：</b><br>
-        ① <b>持有 250 天的赚钱概率</b>：沪深300 <b class="n hl">54.2%</b>（n=791）
-           vs 半导体 <b class="n hl">54.4%</b>（n=261）—— <b>差 0.2 个百分点，统计上没区别</b>。<br>
-        ② <b>过去一年收益</b>：沪深300 <b class="n up">-9.23%</b> vs 半导体 <b class="n up">-5.55%</b>
-           —— <b>半导体反而亏得更少</b>。<br>
-        ③ <b>年化波动率</b>：沪深300 <b class="n">16.76%</b> vs 半导体 <b class="n up">45.53%</b> —— <b class="n">2.7 倍</b>。<br>
+        ① <b>持有 250 天的赚钱概率</b>：沪深300 <b class="n hl"><span data-live="fund.000051.hold250" data-fmt="plain" data-dec="1" data-nocolor>54.2</span>%</b>（n=791）
+           vs 半导体 <b class="n hl"><span data-live="fund.008888.hold250" data-fmt="plain" data-dec="1" data-nocolor>54.4</span>%</b>（n=261）—— <b>差 0.2 个百分点，统计上没区别</b>。<br>
+        ② <b>过去一年收益</b>：沪深300 <b class="n up"><span data-live="fund.000051.ret250">-9.85%</span></b> vs 半导体 <b class="n up"><span data-live="fund.008888.ret250">-10.80%</span></b>
+           —— <b>差不到 1 个百分点，亏得几乎一样多</b>。<br>
+        ③ <b>年化波动率</b>：沪深300 <b class="n"><span data-live="fund.000051.vol" data-fmt="plain" data-nocolor>16.77</span>%</b> vs 半导体 <b class="n up"><span data-live="fund.008888.vol" data-fmt="plain" data-nocolor>45.69</span>%</b> —— <b class="n">2.7 倍</b>。<br>
         <b style="color:#ff4d5e">"回去的路短"说的是路径长度，不是回去以后过得好不好。</b>
         两个人都不及格，一个 55 分一个 30 分，55 分那个确实离 60 分更近——
-        但历史上两人拿满分的机会一模一样。
+        但历史上两人拿满分的机会一模一样；更关键的是，
+        <b>半导体这条路颠了 2.7 倍，最后也没让你少亏钱。</b>
       </div>
     </div>
 
@@ -219,7 +225,7 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Risk × Return</div>
-      <h2><span class="n">18</span> 只放在一张图上，谁在裸泳一目了然</h2>
+      <h2><span class="n" data-live="grp.stock.n" data-fmt="count" data-nocolor>27</span> 只放在一张图上，谁在裸泳一目了然</h2>
       <p>
         横轴波动率、纵轴近一年收益。<b style="color:#e8eef8">这张图最能回答"我到底在为什么承担风险"。</b>
       </p>
@@ -244,12 +250,12 @@
   </div>
 </section>
 
-<!-- ============ 18 只逐只 ============ -->
+<!-- ============ 27 只逐只 ============ -->
 <section class="block">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Every Single One</div>
-      <h2><span class="n">18</span> 只逐个体检</h2>
+      <h2><span class="n" data-live="grp.stock.n" data-fmt="count" data-nocolor>27</span> 只逐个体检</h2>
       <p>点上面的按钮按板块筛选，点表头排序。<b style="color:#e8eef8">"全历史最深"这一列，请务必看。</b></p>
     </div>
     <div class="btnbar" id="filterBtns"></div>
@@ -287,19 +293,23 @@
     <div class="steps">
       <div class="step reveal">
         <h4>① 新手别碰"行业主题"和"港股科技"</h4>
-        <p>行业主题内部极差 18.30、港股 25.67——<b>板块平均没有意义</b>，而且这两类里最惨的个基都在 -40% 以上。
+        <p><b>中国香港</b>内部极差 <b class="n">26.25</b>、<b>新兴市场</b> <b class="n">47.14</b>——<b>这两块的板块平均没有意义</b>。
+           <b>行业主题</b>虽然极差只有 4.35，但三只全是单一赛道（医疗 <span data-live="fund.003095.ret250">-14.10%</span> /
+           半导体 <span data-live="fund.008888.ret250">-10.80%</span> / 白酒 <span data-live="fund.161725.ret250">-9.75%</span>），
+           而半导体近一年最深跌了 <b class="hl-up">-48.55%</b>。
            <b style="color:#e8eef8">你没法通过"看板块数字"来判断自己会买到哪一个。</b></p>
       </div>
       <div class="step reveal d1">
-        <h4>② "跌太多会反弹"是这 <span class="n">18</span> 只里最贵的错觉</h4>
+        <h4>② "跌太多会反弹"是这 <span class="n" data-live="grp.stock.n" data-fmt="count" data-nocolor>27</span> 只里最贵的错觉</h4>
         <p>恒生科技 RSI 26.8 之后，后 20 日胜率只有 <b class="n up">30.0%</b>。
            <b style="color:#e8eef8">超卖只说明最近跌得急，不说明接下来会涨。</b></p>
       </div>
       <div class="step reveal d2">
-        <h4>③ 想要权益类，从"海外美股"这一格开始</h4>
-        <p>它是这四类里唯一<b>内部极差小（1.63）、过去一年为正（<span data-live="sec.overseas">+9.99%</span>）</b>的板块。
+        <h4>③ 想要权益类，从"美国股市"这一格开始</h4>
+        <p>它是七个板块里<b>内部极差最小（2.58）、且过去一年为正（<span data-live="sec.us">+10.45%</span>）</b>的那一格。
            但代价是：<b style="color:#ff4d5e">波动 12%~20%，全历史最深跌 30% 左右，而且机构在撤</b>
-           （050025 机构从 19.13% 撤到 1.43%）。</p>
+           （博时标普500 联接A 的机构持有从 19.13% 撤到 1.43%，四期掉了
+           <span data-live="fund.050025.instDelta" data-fmt="nopercent" data-nocolor>-17.70</span> 个百分点）。</p>
       </div>
       <div class="step reveal d3">
         <h4>④ 仓位一定要小</h4>
@@ -316,7 +326,7 @@
   <div class="wrap">
     <div><b>数据来源：</b>天天基金（东方财富）公开接口 · 东财 F10 官方净值双源校验 · 新浪财经公开行情接口</div>
     <div><b>收益率口径：</b>近250交易日 · 累计净值 · 含分红再投；板块平均为等权金额买入持有的算术平均。</div>
-    <div><b>注：</b>本页 18 只全部是<b>股票基金</b>（基金的一种），不是个股。本看板不提供任何个股推荐。</div>
+    <div><b>注：</b>本页 <span data-live="grp.stock.n" data-fmt="count" data-nocolor>27</span> 只全部是<b>股票基金</b>（基金的一种），不是个股。本看板不提供任何个股推荐。</div>
     <div class="foot-warn">
       本页仅用于数据学习与展示，不构成投资建议。基金投资有风险，入市需谨慎。<br>
       所有"胜率""概率""最大回撤"均为历史频率统计，不构成预测。
@@ -349,8 +359,8 @@
     var worst = FUNDS.slice().sort(function(a,b){ return a.ret250 - b.ret250; })[0];
     var deep = FUNDS.slice().sort(function(a,b){ return a.mddAll - b.mddAll; })[0];
     var items = [
-      {lbl:'4 个板块平均近一年', val:D.groups.stock.avg, suf:'%',
-       note:'18 只权益型基金的整体表现',
+      {lbl:D.groups.stock.nSec+' 个板块平均近一年', val:D.groups.stock.avg, suf:'%',
+       note:D.groups.stock.n+' 只权益型基金的整体表现',
        sub:'波动 '+D.groups.stock.vol.toFixed(2)+'%，最惨个基 '+U.fmt(D.groups.stock.worstMdd)},
       {lbl:'赚最多的一只', val:best.ret250, suf:'%',
        note:best.name, sub:'但全历史最深亏过 '+U.fmt(best.mddAll)},
@@ -380,7 +390,8 @@
 
   /* ---------- 板块折线 ---------- */
   (function(){
-    var PAL = ['#ff4d5e','#f5b942','#3d8bfd','#a78bfa'];
+    /* 颜色由 Chart2.palette 按数量自动生成，不再写死数组（避免多条线撞色） */
+    var PAL = (window.Chart2 && window.Chart2.palette) ? window.Chart2.palette(rows.length) : null;
     var series = SECS.map(function(s,i){
       return {name:s.name, short:s.name, data:s.seq, color:PAL[i%PAL.length]};
     });
@@ -438,7 +449,7 @@
     });
   })();
 
-  /* ---------- 18 只表 ---------- */
+  /* ---------- 27 只表 ---------- */
   (function(){
     var filterOpts = SECS.map(function(s){
       return {v:s.sec, t:s.name+' ('+s.n+')'};
@@ -448,7 +459,7 @@
       rows: FUNDS,
       filterEl: document.getElementById('filterBtns'),
       filterKey: 'sec',
-      filterAll: '全部 18 只',
+      filterAll: '全部 '+D.groups.stock.n+' 只',
       filterOptions: filterOpts,
       defaultSort: {key:'score', dir:-1},
       cols: [
@@ -504,7 +515,7 @@
   (function(){
     var host = document.getElementById('stockScatter');
     if (!host) return;
-    var SC = {ashare:'#22d3ee', hk:'#ff8a5c', overseas:'#6aacff', sector:'#a78bfa'};
+    var SC = {ashare:'#22d3ee', dividend:'#00c58e', hk:'#ff8a5c', us:'#6aacff', developed:'#a78bfa', emerging:'#ff4d5e', sector:'#f5b942'};
     var pts = FUNDS.map(function(f){
       return {
         x: f.vol, y: f.ret250,

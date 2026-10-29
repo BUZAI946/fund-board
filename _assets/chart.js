@@ -528,7 +528,42 @@
     host.appendChild(tip);
   }
 
+  /* =========================================================
+     自动扩展调色板
+     ---------------------------------------------------------
+     问题：各页面自己写死了 4~9 个颜色，然后用 i % PAL.length 循环。
+         债券页现在有 13 只基金，13 条线只用 4 个颜色循环 3 轮，
+         同一个图里有两三条线颜色完全一样，根本分不清哪条是哪条。
+     解法：按数量在色相环上均分取色，n 越大间隔越密但保证不重复。
+         保持原有的 5 个品牌色作为前 5 个（视觉一致性），
+         超出部分用 HSL 均分补齐，饱和度和亮度限定在深色背景可读区间。
+     ========================================================= */
+  var BRAND = ['#3d8bfd', '#f5b942', '#00c58e', '#a78bfa', '#ff8a5c',
+               '#22d3ee', '#ff4d5e', '#6aacff', '#c0c8d4', '#84cc16'];
+
+  function palette(n) {
+    n = Math.max(1, Math.round(n) || 1);
+    var out = [];
+    /* 先放品牌色 */
+    for (var i = 0; i < Math.min(n, BRAND.length); i++) out.push(BRAND[i]);
+    if (n <= BRAND.length) return out;
+
+    /* 超出部分：绕色相环均分。
+       从 205°（蓝）开始逆时针铺满，跳过已经接近品牌色的区段不现实，
+       干脆全部均分 —— 只要两两之间的色相差够大就够区分。
+       饱和度 62~78%、亮度 62~72% 是在 #05080f 底色上实测可读的区间。 */
+    var extra = n - BRAND.length;
+    for (var j = 0; j < extra; j++) {
+      var hue = Math.round(360 / extra * j + 15) % 360;
+      var sat = 62 + (j % 3) * 8;          /* 62 / 70 / 78 */
+      var lig = 68 + (j % 2) * 4;          /* 68 / 72 */
+      out.push('hsl(' + hue + ',' + sat + '%,' + lig + '%)');
+    }
+    return out;
+  }
+
   global.Chart2 = {
+    palette: palette,
     line: function (host, cfg) {
       var c = new LineChart(host, cfg);
       if (cfg.legendEl) buildLegend(cfg.legendEl, cfg.series, c);

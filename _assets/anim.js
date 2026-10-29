@@ -426,3 +426,32 @@
     countUp: countUp, sortableTable: sortableTable, boot: boot
   };
 })(window);
+
+  /* =========================================================
+     区块自动编号
+     视觉诊断结论：14 个区块结构完全一样（kicker+h2+card），
+     读者滚动时没有"这是第几块"的定位感，观感单调。
+     这里给每个 .sec-head 注入 01 / 02 / 03 编号，
+     配合 CSS 的左侧短线，建立终端面板式的层次。
+     不改变任何文案，纯视觉增强。
+     ========================================================= */
+  (function () {
+    var heads = document.querySelectorAll('section.block .sec-head');
+    if (!heads.length) return;
+    Array.prototype.forEach.call(heads, function (h, i) {
+      if (h.querySelector('.sec-no')) return;
+      var kicker = h.querySelector('.kicker');
+      /* 跳过没有 kicker 的（通常是页面顶部 hero 区） */
+      if (!kicker) return;
+      var no = document.createElement('div');
+      no.className = 'sec-no';
+      var n = i + 1;
+      no.innerHTML = '<em>' + (n < 10 ? '0' + n : n) + '</em>' +
+        '<span>' + (kicker.textContent || '').trim().toUpperCase() + '</span>';
+      h.insertBefore(no, kicker);
+      /* 原来的 kicker 隐藏（编号行已经带了它的文字） */
+      kicker.style.display = 'none';
+    });
+  })();
+
+

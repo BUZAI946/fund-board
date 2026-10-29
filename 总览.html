@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>基金股票 · 新手看得懂的盘面</title>
-<meta name="description" content="40只基金 / 9大板块真实数据看板，分红涨绿跌、大白话解读、含真实回测的配置建议。">
+<meta name="description" content="64只基金 / 16大板块真实数据看板，分红涨绿跌、大白话解读、含真实回测的配置建议。">
 <link rel="stylesheet" href="_assets/style.css">
 </head>
 <body>
@@ -45,13 +45,13 @@
   <div class="wrap">
     <h1>过去一年，<em>涨最猛的赚了 102%</em><br>跌最惨的亏了 40%</h1>
     <p>
-      这是一份给完全不懂基金的人看的看板。40 只基金、9 个板块，每一个数字都来自真实行情快照，
+      这是一份给完全不懂基金的人看的看板。60 只基金、15 个板块，每一个数字都来自真实行情快照，
       没有任何一个是我估的。你不用懂"夏普比率"，也能看懂自己该买什么。
     </p>
     <div class="hero-meta">
       <span><i class="dot-live"></i>数据快照 <b id="builtAt"></b></span>
       <span>行情时间 <b id="marketTs"></b></span>
-      <span>40 只基金 · 9 大板块 · 10 种组合真实回测</span>
+      <span>60 只基金 · 15 大板块 · 10 种组合真实回测</span>
     </div>
 
   </div>
@@ -76,8 +76,8 @@
             <rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M3 12h18"/>
           </svg>
         </div>
-        <h3>债券基金 <span class="cnt">4 只</span></h3>
-        <div class="desc">债券和现金。这类东西不刺激，但它是你整个仓位的<b style="color:#96a8c2">地基</b>——也是最不会让你半夜睡不着的地方。</div>
+        <h3>债券基金 <span class="cnt" data-live="grp.fund.n" data-fmt="count" data-suffix=" 只" data-nocolor>4 只</span></h3>
+        <div class="desc">短债、长债、可转债 + 货币。这类东西不刺激，但它是你整个仓位的<b style="color:#96a8c2">地基</b>——也是最不会让你半夜睡不着的地方。</div>
         <div class="stat">
           <span class="big-num up" id="gFund" data-suffix="%"><span data-live="sec.bond">+2.94%</span></span>
           <span class="lbl">板块平均近一年</span>
@@ -94,8 +94,8 @@
             <path d="M3 20h18"/><path d="M6 20V10"/><path d="M11 20V4"/><path d="M16 20v-7"/><path d="M21 20V8"/>
           </svg>
         </div>
-        <h3>股票基金 <span class="cnt">18 只</span></h3>
-        <div class="desc">A股、港股、美股、行业主题。钱主要投在股票上，涨跌都跟着股市走——<b style="color:#96a8c2">跌起来也是真跌</b>。</div>
+        <h3>股票基金 <span class="cnt" data-live="grp.stock.n" data-fmt="count" data-suffix=" 只" data-nocolor>18 只</span></h3>
+        <div class="desc">A股宽基、红利低波、港股、美股、发达/新兴市场、行业主题。钱主要投在股票上，涨跌都跟着股市走——<b style="color:#96a8c2">跌起来也是真跌</b>。</div>
         <div class="stat">
           <span class="big-num down" id="gStock" data-suffix="%"><span data-live="grp.stock">-4.24%</span></span>
           <span class="lbl">板块平均近一年</span>
@@ -112,8 +112,8 @@
             <circle cx="12" cy="12" r="8"/><path d="M12 7v10"/><path d="M15 9.5c0-1.4-1.3-2.5-3-2.5s-3 1.1-3 2.5S10.3 12 12 12s3 1.1 3 2.5-1.3 2.5-3 2.5-3-1.1-3-2.5"/>
           </svg>
         </div>
-        <h3>商品基金 <span class="cnt">18 只</span></h3>
-        <div class="desc">黄金、白银、原油、有色。买的是实物或期货，跟股市不同步——<b style="color:#96a8c2">涨得猛，也跌得要命</b>。</div>
+        <h3>商品基金 <span class="cnt" data-live="grp.commodity.n" data-fmt="count" data-suffix=" 只" data-nocolor>18 只</span></h3>
+        <div class="desc">黄金、白银、原油、有色、农产品。买的是实物或期货，跟股市不同步——<b style="color:#96a8c2">涨得猛，也跌得要命</b>。</div>
         <div class="stat">
           <span class="big-num up" id="gComm" data-suffix="%"><span data-live="grp.commodity">+17.83%</span></span>
           <span class="lbl">板块平均近一年</span>
@@ -126,7 +126,7 @@
     </div>
 
     <div class="note good" style="margin-top:22px">
-      <b>先说清楚一件最重要的事：这 40 只标的，全部都是「基金」。</b><br>
+      <b>先说清楚一件最重要的事：这 60 只标的，全部都是「基金」。</b><br>
       债券基金、股票基金、商品基金——它们都是基金，区别只在于<b style="color:#e8eef8">你的钱被拿去买什么</b>：<br>
       · <b style="color:#6aacff">债券基金</b>：钱借给国家或企业，收利息（最稳）<br>
       · <b style="color:#ff8a5c">股票基金</b>：钱交给经理去买一篮子股票（几十到上百只，<b>不是买某一家公司</b>）<br>
@@ -137,7 +137,7 @@
 </section>
 
 <!-- ================= 今天市场温度 ================= -->
-<section class="block">
+<section class="block" data-tone="data">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Market Now</div>
@@ -155,7 +155,7 @@
 </section>
 
 <!-- ================= 九大板块 ================= -->
-<section class="block">
+<section class="block" data-emph data-tone="data">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Sectors</div>
@@ -198,7 +198,7 @@
 </section>
 
 <!-- ================= 风险收益全景 ================= -->
-<section class="block">
+<section class="block" data-tone="warn">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Risk × Return</div>
@@ -243,7 +243,7 @@
 </section>
 
 <!-- ================= 时间机器 ================= -->
-<section class="block">
+<section class="block" data-emph data-tone="action">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Time Machine</div>
@@ -302,12 +302,12 @@
 </section>
 
 <!-- ================= 三个真相 ================= -->
-<section class="block">
+<section class="block" data-tone="warn">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Before You Buy</div>
       <h2>买之前，先知道这三件事</h2>
-      <p>这三条不是道理，是这 40 只基金自己的数据打出来的。</p>
+      <p>这三条不是道理，是这 60 只基金自己的数据打出来的。</p>
     </div>
 
     <div class="grid g3">
@@ -326,7 +326,7 @@
 
       <div class="card reveal d1">
         <div style="font-size:34px;font-weight:800;font-family:var(--font-num);color:#f5b942;line-height:1">
-          <span data-count="22" data-dec="0" data-sign="false" data-suffix="/40">22/40</span>
+          <span data-count="22" data-dec="0" data-sign="false" data-suffix="/60">22/60</span>
         </div>
         <h4 style="margin:10px 0 8px;font-size:15px">40 只里有 22 只夏普为负</h4>
         <p style="font-size:13px;color:#96a8c2;line-height:1.8">
@@ -362,7 +362,7 @@
 </section>
 
 <!-- ================= 板块相关性矩阵 ================= -->
-<section class="block">
+<section class="block" data-tone="data">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Correlation</div>
@@ -397,7 +397,7 @@
 </section>
 
 <!-- ================= 定投 vs 一次性 ================= -->
-<section class="block">
+<section class="block" data-tone="action">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">DCA vs Lump Sum</div>
@@ -420,7 +420,7 @@
 </section>
 
 <!-- ================= 收益归因 ================= -->
-<section class="block">
+<section class="block" data-emph data-tone="data">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Attribution</div>
@@ -445,7 +445,7 @@
 </section>
 
 <!-- ================= 持仓模拟器 ================= -->
-<section class="block">
+<section class="block" data-tone="action">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Portfolio Builder</div>
@@ -469,7 +469,7 @@
 </section>
 
 <!-- ================= 事件日历 ================= -->
-<section class="block">
+<section class="block" data-tone="warn">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Calendar</div>
@@ -488,7 +488,7 @@
 </section>
 
 <!-- ================= 区间选择器 ================= -->
-<section class="block">
+<section class="block" data-tone="action">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Range Picker</div>
@@ -503,7 +503,7 @@
 </section>
 
 <!-- ================= 工具箱 ================= -->
-<section class="block">
+<section class="block" data-emph data-tone="plan">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Tools</div>
@@ -559,7 +559,7 @@
 </section>
 
 <!-- ================= 1分钟自测 ================= -->
-<section class="block">
+<section class="block" data-tone="hot">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Self Check</div>
@@ -575,7 +575,7 @@
 </section>
 
 <!-- ================= 建议组合 ================= -->
-<section class="block">
+<section class="block" data-tone="plan">
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">The Plan</div>
@@ -782,9 +782,9 @@
         sub: best.name.slice(0, 12), tone: 'up',
         note: '但全历史最深 ' + U.fmt(best.mddAll, 1) },
       { v: D.groups.stock.avg, d: 2, suf: '%', lbl: '权益类平均',
-        sub: '18 只股票型基金', tone: 'down',
-        note: '付了 21% 波动，换来负收益' },
-      { v: negSharpe, d: 0, suf: '/40', lbl: '夏普为负',
+        sub: D.groups.stock.n + ' 只股票型基金', tone: 'down',
+        note: '付了 ' + D.groups.stock.vol.toFixed(0) + '% 波动' + (D.groups.stock.avg < 0 ? '，换来负收益' : '') },
+      { v: negSharpe, d: 0, suf: '/' + D.funds.length, lbl: '夏普为负',
         sub: '白担风险还倒贴', tone: 'gold', sign: false,
         note: '超过一半的标的是这样' },
       { v: cash.yield7, d: 3, suf: '%', lbl: '什么都不做的收益',
@@ -828,10 +828,19 @@
       var v = s.arith;
       /* 红=涨 / 绿=跌，透明度按幅度 */
       var strength = Math.min(1, Math.abs(v) / maxAbs);
-      var alpha = 0.07 + strength * 0.30;
-      var bg = v >= 0 ? 'rgba(255,77,94,' + alpha + ')' : 'rgba(0,197,142,' + alpha + ')';
-      var bd = v >= 0 ? 'rgba(255,77,94,' + (0.25 + strength*0.45) + ')' : 'rgba(0,197,142,' + (0.25 + strength*0.45) + ')';
-      var col = v >= 0 ? '#ff4d5e' : '#00c58e';
+      /* 【视觉增强】原来 alpha 上限只有 0.37，整页几乎全是深蓝灰，
+         实测彩色像素只占 1.3%，观感单调。这里提到 0.55 并加双色渐变，
+         让"谁涨谁跌"一眼就能扫出来。 */
+      var a1 = 0.10 + strength * 0.45;
+      var a2 = 0.04 + strength * 0.18;
+      var bg = v >= 0
+        ? 'linear-gradient(158deg, rgba(255,77,94,' + a1 + '), rgba(255,77,94,' + a2 + '))'
+        : 'linear-gradient(158deg, rgba(0,197,142,' + a1 + '), rgba(0,197,142,' + a2 + '))';
+      var bd = v >= 0 ? 'rgba(255,77,94,' + (0.30 + strength*0.55) + ')' : 'rgba(0,197,142,' + (0.30 + strength*0.55) + ')';
+      var col = v >= 0 ? '#ff5f6e' : '#00d99e';
+      /* 大类色标：债券/股票/商品各一色，快速区分 */
+      var GRP_DOT = { fund: '#3d8bfd', stock: '#22d3ee', commodity: '#f5b942' };
+      var dot = '<span class="heat-dot" style="background:' + (GRP_DOT[s.grp] || '#7b8fb0') + '"></span>';
       var sign = v > 0 ? '+' : '';
       /* 可信度标记 */
       var trust = s.spread < 2 ? '' : (s.spread < 10
@@ -841,7 +850,7 @@
       /* 点击直接进入该板块的独立详情页（板块/板块名.html） */
       return '<a class="heat-cell reveal d'+Math.min(i%6,5)+'" href="板块/'+s.name+'.html" '+
         'title="点开看'+s.name+'的详细数据" style="background:'+bg+';border-color:'+bd+'">'+
-        '<div class="heat-top"><span class="heat-name">'+s.name+'</span>'+
+        '<div class="heat-top">'+dot+'<span class="heat-name">'+s.name+'</span>'+
           '<span class="heat-n">'+s.n+'只</span></div>'+
         '<div class="heat-val" style="color:'+col+'">'+sign+v.toFixed(2)+'%</div>'+
         '<div class="heat-foot">'+

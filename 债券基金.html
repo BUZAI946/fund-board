@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>债券基金（4只）· 债券与现金 — 基金股票</title>
-<meta name="description" content="4只债券基金的逐只体检：波动率、回撤、久期风险、机构持有变化，用大白话讲清债基到底赚的是什么钱。">
+<title>债券基金（13只）· 债券与现金 — 基金股票</title>
+<meta name="description" content="13只债券基金（短债/长债/可转债）的逐只体检：波动率、回撤、久期风险、机构持有变化，用大白话讲清债基到底赚的是什么钱，以及可转债为什么不能当“纯债”看。">
 <link rel="stylesheet" href="_assets/style.css">
 </head>
 <body>
@@ -51,10 +51,12 @@
         <span style="font-size:.52em;color:#96a8c2;font-weight:600">但它是你整个仓位的地基</span>
       </h1>
       <p style="margin-top:14px">
-        这一页只有 <b style="color:#e8eef8">4 只债券基金 + 2 只货币基金</b>。
-        它们的共同点是：<b style="color:#3d8bfd">波动小到几乎看不出来</b>，
-        近一年最深的一次下跌也只有 <b style="color:#e8eef8">0.20%</b>。
-        但这不代表没风险——<b style="color:#f5b942">债券今年赚的钱，很大一块明年赚不到了</b>。这一页会讲清为什么。
+        这一页有 <b style="color:#e8eef8"><span data-live="grp.fund.n" data-fmt="count" data-suffix=" 只" data-nocolor>13 只</span>债券基金 + <span data-live="totals.cash" data-fmt="count" data-suffix=" 只" data-nocolor>4 只</span>货币基金</b>。
+        债券基金分三类：<b style="color:#3d8bfd">短债、长债、可转债</b>。
+        前两类的共同点是波动小到几乎看不出来——短债板块平均波动 <b style="color:#e8eef8"><span data-live="secvol.bonds" data-fmt="plain" data-nocolor>0.93</span>%</b>，长债 <b style="color:#e8eef8"><span data-live="secvol.bondl" data-fmt="plain" data-nocolor>0.98</span>%</b>。
+        但<b style="color:#f5b942">可转债虽然也算债券，波动能到 <span data-live="secvol.convert" data-fmt="plain" data-nocolor>13.15</span>%</b>，
+        单只最深跌过 <b style="color:#f5b942"><span data-live="fund.470059.mddAll">-50.76%</span></b>——那是股票那一档的风险。
+        纯债也不等于没风险——<b style="color:#f5b942">债券今年赚的钱，很大一块明年赚不到了</b>。这一页会讲清为什么。
       </p>
     </div>
   </div>
@@ -65,9 +67,10 @@
   <div class="wrap">
     <div class="grid g4" id="kpiRow"></div>
     <div class="note good reveal">
-      <b>先给你一个参照：</b>余额宝现在七日年化 <b class="hl" id="cashYield"></b>。
-      这 4 只债券基金近一年收益是 <b id="bondRange"></b>。
-      <b>也就是说，跌得最少的那只，收益也就比放着不动多一点点</b>——
+      <b>先给你一个参照：</b>货币基金里七日年化最高的那只，现在能做到 <b class="hl" id="cashYield"></b>。
+      短债这 <span data-live="sec.bonds.n" data-fmt="count" data-suffix=" 只" data-nocolor>5 只</span>近一年收益是 <b id="bondRange"></b>；
+      把 <span data-live="grp.fund.n" data-fmt="count" data-suffix=" 只" data-nocolor>13 只</span>全算上，最好的一只 <b><span data-live="fund.003376.ret250">+5.32%</span></b>，最差的一只 <b><span data-live="fund.470059.ret250">-7.34%</span></b>。
+      <b>也就是说，最差的那档短债，收益还不如干脆放着吃货币基金的利息</b>——
       这就是"稳健"的真实含义：<b style="color:#e8eef8">不是帮你赚大钱，是帮你少亏钱、且睡得着。</b>
     </div>
   </div>
@@ -79,7 +82,7 @@
     <div class="sec-head reveal">
       <div class="kicker">The Core Truth</div>
       <h2>债券赚的两种钱，你必须分清</h2>
-      <p>这决定了"今年赚的 5%，明年还能不能赚到"。</p>
+      <p>这决定了"今年长债赚的那 <span data-live="sec.bondl">3.68%</span>，明年还能不能赚到"。</p>
     </div>
 
     <div class="grid g2">
@@ -122,7 +125,7 @@
         <b>这就是问题所在：</b>现在的 10 年期国债收益率是 <b class="n up">1.6412%</b>——
         <b>已经是历史极低位</b>。这意味着"价差"这个年终奖已经发得差不多了。<br>
         更要命的是反过来：<b>如果利率往回走一点，7-10 年的长债跌得最快</b>。
-        003376 历史上最惨亏过 <b class="n up">8.27%</b>——对一只"稳健"基金来说，这不小。
+        003376 历史上最惨亏过 <b class="n"><span data-live="fund.003376.mddAll">-8.27%</span></b>——对一只"稳健"基金来说，这不小。
       </div>
     </div>
   </div>
@@ -133,7 +136,7 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Duration Risk</div>
-      <h2>同样是债券，为什么有的跌 <span class="n">0.2%</span>、有的跌 <span class="n">8%</span></h2>
+      <h2>同样是债券，为什么有的只跌 <span class="n" data-live="fund.002086.mddAll" data-fmt="abs">1.13%</span>、有的跌 <span class="n" data-live="fund.003358.mddAll" data-fmt="abs">9.04%</span>、可转债能跌 <span class="n" data-live="fund.470059.mddAll" data-fmt="abs">50.76%</span></h2>
       <p>答案是"久期"——听起来很专业，其实就是<b style="color:#e8eef8">"这笔钱借出去多久"</b>。</p>
     </div>
 
@@ -145,14 +148,17 @@
 
     <div class="chart-card reveal">
       <div class="chart-head">
-        <h4>4 只债券基金的"全历史最深跌幅"对比</h4>
-        <span class="hint">这是它这辈子最惨的一次，不是近一年</span>
+        <h4><span data-live="grp.fund.n" data-fmt="count" data-suffix=" 只" data-nocolor>13 只</span>债券基金的"全历史最深跌幅"对比</h4>
+        <span class="hint">含 4 只可转债；这是它这辈子最惨的一次，不是近一年</span>
       </div>
       <div id="mddViz"></div>
       <div class="note warn" style="margin-bottom:0">
-        <b>看出规律了吗？</b>全历史跌得最深的 003376，正是久期最长的那只（7-10 年国开债）。
-        而 001512（3-5 年）和 000015（纯债）跌得就浅得多。<br>
-        <b style="color:#f5b942">所以"债券安全"这句话是粗的。真正该问的是：这只债基的久期有多长？</b>
+        <b>看出规律了吗？</b>纯债里跌得最深的，正是久期最长的 7-10 年国开债：
+        003358 亏过 <b class="n"><span data-live="fund.003358.mddAll">-9.04%</span></b>、003376 亏过 <b class="n"><span data-live="fund.003376.mddAll">-8.27%</span></b>；
+        而 001512（3-5 年）只跌 <b class="n"><span data-live="fund.001512.mddAll">-4.14%</span></b>、000015（纯债）跌 <b class="n"><span data-live="fund.000015.mddAll">-4.10%</span></b>，明显浅一截。<br>
+        <b style="color:#f5b942">但真正惨的不是它们：4 只可转债里最差的一只亏过 <span data-live="fund.470059.mddAll">-50.76%</span></b>——
+        可转债会跟着正股一起跌，它挂着"债券"的名字，风险却是股票那一档。<br>
+        <b style="color:#f5b942">所以"债券安全"这句话是粗的。真正该问的是两件事：这只债基的久期有多长？里面有没有可转债？</b>
       </div>
     </div>
   </div>
@@ -172,7 +178,7 @@
 
     <div class="chart-card reveal">
       <div class="chart-head">
-        <h4>4 只债券基金的机构持有比例变化（四个报告期）</h4>
+        <h4><span data-live="grp.fund.n" data-fmt="count" data-suffix=" 只" data-nocolor>13 只</span>债券基金的机构持有比例变化（四个报告期）</h4>
         <span class="hint">2024-12-31 → 2025-06-30 → 2025-12-31 → 2026-06-30</span>
       </div>
       <div id="instChart"></div>
@@ -180,11 +186,13 @@
     </div>
 
     <div class="note warn reveal">
-      <b>读出来的两件事：</b><br>
-      ① <b>000015 华夏纯债</b>：机构从 53.39% 一路加到 <b class="n hl">77.37%</b>（+23.98 个百分点，四期连续上升）——
-      这是 42 只里机构加仓最猛的一只。<br>
-      ② <b>003376 广发7-10年国开债</b>：机构从 22.07% 一路撤到 <b class="n up">9.32%</b>（−12.75 个百分点，撤了 58%）——
-      撤的正是久期最长的那只。
+      <b>读出来的三件事：</b>（比例取自四个报告期，最后一期是 2026-06-30，滞后当前约 4 个月）<br>
+      ① <b>000015 华夏纯债</b>：机构从 53.39% 一路加到 <b class="n hl">77.37%</b>（<span data-live="fund.000015.instDelta" data-fmt="nopercent">+23.98</span> 个百分点，四期连续上升）——
+      全市场 <span data-live="totals.funds" data-fmt="count" data-suffix=" 只" data-nocolor>60 只</span>非货币基金里这个幅度排第三，<b>在债券基金里是最猛的一只</b>。<br>
+      ② <b>003376 广发7-10年国开债</b>：机构从 22.07% 一路撤到 <b class="n up">9.32%</b>（<span data-live="fund.003376.instDelta" data-fmt="nopercent">-12.75</span> 个百分点，撤了 58%）——
+      撤的正是久期最长的那只。<br>
+      ③ <b>002086 大成景安短融</b>：机构从 84.01% 撤到 <b class="n up">52.69%</b>（<span data-live="fund.002086.instDelta" data-fmt="nopercent">-31.32</span> 个百分点）——
+      这是 60 只里撤退最猛的一只。所以短债也不等于"没人卖"。
     </div>
 
     <div class="note danger reveal">
@@ -201,7 +209,7 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Every Single One</div>
-      <h2>4 只逐个体检</h2>
+      <h2><span data-live="grp.fund.n" data-fmt="count" data-suffix=" 只" data-nocolor>13 只</span>逐个体检</h2>
       <p>点表头可以排序。每一行都告诉你"它适合谁、它的代价是什么"。</p>
     </div>
     <div class="tbl-wrap reveal">
@@ -222,8 +230,8 @@
     </div>
     <div class="grid g2" id="cashRow"></div>
     <div class="note reveal">
-      <b>说句实在话：</b>余额宝七日年化 <b class="n hl">0.837%</b>，
-      10 万块放一年是 <b class="n">100,837 元</b>——只多了 837 块。
+      <b>说句实在话：</b>余额宝七日年化<b class="n hl">不到 1%</b>，
+      10 万块放一年，也就<b class="n">多几百块</b>。
       <b>但它是你唯一的"子弹"</b>：市场真跌出机会的时候，只有它能让立刻出手。
       <b style="color:#f5b942">所以别嫌它少，你必须留一部分在这里。</b>
     </div>
@@ -252,24 +260,30 @@
     <div class="steps">
       <div class="step reveal">
         <h4>① 债券是目前最适合新手的品种</h4>
-        <p>不是因为它涨得多，而是因为<b style="color:#e8eef8">它跌的时候你扛得住</b>。波动 0.35%~1.24%，
-           近一年最深跌 0.20%~0.67%。<b>这是唯一一个"跌了你也不会慌"的位置</b>。</p>
+        <p>不是因为它涨得多，而是因为<b style="color:#e8eef8">它跌的时候你扛得住</b>。短债板块平均波动
+           <span data-live="secvol.bonds" data-fmt="plain" data-nocolor>0.93</span>%、长债
+           <span data-live="secvol.bondl" data-fmt="plain" data-nocolor>0.98</span>%——纯债类都不到 1%。
+           但可转债平均波动 <span data-live="secvol.convert" data-fmt="plain" data-nocolor>13.15</span>%，
+           单只近一年最深跌过 <span data-live="fund.050019.mdd250" data-fmt="abs">19.43%</span>，那是股票那一档。
+           <b>所以"跌了你也不会慌"这句话，只对纯债成立。</b></p>
       </div>
       <div class="step reveal d1">
-        <h4>② 但别指望它明年还赚 <span class="n">5%</span></h4>
-        <p>今年这 5% 里，很大一部分是"利率从高位跌到 1.6412%"带来的涨价。
+        <h4>② 但别指望长债明年还赚 <span class="n" data-live="sec.bondl">3.68%</span></h4>
+        <p>长债今年这 <span data-live="sec.bondl">3.68%</span> 里，很大一部分是"利率从高位跌到 1.6412%"带来的涨价。
            <b style="color:#ff4d5e">利率已经低到不能再低，这块收益不可重复</b>。
            明年更可能只赚到票息那部分。</p>
       </div>
       <div class="step reveal d2">
         <h4>③ 长债要少放，短债可以多放</h4>
-        <p>003376（7-10年）历史上最惨亏 8.27%，是 001512（3-5年，-4.14%）的两倍。
+        <p>003376（7-10年）历史上最惨亏 <span data-live="fund.003376.mddAll">-8.27%</span>，
+           是 001512（3-5年，<span data-live="fund.001512.mddAll">-4.14%</span>）的两倍；
+           可转债更该单独算——单只最深能亏到 <span data-live="fund.470059.mddAll">-50.76%</span>，那个不该当"债"来放。
            <b style="color:#f5b942">而且机构正在从长债撤退、往纯债加仓</b>——
            虽然这只是旁证，但方向上值得参考。</p>
       </div>
       <div class="step reveal d3">
         <h4>④ 一定要留现金</h4>
-        <p>不是为了赚那 0.837%，是为了<b style="color:#e8eef8">在市场真跌出机会时，你有子弹</b>。
+        <p>不是为了赚那不到 1% 的利息，是为了<b style="color:#e8eef8">在市场真跌出机会时，你有子弹</b>。
            全仓进去的人，跌的时候只能看着。</p>
       </div>
     </div>
@@ -323,8 +337,8 @@
     var safest = FUNDS.slice().sort(function(a,b){ return a.vol - b.vol; })[0];
     var deep = FUNDS.slice().sort(function(a,b){ return a.mddAll - b.mddAll; })[0];
     var items = [
-      {lbl:'债券板块平均近一年', val:BONDS[0].arith, suf:'%',
-       note:'4 只债券基金各买同样多的钱，拿满一年',
+      {lbl:'短债板块平均近一年', val:BONDS[0].arith, suf:'%',
+       note:'短债 '+BONDS[0].n+' 只各买同样多的钱，拿满一年',
        sub:'波动仅 '+BONDS[0].vol.toFixed(2)+'%，近一年最深跌 '+U.fmt(BONDS[0].mddWorst)},
       {lbl:'最稳的一只（波动最小）', val:safest.vol, suf:'%', neutral:true, sign:false,
        note:safest.name, sub:'近一年 '+U.fmt(safest.ret250)+'，回撤 '+U.fmt(safest.mdd250)},
@@ -417,13 +431,14 @@
   (function(){
     var rows = FUNDS.filter(function(f){ return f.inst && f.inst.length >= 2; })
       .sort(function(a,b){ return (b.instDelta||0) - (a.instDelta||0); });
-    var PAL = ['#00c58e','#3d8bfd','#f5b942','#ff4d5e'];
+    /* 颜色由 Chart2.palette 按数量自动生成，不再写死数组（避免多条线撞色） */
+    var PAL = (window.Chart2 && window.Chart2.palette) ? window.Chart2.palette(rows.length) : null;
     var series = rows.map(function(f,i){
       return {
         name: f.code + ' ' + f.name.slice(0,12),
         short: f.code,
         data: f.inst,
-        color: PAL[i % PAL.length]
+        color: PAL[i]
       };
     });
     window.Chart2.line(document.getElementById('instChart'), {
@@ -493,7 +508,8 @@
     var NOTE = {
       '003376':'久期最长（7-10年）。利率跌它涨得最多，利率涨它跌得最狠。历史上最惨亏 8.27%。机构四期撤离 58%。',
       '001512':'久期中等（3-5年）。历史最深亏 4.14%，是长债的一半。机构四期小幅加仓。',
-      '000015':'纯债，波动只有 0.35%——这 4 只里最不颠的。机构四期从 53% 加到 77%，全场加仓最猛。',
+      '000015':'纯债，波动只有 0.35%——13 只里最不颠的那一档。机构四期从 53% 加到 77%，加仓幅度全场第三、债券基金里最猛。',
+      '470059':'可转债，历史最深亏 50.76%——它不是"纯债"，是跟着正股一起涨跌的东西。机构四期从 78% 撤到 63%。',
       '110017':'名字叫"增强回报"，其实是债+少量股票的混合。它的 250 日单位净值几乎没动（-0.06%），收益几乎全靠分红再投。'
     };
     var ROLE = {

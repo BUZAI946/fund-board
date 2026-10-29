@@ -533,11 +533,13 @@
       }
 
       /* 线条 */
-      var PAL = ['#f5b942', '#ff4d5e', '#3d8bfd', '#00c58e', '#c0c8d4', '#ff8a5c', '#22d3ee', '#a78bfa', '#6aacff'];
+      /* 颜色由 Chart2.palette 按数量自动生成，不再写死数组（避免多条线撞色） */
+    var PAL = (window.Chart2 && window.Chart2.palette)
+      ? window.Chart2.palette(SECS.length) : null;
       SECS.forEach(function (s, si) {
         var d = s.seq.map(function (v, i) { return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1); }).join(' ');
         svg.appendChild(mk('path', {
-          d: d, fill: 'none', stroke: PAL[si % PAL.length],
+          d: d, fill: 'none', stroke: PAL[si],
           'stroke-width': 1.5, 'stroke-linejoin': 'round', opacity: 0.72
         }));
       });

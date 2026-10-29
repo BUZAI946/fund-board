@@ -388,13 +388,14 @@
       return;
     }
 
-    var PAL = ['#f5b942', '#3d8bfd', '#00c58e', '#ff4d5e', '#a78bfa', '#22d3ee', '#ff8a5c'];
+    /* 颜色由 Chart2.palette 按数量自动生成，不再写死数组（避免多条线撞色） */
+    var PAL = (window.Chart2 && window.Chart2.palette) ? window.Chart2.palette(rows.length) : null;
     var series = rows.map(function (f, i) {
       return {
         name: f.code + ' ' + f.name.slice(0, 10),
         short: f.code,
         data: f.inst,
-        color: PAL[i % PAL.length]
+        color: PAL[i]
       };
     });
 

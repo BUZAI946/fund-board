@@ -23,10 +23,12 @@
   if (!D) return;
 
   /* ---------------- 取值映射 ---------------- */
-  var SEC = {}, SECVOL = {}, GRP = {}, PLAN = {}, FUND = {};
+  var SEC = {}, SECVOL = {}, SECN = {}, SECFULL = {}, GRP = {}, PLAN = {}, FUND = {};
   (D.sectors || []).forEach(function (s) {
     SEC[s.sec] = s.arith;
     SECVOL[s.sec] = s.vol;
+    SECN[s.sec] = s.n;
+    SECFULL[s.sec] = s;   /* 整个板块对象，供 sec.<key>.spread 等路径用 */
   });
   (D.funds || []).forEach(function (f) {
     FUND[f.code] = f;
@@ -63,8 +65,58 @@
     }
   })();
 
+  /* 大类里"最惨个基"的回撤（groups 可能没直接给，从 funds 算） */
+  function g4mdd(g) {
+    if (g.mddWorst !== undefined) return g.mddWorst;
+    var secs = g.secs || [];
+    var worst = 0;
+    (D.funds || []).forEach(function (f) {
+      if (secs.indexOf(f.sec) >= 0 && f.mddAll < worst) worst = f.mddAll;
+    });
+    return worst;
+  }
+
   function lookup(path) {
     var p = path.split('.');
+
+    /* ---- 数量类（不格式化，直接输出整数）---- */
+    if (path === 'totals.funds') return (D.funds || []).length;
+    if (path === 'totals.sectors') return (D.sectors || []).length;
+    if (path === 'totals.sectorsAll') return (D.sectors || []).length + 1;  /* +1 = 货币页 */
+    if (path === 'totals.cash') return (D.cash || []).length;
+
+    if (p[0] === 'grp' && p[2] === 'n') {
+      var g = D.groups && D.groups[p[1]];
+      return g ? (g.n || 0) : null;
+    }
+    if (p[0] === 'grp' && p[2] === 'nSec') {
+      var g2 = D.groups && D.groups[p[1]];
+      return g2 ? (g2.nSec || 0) : null;
+    }
+    if (p[0] === 'grp' && p[2] === 'vol') {
+      var g3 = D.groups && D.groups[p[1]];
+      return g3 ? g3.vol : null;
+    }
+    if (p[0] === 'grp' && p[2] === 'worst') {
+      var g4 = D.groups && D.groups[p[1]];
+      return g4 ? g4.worst : null;
+    }
+    if (p[0] === 'grp' && p[2] === 'mdd') {
+      var g5 = D.groups && D.groups[p[1]];
+      return g5 ? g4mdd(g5) : null;
+    }
+    if (p[0] === 'sec' && p[2] === 'n') {
+      var sec = SECN[p[1]];
+      return sec === undefined ? null : sec;
+    }
+    /* 板块的其它指标（极差/波动/回撤/最好/最差）
+       之前缺这些，导致页面写"极差 18.30"这类数字没法动态化，
+       数据一变就和表格对不上。 */
+    if (p[0] === 'sec' && p[2]) {
+      var full = SECFULL[p[1]];
+      if (full && full[p[2]] !== undefined) return full[p[2]];
+    }
+
     if (p[0] === 'sec' && p[1] in SEC) return SEC[p[1]];
     if (p[0] === 'secvol' && p[1] in SECVOL) return SECVOL[p[1]];
     if (p[0] === 'grp' && GRP[p[1]] !== undefined) return GRP[p[1]];
@@ -98,6 +150,11 @@
     }
     if (mode === 'plain') {
       return v.toFixed(d);
+    }
+    if (mode === 'count') {
+      /* 数量：整数 + 可选后缀 */
+      var suf = el.getAttribute('data-suffix') || '';
+      return Math.round(v) + suf;
     }
     /* 默认：带符号的百分比（用普通减号，不用 Unicode 负号） */
     return (v > 0 ? '+' : (v < 0 ? '-' : '')) + Math.abs(v).toFixed(d) + '%';

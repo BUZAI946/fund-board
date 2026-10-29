@@ -4137,3 +4137,322 @@ html[data-theme="light"] .tbl-wrap tbody tr:hover td{
 }
 .nt-panel::-webkit-scrollbar{width:5px}
 .nt-panel::-webkit-scrollbar-thumb{background:var(--line2);border-radius:3px}
+
+
+/* ===========================================================
+   视觉层级优化 v2
+   -----------------------------------------------------------
+   诊断：14 个区块结构完全一样（kicker + h2 + card），
+        30 处卡片边框完全相同 → 视觉上没有节奏，显得单调。
+   解法：用「编号 + 装饰线 + 节奏化间距」建立层次，
+        不改配色、不加花哨动效，保持专业终端气质。
+   =========================================================== */
+
+/* ---------- 1) 区块编号（终端面板感）---------- */
+section.block{counter-increment:secnum;position:relative}
+body{counter-reset:secnum}
+
+.sec-head{position:relative;padding-left:0}
+
+/* 自动编号：由 JS 注入 .sec-no 元素，这里只定义样式 */
+.sec-no{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--font-num);font-size:11px;font-weight:700;
+  color:var(--num-4);letter-spacing:2px;margin-bottom:9px;
+}
+.sec-no::before{
+  content:"";width:18px;height:1px;
+  background:linear-gradient(90deg,var(--blue),transparent);
+}
+.sec-no em{
+  font-style:normal;color:var(--blue);opacity:.85;
+}
+
+/* ---------- 2) h2 层级强化 ---------- */
+.sec-head h2{
+  font-size:clamp(24px,2.8vw,32px);
+  font-weight:800;
+  letter-spacing:-.7px;
+  line-height:1.25;
+  position:relative;
+  padding-bottom:13px;
+}
+/* h2 下方一条渐隐短线，作为视觉锚点 */
+.sec-head h2::after{
+  content:"";position:absolute;left:0;bottom:0;
+  width:44px;height:2px;border-radius:1px;
+  background:linear-gradient(90deg,var(--blue),rgba(61,139,253,0));
+}
+.sec-head p{
+  margin-top:9px;
+  font-size:14px;line-height:1.9;
+  color:var(--sub);
+  max-width:860px;
+}
+
+/* ---------- 3) 区块之间的节奏：重要区块加呼吸 ---------- */
+section.block{
+  padding-top:44px;
+  padding-bottom:44px;
+}
+/* 每 3 个区块做一次"大间隔"，形成视觉分组 */
+section.block:nth-of-type(3n+1){
+  padding-top:56px;
+}
+
+/* ---------- 4) 关键区块的强调背景 ---------- */
+/* 数据密度最高的几个区块用更深的底，形成"面板叠面板"的层次 */
+section.block[data-emph]{
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(61,139,253,.055), transparent 70%),
+    var(--bg2);
+  border-top:0.5px solid var(--line-mid);
+  border-bottom:0.5px solid var(--line-mid);
+}
+
+/* ---------- 5) 卡片形态分级 ---------- */
+/* L1：普通数据卡（现在的） */
+/* L2：强调卡 —— 左侧色条，用于"结论""警示"这类 */
+.card-accent{
+  position:relative;
+  padding-left:20px !important;
+}
+.card-accent::before{
+  content:"";position:absolute;left:0;top:14px;bottom:14px;
+  width:2px;border-radius:1px;
+  background:var(--accent,var(--blue));
+  box-shadow:0 0 12px var(--accent,var(--blue));
+  opacity:.7;
+}
+
+/* L3：内嵌更深面板 —— 用于卡片里的次级信息 */
+.panel-inset{
+  background:var(--bg2);
+  border:0.5px solid var(--line-soft);
+  border-radius:9px;
+  padding:14px 16px;
+}
+
+/* ---------- 6) 数字焦点化 ---------- */
+/* 关键数字：更大 + 极淡光晕，让视线第一时间落上去 */
+.num-focus{
+  font-family:var(--font-num);
+  font-size:clamp(34px,4.2vw,46px);
+  font-weight:800;
+  letter-spacing:-2px;
+  line-height:1;
+  color:var(--num-1);
+  text-shadow:0 0 28px rgba(61,139,253,.28);
+}
+.num-focus.up{text-shadow:0 0 28px rgba(255,77,94,.3)}
+.num-focus.down{text-shadow:0 0 28px rgba(0,197,142,.3)}
+
+/* ---------- 7) 细分隔符 ---------- */
+.rule{
+  height:0.5px;
+  background:linear-gradient(90deg,transparent,var(--line-hard) 12%,
+             var(--line-hard) 88%,transparent);
+  margin:38px 0;
+}
+
+/* ---------- 8) 区块底部的"继续"引导 ---------- */
+.sec-foot{
+  display:flex;align-items:center;gap:10px;
+  margin-top:26px;padding-top:16px;
+  border-top:0.5px solid var(--line-soft);
+  font-size:12px;color:var(--num-4);
+}
+.sec-foot a{
+  color:#6aacff;text-decoration:none;font-weight:600;
+  border-bottom:1px dashed rgba(106,172,255,.4);
+  transition:.16s;
+}
+.sec-foot a:hover{border-bottom-style:solid;color:#8fc0ff}
+
+/* ---------- 9) 数字卡片的密集排列（KPI 墙）---------- */
+.kpi-wall{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:1px;
+  background:var(--line);
+  border:0.5px solid var(--line-mid);
+  border-radius:11px;
+  overflow:hidden;
+}
+.kpi-wall>div{
+  background:var(--panel);
+  padding:16px 14px;
+  text-align:center;
+  transition:background .16s;
+}
+.kpi-wall>div:hover{background:var(--panel2)}
+.kpi-wall .kw-l{
+  font-size:10.5px;color:var(--num-4);
+  letter-spacing:.4px;margin-bottom:7px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.kpi-wall .kw-v{
+  font-family:var(--font-num);
+  font-size:19px;font-weight:800;
+  letter-spacing:-.7px;line-height:1;
+  color:var(--num-1);
+}
+.kpi-wall .kw-v small{font-size:10px;font-weight:600;color:var(--dim);margin-left:1px}
+
+/* ---------- 10) 亮色主题配套 ---------- */
+html[data-theme="light"] section.block[data-emph]{
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(31,111,224,.05), transparent 70%),
+    #f6f8fc;
+}
+html[data-theme="light"] .num-focus{text-shadow:none}
+html[data-theme="light"] .kpi-wall{background:rgba(20,40,80,.1)}
+html[data-theme="light"] .kpi-wall>div{background:#fff}
+
+@media(max-width:760px){
+  section.block{padding-top:34px;padding-bottom:34px}
+  section.block:nth-of-type(3n+1){padding-top:40px}
+  .sec-head h2{font-size:23px}
+  .num-focus{font-size:32px}
+}
+
+
+/* 热力图：大类色标 + 饱和增强 */
+.heat-dot{
+  display:inline-block;width:6px;height:6px;border-radius:50%;
+  margin-right:5px;vertical-align:middle;flex-shrink:0;
+  box-shadow:0 0 6px currentColor;
+}
+.heat-cell{
+  transition:transform .18s, box-shadow .18s, border-color .18s !important;
+}
+.heat-cell:hover{
+  box-shadow:0 12px 34px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.14) inset !important;
+}
+/* 涨跌数字加微小光晕，扫读更快 */
+.heat-val{
+  text-shadow:0 0 16px currentColor;
+  opacity:1 !important;
+}
+
+
+/* ===========================================================
+   色彩语义系统
+   -----------------------------------------------------------
+   诊断：全站 14 个区块都用同一个蓝 #3d8bfd 做强调，
+        读者感受不到"这块是数据 / 这块是警示 / 这块是建议"。
+   解法：给区块分配 4 种语义色，只作用于编号、h2 短线、强调卡
+        的左侧竖线。主体仍是深色底 + 白字，不破坏专业感。
+   用法：<section class="block" data-tone="plan">
+   =========================================================== */
+
+section.block[data-tone="data"]   {--tone:#3d8bfd}
+section.block[data-tone="warn"]   {--tone:#f5b942}
+section.block[data-tone="plan"]   {--tone:#4ecfa4}
+section.block[data-tone="action"] {--tone:#a78bfa}
+section.block[data-tone="hot"]    {--tone:#ff8a5c}
+
+/* 编号短线用主题色 */
+section.block[data-tone] .sec-no::before{
+  background:linear-gradient(90deg,var(--tone),transparent);
+}
+section.block[data-tone] .sec-no em{color:var(--tone)}
+
+/* h2 底线用主题色 */
+section.block[data-tone] .sec-head h2::after{
+  background:linear-gradient(90deg,var(--tone),transparent);
+}
+
+/* 左侧竖线装饰：让"这一块开始了"更有标记感 */
+section.block[data-tone]{
+  position:relative;
+}
+section.block[data-tone]::before{
+  content:"";position:absolute;left:0;top:44px;
+  width:2px;height:34px;border-radius:1px;
+  background:var(--tone);opacity:.5;
+  box-shadow:0 0 14px var(--tone);
+}
+@media(max-width:760px){
+  section.block[data-tone]::before{display:none}
+}
+
+/* 主题色区块的强调卡 */
+section.block[data-tone] .card-accent{--accent:var(--tone)}
+
+/* 主题色区块的内嵌面板顶部微光 */
+section.block[data-tone] .card-pad{
+  position:relative;
+}
+section.block[data-tone] .card-pad::before{
+  content:"";position:absolute;top:0;left:20px;right:20px;height:1px;
+  background:linear-gradient(90deg,var(--tone),transparent 65%);
+  opacity:.35;pointer-events:none;
+  border-radius:inherit;
+}
+
+/* 亮色主题 */
+html[data-theme="light"] section.block[data-tone]::before{opacity:.4}
+
+
+/* ===========================================================
+   首屏视觉强化
+   诊断：hero 区只有文字，没有任何视觉装饰，且和下方区块同底色，
+        打开页面第一眼没有"这是一份数据产品"的感觉。
+   解法：加三样东西，都不影响可读性：
+     1. 右上角极淡的同心圆环（终端雷达感）
+     2. 底部一条渐隐的"数据地平线"
+     3. 主标题下关键词用渐变文字
+   =========================================================== */
+header.hero{
+  position:relative;
+  overflow:hidden;
+}
+/* 1) 极淡雷达环 */
+header.hero::before{
+  content:"";position:absolute;
+  right:-140px;top:50%;transform:translateY(-50%);
+  width:520px;height:520px;border-radius:50%;
+  background:
+    radial-gradient(circle, transparent 38%, rgba(61,139,253,.055) 38.4%, transparent 39%),
+    radial-gradient(circle, transparent 53%, rgba(61,139,253,.04) 53.4%, transparent 54%),
+    radial-gradient(circle, transparent 68%, rgba(61,139,253,.028) 68.4%, transparent 69%);
+  pointer-events:none;
+  opacity:.9;
+}
+/* 2) 数据地平线 */
+header.hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(61,139,253,.35) 28%,
+             rgba(61,139,253,.35) 72%,transparent);
+  pointer-events:none;
+}
+/* 3) 首屏主标题用渐变文字（只影响 h1） */
+header.hero h1{
+  background:linear-gradient(102deg,#f2f6fc 12%,#c9dcf5 46%,#8fb4e8 88%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+}
+
+/* hero 里的关键数字：加色彩 */
+header.hero .hl-up,
+header.hero b.hl-up{color:var(--up);text-shadow:0 0 22px rgba(255,77,94,.32)}
+header.hero .hl-down{color:var(--down);text-shadow:0 0 22px rgba(0,197,142,.32)}
+
+/* 数字墙：首项加大，形成视觉起点 */
+.numwall>div:first-child .nw-v,
+.numwall>div:first-child [data-count]{
+  font-size:1.18em;
+}
+
+/* 亮色主题回退（渐变文字在白底上不好看，改成实色） */
+html[data-theme="light"] header.hero h1{
+  background:none;-webkit-text-fill-color:initial;color:#0f1a2b;
+}
+html[data-theme="light"] header.hero::before{opacity:.5}
+
+@media(max-width:760px){
+  header.hero::before{width:300px;height:300px;right:-120px;opacity:.55}
+}
