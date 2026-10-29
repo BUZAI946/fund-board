@@ -169,7 +169,7 @@
       avg.push(cnt ? sum / cnt : 100);
     }
     series.push({
-      name: '九大板块平均', short: '全市场平均', data: avg,
+      name: '全部板块平均', short: '全市场平均', data: avg,
       color: '#7b8fb0', width: 1.3, dash: true
     });
 

@@ -381,7 +381,7 @@
         num(s.spread), num(s.vol), num(s.mddCombo), num(s.mddWorst)];
     });
     sheets.push({
-      name: '九大板块', title: '九大板块聚合（等权金额买入持有口径）',
+      name: '全部板块', title: '全部板块聚合（等权金额买入持有口径）',
       headers: h2, rows: r2, types: t2
     });
 
@@ -389,10 +389,10 @@
     var h3 = ['组合', '近一年(%)', '年化波动(%)', '最大回撤(%)', '夏普比率', '说明'];
     var t3 = ['txt', 'sig', 'num', 'num', 'num', 'txt'];
     var DESC = {
-      A: '4只债券均配，一点股票都不碰',
+      A: '全债券均配，一点股票都不碰',
       B: '长债为主 + 纯债 + 标普500 + 红利低波',
       C: 'A股 + 港股 + 债券 + 黄金 六腿分散',
-      D: '九大板块各买一点',
+      D: '全部板块各买一点',
       E: '全部买黄金（单押）',
       F: '全部买原油（单押）',
       G: '四类高波动品种均配',
@@ -429,7 +429,7 @@
       return [nm].concat(C.matrix[i].map(function (v) { return num(v, 3); }));
     });
     sheets.push({
-      name: '相关性矩阵', title: '九大板块日收益相关系数（+1 同涨同跌，-1 反向）',
+      name: '相关性矩阵', title: '全部板块日收益相关系数（+1 同涨同跌，-1 反向）',
       headers: h5, rows: r5, types: t5
     });
 

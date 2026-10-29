@@ -327,9 +327,9 @@
         '就能看到这笔钱现在值多少、赚了多少。<br>' +
         '<b>记录只存你自己电脑，不会有任何人看到。</b></div>' +
         '<div class="we-links">' +
-        '<a class="btn on" href="商品基金.html">看商品 18 只 →</a> ' +
-        '<a class="btn" href="股票基金.html">看股票 18 只 →</a> ' +
-        '<a class="btn" href="债券基金.html">看债券 4 只 →</a>' +
+        '<a class="btn on" href="商品基金.html">看商品 ' + D.groups.commodity.n + ' 只 →</a> ' +
+        '<a class="btn" href="股票基金.html">看股票 ' + D.groups.stock.n + ' 只 →</a> ' +
+        '<a class="btn" href="债券基金.html">看债券 ' + D.groups.fund.n + ' 只 →</a>' +
         '</div></div>';
       ['pfListBox', 'pfStructBox', 'pfRiskBox'].forEach(function (id) {
         var b = document.getElementById(id);

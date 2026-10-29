@@ -53,9 +53,9 @@
         '<div class="we-d">去任意基金详情页点「加入自选」，或者用上面的下拉框直接加。<br>' +
         '<b>收藏只存在你这台电脑的浏览器里</b>，不上传、不同步。</div>' +
         '<div class="we-links">' +
-        '<a class="btn on" href="商品基金.html">看商品类 18 只 →</a> ' +
-        '<a class="btn" href="股票基金.html">看股票类 18 只 →</a> ' +
-        '<a class="btn" href="债券基金.html">看债券 4 只 →</a>' +
+        '<a class="btn on" href="商品基金.html">看商品类 ' + D.groups.commodity.n + ' 只 →</a> ' +
+        '<a class="btn" href="股票基金.html">看股票类 ' + D.groups.stock.n + ' 只 →</a> ' +
+        '<a class="btn" href="债券基金.html">看债券 ' + D.groups.fund.n + ' 只 →</a>' +
         '</div></div>';
       box.innerHTML = html;
       if (tbox) tbox.style.display = 'none';

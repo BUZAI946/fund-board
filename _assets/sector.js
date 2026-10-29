@@ -27,12 +27,12 @@
   var FUNDS = D.funds.filter(function (f) { return f.sec === SEC_ID; })
     .sort(function (a, b) { return b.ret250 - a.ret250; });
 
-  /* 九大板块排名（按收益） */
+  /* 全部板块排名（按收益） */
   var RANKED = D.sectors.slice().sort(function (a, b) { return b.arith - a.arith; });
   var RANK = RANKED.indexOf(S) + 1;
   var ALL_AVG = D.sectors.reduce(function (a, b) { return a + b.arith; }, 0) / D.sectors.length;
 
-  /* 每只基金在"全 40 只"里的收益排名 */
+  /* 每只基金在全样本里的收益排名 */
   var ALL40 = D.funds.slice().sort(function (a, b) { return b.ret250 - a.ret250; });
   function globalRank(code) {
     for (var k = 0; k < ALL40.length; k++) if (ALL40[k].code === code) return k + 1;
@@ -55,7 +55,7 @@
     if (el) el.textContent = U.fmt(S.arith);
     var nm = document.getElementById('sHeroNote');
     if (nm) {
-      nm.innerHTML = S.n + ' 只基金 · 九大板块里排第 <b class="n">' + RANK + '</b> 名 · ' +
+      nm.innerHTML = S.n + ' 只基金 · 全部板块里排第 <b class="n">' + RANK + '</b> 名 · ' +
         '全市场平均 <b class="n">' + U.fmt(ALL_AVG) + '</b>';
     }
   })();
@@ -96,13 +96,13 @@
   })();
 
   /* =====================================================
-     3. 走势：本板块 vs 九大板块平均
+     3. 走势：本板块 vs 全部板块平均
      ===================================================== */
   (function () {
     var host = document.getElementById('sChart');
     if (!host || !C2) return;
 
-    /* 九大板块平均线（等权） */
+    /* 全部板块平均线（等权） */
     var axis = D.axis;
     var avgLine = [];
     for (var t = 0; t < axis.length; t++) {
@@ -117,7 +117,7 @@
       axis: axis, height: 340, base: 100,
       series: [
         { name: S.name + '（本板块）', short: S.name, data: S.seq, color: MAIN, width: 2.8 },
-        { name: '九大板块平均', short: '全市场平均', data: avgLine, color: '#7b8fb0',
+        { name: '全部板块平均', short: '全市场平均', data: avgLine, color: '#7b8fb0',
           width: 1.6, dash: true, area: false }
       ],
       legendEl: document.getElementById('sChartLegend')
@@ -305,7 +305,7 @@
         '</div>' +
 
         '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">' +
-          (gr && gr <= 10 ? '<span class="tag ok">全 40 只里第 ' + gr + ' 名</span>' : '') +
+          (gr && gr <= 10 ? '<span class="tag ok">全 ' + D.funds.length + ' 只里第 ' + gr + ' 名</span>' : '') +
           '<span class="tag">波动 ' + f.vol.toFixed(2) + '%</span>' +
           '<span class="tag">全历史 ' + U.fmt(f.mddAll, 1) + '</span>' +
           '<span class="tag">夏普 ' + (f.sharpe === null ? '—' : f.sharpe.toFixed(2)) + '</span>' +
@@ -463,7 +463,7 @@
   })();
 
   /* =====================================================
-     10. 九大板块横向排名（标出当前板块）
+     10. 全部板块横向排名（标出当前板块）
      ===================================================== */
   (function () {
     var host = document.getElementById('sRankChart');

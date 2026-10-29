@@ -284,11 +284,20 @@
     /* 口径说明 */
     var cal = $('attrCaliber');
     if (cal) {
-      cal.innerHTML = '<b>⚠️ 口径说明：</b>各腿贡献相加 = <b class="n">' + U.fmt(sum) +
-        '</b>，而组合实际回测是 <b class="n">+3.87%</b>，差 <b class="n">' +
-        Math.abs(sum - 3.87).toFixed(2) + 'pp</b>。<br>' +
-        '原因是<b>复利效应</b>——加权平均收益 ≠ 组合实际收益（后者要连乘）。两者都真实，' +
-        '归因图用来看"谁贡献大"，组合收益用前面回测表里的数。';
+      /* 【修 bug】原来把组合实际收益写死成 3.87%，差值也是拿它算的。
+         数据一变（现在是 4.05%），不仅显示错误，连"差 xx pp"这个计算结果都是错的。
+         改为从 D.plans.J.r250 实时取。 */
+      var JACT = (D.plans && D.plans.J && D.plans.J.r250 !== undefined) ? D.plans.J.r250 : null;
+      if (JACT === null) {
+        cal.innerHTML = '<b>⚠️ 口径说明：</b>各腿贡献相加 = <b class="n">' + U.fmt(sum) +
+          '</b>。归因图用来看"谁贡献大"，组合收益用前面回测表里的数。';
+      } else {
+        cal.innerHTML = '<b>⚠️ 口径说明：</b>各腿贡献相加 = <b class="n">' + U.fmt(sum) +
+          '</b>，而组合实际回测是 <b class="n">' + U.fmt(JACT) + '</b>，差 <b class="n">' +
+          Math.abs(sum - JACT).toFixed(2) + 'pp</b>。<br>' +
+          '原因是<b>复利效应</b>——加权平均收益 ≠ 组合实际收益（后者要连乘）。两者都真实，' +
+          '归因图用来看"谁贡献大"，组合收益用前面回测表里的数。';
+      }
     }
   })();
 
