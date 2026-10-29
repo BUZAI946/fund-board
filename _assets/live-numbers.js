@@ -23,7 +23,7 @@
   if (!D) return;
 
   /* ---------------- 取值映射 ---------------- */
-  var SEC = {}, SECVOL = {}, SECN = {}, SECFULL = {}, GRP = {}, PLAN = {}, FUND = {};
+  var SEC = {}, SECVOL = {}, SECN = {}, SECFULL = {}, GRP = {}, PLAN = {}, PLANFULL = {}, FUND = {};
   (D.sectors || []).forEach(function (s) {
     SEC[s.sec] = s.arith;
     SECVOL[s.sec] = s.vol;
@@ -38,6 +38,7 @@
   });
   Object.keys(D.plans || {}).forEach(function (k) {
     PLAN[k] = D.plans[k].r250;
+    PLANFULL[k] = D.plans[k];   /* 整个组合对象，供 plan.J.vol 等路径用 */
   });
 
   /* 衍生值（一次性算好） */
@@ -120,9 +121,27 @@
     if (p[0] === 'sec' && p[1] in SEC) return SEC[p[1]];
     if (p[0] === 'secvol' && p[1] in SECVOL) return SECVOL[p[1]];
     if (p[0] === 'grp' && GRP[p[1]] !== undefined) return GRP[p[1]];
+    /* 组合的其它指标（波动/回撤/夏普）
+       原来只支持 plan.J（= r250），页面里写"波动 2.48% 回撤 -1.53% 夏普 0.76"
+       只能写死，数据一更新就矛盾。补上字段路径。 */
+    if (p[0] === 'plan' && p[2]) {
+      var pv = PLANFULL[p[1]];
+      if (pv && pv[p[2]] !== undefined) return pv[p[2]];
+      return null;
+    }
     if (p[0] === 'plan' && PLAN[p[1]] !== undefined) return PLAN[p[1]];
     if (p[0] === 'fund' && FUND[p[1]] && p[2]) return FUND[p[1]][p[2]];
-    /* 衍生 */
+        /* 收益口径差 = 复权口径 − 单位净值口径（pp）
+       navAcGap 是"净值差"（3.275 vs 0.963 那种），不是收益差，别混用。
+       新手最容易栽在这个差值上，所以单独给个路径。 */
+    if (p[0] === 'fund' && p[2] === 'retGap') {
+      var fg = FUND[p[1]];
+      if (fg && fg.ret250 !== undefined && fg.ret250nav !== undefined) {
+        return fg.ret250 - fg.ret250nav;
+      }
+      return null;
+    }
+/* 衍生 */
     if (path === 'derived.spread') return DERIVED.spread;
     if (path === 'derived.spreadAbs') return DERIVED.spread;
     if (path === 'derived.posCount') return DERIVED.posCount;

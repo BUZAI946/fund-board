@@ -64,11 +64,14 @@ jobs:
           import io, json, os, statistics as st, sys
           raw = io.open('data.js', encoding='utf-8').read()
           D = json.loads(raw[raw.index('=')+1:].strip().rstrip(';'))
-          F = list(D['funds'].values())
+          # data.js 里 funds 是 list（不是 dict），这里兼容两种
+          _f = D['funds']
+          F = list(_f.values()) if isinstance(_f, dict) else list(_f)
 
           # 1) 数据新鲜度：最新净值日不能超过 7 天
           from datetime import datetime, timedelta
-          dates = sorted([f.get('last_date') or '' for f in F if f.get('last_date')])
+          dates = sorted([f.get('last') or f.get('last_date') or '' for f in F
+                          if (f.get('last') or f.get('last_date'))])
           newest = dates[-1] if dates else ''
           age = (datetime.now() - datetime.strptime(newest, '%Y-%m-%d')).days if newest else 999
 
