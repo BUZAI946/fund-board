@@ -303,11 +303,21 @@ section.block:first-of-type{border-top:none}
 .card-pad{padding:24px}
 
 .grid{display:grid;gap:16px;align-items:stretch}
-.g2{grid-template-columns:repeat(2,1fr)}
-.g3{grid-template-columns:repeat(3,1fr)}
-.g4{grid-template-columns:repeat(4,1fr)}
-@media(max-width:980px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:680px){.g2,.g3,.g4{grid-template-columns:1fr}}
+/* 【修 bug】原来写的是 repeat(2,1fr)。CSS Grid 里 1fr 的最小尺寸默认是 auto
+   （等于 min-content），所以当格子里的表格比视口宽时，列会被"撑大"而不是
+   让内容滚动 —— 实测定投计算器.html 在 375px 下 grid 列被撑到 461px，
+   整个页面横向溢出 112px。
+   改成 minmax(0,1fr) 后，列宽严格等于容器宽度，内容溢出交给
+   .tbl-wrap 或 :has(>table) 的 overflow-x 去处理。 */
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:980px){
+  .g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:680px){
+  .g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}
+}
 
 /* ===================== KPI ===================== */
 .kpi{
@@ -1016,14 +1026,27 @@ hr.sep{border:none;border-top:1px solid var(--line);margin:26px 0}
   border-top:1px solid rgba(255,255,255,.09);
 }
 .heat-foot b{font-family:var(--font-num);font-weight:700}
-.heat-warn{
-  position:absolute;top:10px;right:10px;
-  font-size:11px;padding:1.5px 5px;border-radius:3px;
-  background:rgba(245,185,66,.18);color:#e8a93c;
-  border:1px solid rgba(245,185,66,.3);
-  transform:translateY(-100%);opacity:0;
+/* 【修 bug】原来是 position:absolute;top:10px;right:10px，
+   正好压在同样位于右上角的 .heat-n（只数）上面，两个数字重叠。
+   而且默认 opacity:0，只有 .hot 才显示 —— 极差 2~10 那档等于永远看不见。
+   现在改成正常流，放在数字行右侧的空白处，始终可见。 */
+.heat-valrow{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;margin:4px 0 auto;
 }
-.heat-warn.hot{opacity:1;transform:translateY(0);transition:.3s}
+.heat-valrow .heat-val{margin:0}
+.heat-warn{
+  flex-shrink:0;
+  font-size:10.5px;padding:2px 6px;border-radius:4px;
+  background:rgba(245,185,66,.14);color:#c9a35c;
+  border:1px solid rgba(245,185,66,.24);
+  font-family:var(--font-num);font-weight:700;
+  white-space:nowrap;
+}
+.heat-warn.hot{
+  background:rgba(245,185,66,.26);color:#f5b942;
+  border-color:rgba(245,185,66,.5);
+}
 
 /* 散点图容器最小高度 */
 #scatterChart{min-height:460px}
@@ -4570,4 +4593,35 @@ html[data-theme="light"] header.hero::before{opacity:.5}
 .ni-meta{
   font-size:10px;color:var(--num-4);
   font-family:var(--font-num);
+}
+
+
+/* ===========================================================
+   表格横滚兜底（响应式修复）
+   -----------------------------------------------------------
+   检测方法：375 / 768 / 1280 三种宽度 × 19 个页面 = 57 次检测，
+   用 documentElement.scrollWidth > clientWidth 判定横向溢出。
+   结果发现 2 处真实溢出：
+     · 定投计算器.html  溢出 112px（#dcaDetail 里的 dca-t2 表格 427px 宽）
+     · 新手百科.html    溢出 13px（allocTable 785px 宽）
+   根因：这两处表格没有用 .tbl-wrap 包裹，也就没有 overflow-x:auto，
+        表格的固有宽度直接把整个页面撑开。
+
+   解法：用 :has() 给"直接包含表格的容器"自动加横向滚动能力，
+        这样以后新增页面忘了包 .tbl-wrap 也不会撑破布局。
+   =========================================================== */
+@media(max-width:820px){
+  /* 支持 :has 的浏览器（Chrome 105+ / Edge 105+ / Safari 15.4+） */
+  body :has(> table){overflow-x:auto;overflow-y:hidden}
+  /* 表格自身限制最大宽度，避免内容被压扁 */
+  body table{max-width:100%}
+  /* 滚动条样式保持和其他滚动容器一致 */
+  body :has(> table)::-webkit-scrollbar{height:9px}
+  body :has(> table)::-webkit-scrollbar-track{background:var(--bg2)}
+  body :has(> table)::-webkit-scrollbar-thumb{background:var(--line2);border-radius:5px}
+
+  /* 兜底：不支持 :has 的旧浏览器，至少让表格不被压变形 */
+  @supports not selector(:has(*)){
+    body table{display:block;overflow-x:auto}
+  }
 }

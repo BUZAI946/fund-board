@@ -317,7 +317,7 @@
         </div>
         <h4 style="margin:10px 0 8px;font-size:15px">只看"近一年最大回撤"，会低估痛苦 2.14 倍</h4>
         <p style="font-size:13px;color:#96a8c2;line-height:1.8">
-          40 只基金近一年<b>平均</b>最深跌 <b style="color:#e8eef8">-24.74%</b>，
+          <span data-live="totals.funds" data-fmt="count" data-suffix=" 只" data-nocolor>60 只</span>基金近一年<b>平均</b>最深跌 <b style="color:#e8eef8">-20.23%</b>，
           全历史<b>平均</b>最深跌 <b style="color:#e8eef8">-42.27%</b>（均值比是 1.71 倍）。<br>
           但逐只看，<b>"全历史回撤 ÷ 近一年回撤"的中位数是 2.14 倍</b>——
           <b style="color:#f5b942">你必须看"全历史"那一栏。</b>
@@ -424,10 +424,10 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <div class="kicker">Attribution</div>
-      <h2>建议组合那 <span class="n">3.87%</span>，到底是谁赚来的</h2>
+      <h2>建议组合那 <span class="n" data-live="plan.J" data-nocolor>+4.05%</span>，到底是谁赚来的</h2>
       <p>
         把组合拆开，看每一条腿各贡献了多少个百分点。
-        <b style="color:#e8eef8">这是回答"为什么只有 3.87%"最直接的方式。</b>
+        <b style="color:#e8eef8">这是回答"为什么只有这几个点"最直接的方式。</b>
       </p>
     </div>
 
@@ -451,7 +451,7 @@
       <div class="kicker">Portfolio Builder</div>
       <h2>自己搭一个组合，看看会怎样</h2>
       <p>
-        从 40 只基金里随便挑，拖动权重，实时算出加权收益、波动和最坏情况。
+        从 60 只基金里随便挑，拖动权重，实时算出加权收益、波动和最坏情况。
         <b style="color:#e8eef8">不构成建议，只帮你看清"这么配会发生什么"。</b>
       </p>
     </div>
@@ -843,21 +843,28 @@
       var dot = '<span class="heat-dot" style="background:' + (GRP_DOT[s.grp] || '#7b8fb0') + '"></span>';
       var sign = v > 0 ? '+' : '';
       /* 可信度标记 */
-      var trust = s.spread < 2 ? '' : (s.spread < 10
-        ? '<span class="heat-warn">极差'+s.spread.toFixed(0)+'</span>'
-        : '<span class="heat-warn hot">极差'+s.spread.toFixed(0)+'</span>');
+      /* 【修 bug】原来 heat-warn 是 position:absolute 贴在右上角，
+         正好压住同样在右上角的 .heat-n（只数），两个数字重叠看不清。
+         而且极差 2~10 的那档套的是 .heat-warn 但没 .hot 类，
+         CSS 里 opacity:0 直接不可见 —— 相当于这档极差从来没显示过。
+         现在改为放进数字行的右侧空白，始终显示，只按大小分两档配色。 */
+      var trust = s.spread < 2 ? ''
+        : '<span class="heat-warn' + (s.spread >= 10 ? ' hot' : '') + '">极差 ' +
+          s.spread.toFixed(0) + '</span>';
 
       /* 点击直接进入该板块的独立详情页（板块/板块名.html） */
       return '<a class="heat-cell reveal d'+Math.min(i%6,5)+'" href="板块/'+s.name+'.html" '+
         'title="点开看'+s.name+'的详细数据" style="background:'+bg+';border-color:'+bd+'">'+
         '<div class="heat-top">'+dot+'<span class="heat-name">'+s.name+'</span>'+
           '<span class="heat-n">'+s.n+'只</span></div>'+
-        '<div class="heat-val" style="color:'+col+'">'+sign+v.toFixed(2)+'%</div>'+
+        '<div class="heat-valrow">'+
+          '<div class="heat-val" style="color:'+col+'">'+sign+v.toFixed(2)+'%</div>'+
+          trust+
+        '</div>'+
         '<div class="heat-foot">'+
           '<span>最差 <b style="'+(s.worst>=0?'color:#ff4d5e':'color:#00c58e')+'">'+s.worst.toFixed(1)+'%</b></span>'+
           '<span>波动 '+s.vol.toFixed(0)+'%</span>'+
         '</div>'+
-        trust+
       '</a>';
     }).join('');
   })();
